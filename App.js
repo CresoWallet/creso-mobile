@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
-import { SafeAreaView, Text, View } from 'react-native';
+import React, {useEffect} from 'react';
+import {SafeAreaView, Text, View} from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
-import LandingPage from './src/screens/LandingPage';
+// import LandingPage from './src/screens/LandingPage';
 import NoSessionsPage from './src/screens/NoSessionsPage';
 import NetworkSettings from './src/screens/NetworkSettings';
 import BitcoinMainnetScreen from './src/screens/BitcoinMainnetScreen';
@@ -32,18 +32,15 @@ import MainNavigator from './src/services/config/navigation';
 import BackupMainScreen from './src/screens/BackupMainScreen';
 import BackupBiometric from './src/screens/BackupBiometric';
 import BackupRcoveryKey from './src/screens/BackupRcoveryKey';
-import { sizes } from './src/services';
+import {sizes} from './src/services';
 
 export default function App() {
   useEffect(() => {
     SplashScreen.hide();
   }, []);
 
-  return (
-    <MainNavigator />
-  )
+  return <MainNavigator />;
 }
-
 
 // <SafeAreaView>
 {
