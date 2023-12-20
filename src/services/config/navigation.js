@@ -39,6 +39,7 @@ import OTP from '../../screens/OTP';
 import ForgotPass from '../../screens/ForgotPass';
 import ResetPass from '../../screens/ResetPass';
 import PrivacyPolicy from '../../screens/PrivacyPolicy';
+import {useSelector} from 'react-redux';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -54,6 +55,22 @@ export default function MainNavigator() {
 }
 
 const MyStack = () => {
+  const isSignIn = useSelector(state => state.isSignedInSlice.isSignIn);
+  return (
+    <Stack.Navigator screenOptions={{headerShown: false}}>
+      {isSignIn ? (
+        <Stack.Screen name="AppStackNavigator" component={AppStackNavigator} />
+      ) : (
+        <Stack.Screen
+          name="AuthStackNavigator"
+          component={AuthStackNavigator}
+        />
+      )}
+    </Stack.Navigator>
+  );
+};
+
+const AuthStackNavigator = () => {
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen name="LandingPage" component={LandingPage} />
@@ -64,6 +81,55 @@ const MyStack = () => {
       <Stack.Screen name="SignIn" component={SignIn} />
       <Stack.Screen name="SignUp" component={SignUp} />
       <Stack.Screen name="MyTabs" component={MyTabs} />
+      <Stack.Screen name="AccountInfo" component={AccountInfo} />
+      <Stack.Screen name="Account" component={Account} />
+      <Stack.Screen name="Security" component={Security} />
+      <Stack.Screen name="NoSessionsPage" component={NoSessionsPage} />
+      <Stack.Screen name="NetworkSettings" component={NetworkSettings} />
+      <Stack.Screen
+        name="BitcoinMainnetScreen"
+        component={BitcoinMainnetScreen}
+      />
+      <Stack.Screen name="Language" component={Language} />
+      <Stack.Screen name="Advanced" component={Advanced} />
+      <Stack.Screen name="AboutUs" component={AboutUs} />
+      <Stack.Screen name="RfcNodesSettings" component={RfcNodesSettings} />
+      <Stack.Screen name="ETH1Page" component={ETH1Page} />
+      <Stack.Screen name="ETHPage" component={ETHPage} />
+      <Stack.Screen name="SendETHPage" component={SendETHPage} />
+      <Stack.Screen name="WalletAddressPage" component={WalletAddressPage} />
+      <Stack.Screen name="BackupMainScreen" component={BackupMainScreen} />
+      <Stack.Screen
+        name="BackupEmailVerifyPage"
+        component={BackupEmailVerifyPage}
+      />
+      <Stack.Screen
+        name="BackupPrivacyPolicy"
+        component={BackupPrivacyPolicy}
+      />
+      <Stack.Screen name="BackupBiometric" component={BackupBiometric} />
+      <Stack.Screen name="BackupEnableLock" component={BackupEnableLock} />
+      <Stack.Screen
+        name="BackupPersonalKeyShare"
+        component={BackupPersonalKeyShare}
+      />
+      <Stack.Screen name="BackupRcoveryKey" component={BackupRcoveryKey} />
+      <Stack.Screen name="SwapAndBridgeScr2" component={SwapAndBridgeScr2} />
+      <Stack.Screen name="SwapFrom" component={SwapFrom} />
+    </Stack.Navigator>
+  );
+};
+const AppStackNavigator = () => {
+  return (
+    <Stack.Navigator screenOptions={{headerShown: false}}>
+      <Stack.Screen name="MyTabs" component={MyTabs} />
+      <Stack.Screen name="LandingPage" component={LandingPage} />
+      <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicy} />
+      <Stack.Screen name="ForgotPass" component={ForgotPass} />
+      <Stack.Screen name="ResetPass" component={ResetPass} />
+      <Stack.Screen name="OTP" component={OTP} />
+      <Stack.Screen name="SignIn" component={SignIn} />
+      <Stack.Screen name="SignUp" component={SignUp} />
       <Stack.Screen name="AccountInfo" component={AccountInfo} />
       <Stack.Screen name="Account" component={Account} />
       <Stack.Screen name="Security" component={Security} />

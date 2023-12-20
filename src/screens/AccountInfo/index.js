@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Image,
   ImageBackground,
@@ -11,8 +11,32 @@ import {
 import {styles} from './style';
 import images from '../../services/utilities/images';
 import {colors} from '../../services';
+import {getUserDetails} from '../../clientApi';
+import {useSelector} from 'react-redux';
 
 export default function AccountInfo({navigation}) {
+  const [userName, setUserName] = useState('');
+  const [userEmail, setUserEmail] = useState('');
+
+  const userToken = useSelector(state => state?.tokenSlice?.token);
+  const userDetail = useSelector(state => state?.userDetailSlice?.userDetail);
+
+  useEffect(() => {
+    // getCurrentUser();
+    setUserEmail(userDetail.email);
+    setUserName(userDetail.username);
+  }, []);
+
+  const getCurrentUser = async () => {
+    try {
+      const res = await getUserDetails(userToken);
+      setUserName(res.data.user.username);
+      setUserEmail(res.data.user.email);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <SafeAreaView>
       <View style={styles.container}>
@@ -33,12 +57,10 @@ export default function AccountInfo({navigation}) {
                 </View>
                 <View style={styles.profilecontainerText}>
                   <View>
-                    <Text style={styles.textSamuel}>Samuel Hawking</Text>
+                    <Text style={styles.textSamuel}>{userName}</Text>
                   </View>
                   <View style={styles.profilecontainerEmail}>
-                    <Text style={styles.textSamuelEmail}>
-                      Samhawking@gmail.com
-                    </Text>
+                    <Text style={styles.textSamuelEmail}>{userEmail}</Text>
                   </View>
                   <View style={styles.profilecontainerLastSeen}>
                     <Text style={styles.textSamuelLastSeen}>

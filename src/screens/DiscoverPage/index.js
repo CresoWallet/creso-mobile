@@ -10,8 +10,11 @@ import {
 } from 'react-native';
 import images from '../../services/utilities/images';
 import {styles} from './style';
+import {useSelector} from 'react-redux';
 
 export default function DiscoverPage() {
+  // const data = useSelector(state => state);
+  // console.log('discover0--=-=-=-=', data);
   return (
     <SafeAreaView>
       <ImageBackground

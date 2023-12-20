@@ -1,5 +1,6 @@
 import {StyleSheet} from 'react-native';
 import {colors, fontSize, sizes} from '../../services';
+import {SafeAreaInsetsContext} from 'react-native-safe-area-context';
 
 export const styles = StyleSheet.create({
   mainContainer: {
@@ -16,15 +17,15 @@ export const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: colors.underlineColor,
     borderRadius: sizes.screenWidth * 0.9,
-    justifyContent: 'space-around',
+    justifyContent: 'space-between',
     height: sizes.screenHeight * 0.08,
     width: sizes.screenWidth * 0.9,
     marginLeft: sizes.screenWidth * 0.04,
     alignItems: 'center',
+    paddingHorizontal: sizes.screenWidth * 0.04,
   },
 
   connectedTextStyling: {
-    paddingTop: sizes.screenHeight * 0.005,
     color: colors.black,
   },
 
@@ -33,8 +34,9 @@ export const styles = StyleSheet.create({
     borderWidth: 2,
     borderRadius: sizes.screenWidth * 0.8,
     height: sizes.screenHeight * 0.04,
-    width: sizes.screenWidth * 0.29,
+    paddingHorizontal: sizes.screenWidth * 0.05,
     alignItems: 'center',
+    justifyContent: 'center',
   },
   topContainer: {
     // padding: sizes.screenWidth * 0.1,

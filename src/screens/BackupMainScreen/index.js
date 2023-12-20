@@ -1,4 +1,5 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
+import axios from 'axios';
 import {
   TouchableOpacity,
   Image,
@@ -13,8 +14,64 @@ import images from '../../services/utilities/images';
 import {styles} from '../BackupMainScreen/style';
 import Header from '../../components/Header';
 import {colors} from '../../services';
+import {useSelector} from 'react-redux';
+import {getUserDetails, sendOTPMail} from '../../clientApi';
+import {axiosInstance} from '../../services/config/axios';
 
 export default function BackupMainScreen({navigation}) {
+  const [userEmail, setUserEmail] = useState('');
+  const [loader, setLoader] = useState(false);
+
+  const userDetail = useSelector(state => state?.userDetailSlice?.userDetail);
+
+  useEffect(() => {
+    // getCurrentUser();
+    setUserEmail(userDetail.email);
+  }, []);
+
+  const userToken = useSelector(state => state?.tokenSlice?.token);
+
+  const getCurrentUser = async () => {
+    const res = await getUserDetails(userToken);
+    setUserEmail(res.data.user.email);
+  };
+
+  const handleNext = async () => {
+    setLoader(true);
+
+    var myHeaders = new Headers();
+    myHeaders.append('auth_token', `"auth_token ${userToken}"`);
+    myHeaders.append('Cookie', `auth_token=${userToken}`);
+
+    var formdata = new FormData();
+    formdata.append('email', 'test5@gmail.com');
+
+    var requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: formdata,
+      redirect: 'follow',
+    };
+
+    fetch(
+      'https://creso-b02eab9f8c40.herokuapp.com/api/sendOTP',
+      requestOptions,
+    )
+      .then(response => response.text())
+      .then(result => {
+        console.log(result);
+
+        navigation.navigate('BackupEmailVerifyPage', {
+          email: userEmail,
+        });
+        setLoader(false);
+      })
+      .catch(error => {
+        console.log('error', error);
+        setLoader(false);
+      });
+  };
+
   return (
     <SafeAreaView>
       <View style={styles.topContainer}>
@@ -37,16 +94,17 @@ export default function BackupMainScreen({navigation}) {
                 <Text style={styles.fieldText}>Email</Text>
                 <TextInput
                   style={styles.inputField}
-                  onChangeText={onChangeText}
                   placeholder="E.g. name@example.com"
                   placeholderTextColor={colors.disabledBg1}
+                  value={userEmail}
+                  onChangeText={text => {
+                    setUserEmail(text);
+                  }}
                 />
               </View>
               <TouchableOpacity
                 style={styles.addPhoneButtonStyling}
-                onPress={() => {
-                  navigation.navigate('BackupEmailVerifyPage');
-                }}>
+                onPress={handleNext}>
                 <Text style={styles.textColor}>Next</Text>
               </TouchableOpacity>
             </View>

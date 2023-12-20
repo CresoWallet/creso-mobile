@@ -41,7 +41,7 @@ export const styles = StyleSheet.create({
   },
   inputFieldText: {
     width: sizes.screenWidth * 0.6,
-    color:colors.black
+    color: colors.black,
   },
   BtnBlack: {
     width: sizes.screenWidth * 0.85,
@@ -109,8 +109,13 @@ export const styles = StyleSheet.create({
     height: sizes.screenWidth * 0.005,
     width: sizes.screenWidth * 0.35,
   },
-  forgotPass:{
-    left:sizes.screenWidth*0.25,
-    color:colors.textBlue
-  }
+  forgotPass: {
+    left: sizes.screenWidth * 0.25,
+    color: colors.textBlue,
+  },
+  errorText: {
+    color: 'red',
+    alignSelf: 'flex-start',
+    left: sizes.screenWidth * 0.1,
+  },
 });

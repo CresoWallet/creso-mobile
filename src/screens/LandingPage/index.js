@@ -10,9 +10,12 @@ import {
 import {styles} from './style';
 import images from '../../services/utilities/images';
 import Modal from 'react-native-modal';
+import {useSelector} from 'react-redux';
 
 export default function LandingPage({navigation}) {
   const [modalShow, setModalShow] = useState(false);
+  const data = useSelector(state => state);
+  console.log(data);
 
   return (
     <SafeAreaView>
@@ -47,14 +50,14 @@ export default function LandingPage({navigation}) {
                 </View>
               </View>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.btn}
-            onPress={() => {
-              navigation.navigate("SignIn")
-            }}>
+            <TouchableOpacity
+              style={styles.btn}
+              onPress={() => {
+                navigation.navigate('SignIn');
+              }}>
               <View style={styles.btnContnt}>
                 <Image source={images.restore} style={styles.addImg} />
-                <View style={styles.btnContentView}
-                >
+                <View style={styles.btnContentView}>
                   <Text style={styles.text2}>Restore</Text>
                   <Text style={styles.text3}>Existing Account</Text>
                 </View>
@@ -99,7 +102,7 @@ export default function LandingPage({navigation}) {
                     style={styles.bottonBlack}
                     onPress={() => {
                       setModalShow(!modalShow);
-                      navigation.navigate("SignUp")
+                      navigation.navigate('SignUp');
                     }}>
                     <Text style={styles.bottonBlackText}>Agree</Text>
                   </TouchableOpacity>

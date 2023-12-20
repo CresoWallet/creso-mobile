@@ -12,20 +12,114 @@ import {
   TouchableOpacity,
   View,
   Animated,
+  ActivityIndicator,
 } from 'react-native';
 import images from '../../services/utilities/images';
 
 import Modal from 'react-native-modal';
 import {colors, sizes} from '../../services';
+import {useDispatch, useSelector} from 'react-redux';
+import {getUserDetails} from '../../clientApi';
+import {handleAddUserDetail} from '../../store/user';
 
 export default function Home({navigation}) {
   const [checkedCoin, setCheckedCoin] = useState('coin1');
-
+  const [userName, setUserName] = useState('');
   const [modalShow, setModalShow] = useState(false);
-
   const [modal2Show, setModal2Show] = useState(false);
+  const [modal3Show, setModal3Show] = useState(false);
+
   const [modalForBackup, setModalForBackup] = useState(true);
+  const [walletName, setWalletName] = useState('');
+  const [smartWalletName, setSmartWalletName] = useState('');
+  const [loader, setLoader] = useState(false);
+
   const translateY = useRef(new Animated.Value(500)).current;
+
+  const dispatch = useDispatch();
+
+  const handleCreateWallet = async () => {
+    var myHeaders = new Headers();
+
+    setLoader(true);
+
+    myHeaders.append('auth_token', `"auth_token ${userToken}"`);
+
+    myHeaders.append('Content-Type', 'application/json');
+
+    myHeaders.append('Cookie', `auth_token=${userToken}`);
+
+    var raw = JSON.stringify({
+      walletName: walletName,
+    });
+
+    var requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: raw,
+      redirect: 'follow',
+    };
+
+    fetch(
+      'https://creso-b02eab9f8c40.herokuapp.com/api/create/wallet',
+      requestOptions,
+    )
+      .then(response => response.text())
+      .then(result => {
+        console.log(result);
+        if (result) {
+          setModal2Show(!modal2Show);
+        }
+        setWalletName('');
+        setLoader(false);
+      })
+      .catch(error => {
+        console.log('error', error);
+        setWalletName('');
+        setLoader(false);
+      });
+  };
+
+  const handleCreateSmartWallet = async () => {
+    var myHeaders = new Headers();
+
+    setLoader(true);
+
+    myHeaders.append('auth_token', `"auth_token ${userToken}"`);
+    myHeaders.append('Content-Type', 'application/json');
+    myHeaders.append('Cookie', `auth_token=${userToken}`);
+
+    var raw = JSON.stringify({
+      walletName: smartWalletName,
+      network: 'goerli',
+    });
+
+    var requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: raw,
+      redirect: 'follow',
+    };
+
+    fetch(
+      'https://creso-b02eab9f8c40.herokuapp.com/api/create/smartwallet',
+      requestOptions,
+    )
+      .then(response => response.text())
+      .then(result => {
+        console.log(result);
+        if (result) {
+          setModal3Show(!modal3Show);
+        }
+        setSmartWalletName('');
+        setLoader(false);
+      })
+      .catch(error => {
+        console.log('error', error);
+        setSmartWalletName('');
+        setLoader(false);
+      });
+  };
 
   useEffect(() => {
     Animated.spring(translateY, {
@@ -55,6 +149,26 @@ export default function Home({navigation}) {
   //   });
   // }, [navigation]);
 
+  useEffect(() => {
+    if (!userDetail.username) {
+      getCurrentUser();
+    } else {
+      setUserName(userDetail.username);
+    }
+  }, []);
+
+  const userToken = useSelector(state => state?.tokenSlice?.token);
+  const userDetail = useSelector(state => state?.userDetailSlice?.userDetail);
+
+  const getCurrentUser = async () => {
+    const res = await getUserDetails(userToken);
+    if (res) {
+      const user = res.data.user;
+      dispatch(handleAddUserDetail(user));
+      setUserName(res.data.user.username);
+    }
+  };
+
   return (
     <SafeAreaView>
       <ImageBackground
@@ -76,7 +190,7 @@ export default function Home({navigation}) {
           </View>
         </View>
         <ImageBackground style={styles.homeCardImg} source={images.homeCardImg}>
-          <Text style={styles.homeCardText1}>Samuel Hawking</Text>
+          <Text style={styles.homeCardText1}>{userName}</Text>
           <Text style={styles.homeCardText2}>3.187.99 USD</Text>
         </ImageBackground>
 
@@ -427,7 +541,7 @@ export default function Home({navigation}) {
                 <TouchableOpacity
                   style={styles.walletSection}
                   onPress={() => {
-                    setModal2Show(!modal2Show);
+                    setModal3Show(!modal3Show);
                   }}>
                   <Image style={styles.images} source={images.walletSmart} />
                   <View style={styles.walletTextSection}>
@@ -507,6 +621,10 @@ export default function Home({navigation}) {
                     style={styles.nameRowTextInput}
                     placeholder="E.g.My Wallet"
                     placeholderTextColor={colors.disabledBg1}
+                    value={walletName}
+                    onChangeText={text => {
+                      setWalletName(text);
+                    }}
                   />
                   <Text style={styles.nameRowTextInputLeft}>EQA</Text>
                 </View>
@@ -527,19 +645,112 @@ export default function Home({navigation}) {
                 <TouchableOpacity
                   style={styles.bottonWhite}
                   onPress={() => {
-                    // setModalShow(!modalShow);
                     setModal2Show(!modal2Show);
                   }}>
                   <Text style={styles.bottonWhiteText}>Cancel</Text>
                 </TouchableOpacity>
+                {loader ? (
+                  <View style={styles.bottonBlack}>
+                    <ActivityIndicator color={'white'} size={30} />
+                  </View>
+                ) : (
+                  <TouchableOpacity
+                    style={styles.bottonBlack}
+                    onPress={handleCreateWallet}>
+                    <Text style={styles.bottonBlackText}>Confirm</Text>
+                  </TouchableOpacity>
+                )}
+              </View>
+            </View>
+          </View>
+        </Modal>
+        <Modal
+          isVisible={modal3Show}
+          backdropOpacity={0.5}
+          onBackdropPress={() => {
+            // setModalShow(!modalShow);
+            setModal3Show(!modal3Show);
+          }}>
+          <View style={styles.modal}>
+            <View style={styles.modalContent}>
+              <View style={styles.modalBody}>
+                <View style={styles.horizontalLine}></View>
+
+                <Text style={styles.modalHeading}>Create Smart Wallet</Text>
+                <View style={styles.ethereumMainnetContainer}>
+                  <Image
+                    style={styles.ethereumMainnetImg}
+                    source={images.ethImg}
+                  />
+                  <Text style={styles.ethereumMainnetText}>
+                    Ethereum Mainnet
+                  </Text>
+                </View>
+                <View style={styles.warningRow}>
+                  <View>
+                    <Image
+                      style={styles.warningImg}
+                      source={images.securityWarningImg}
+                    />
+                  </View>
+                  <Text style={styles.warningText}>
+                    Compatible with all Dapps; lower Gas fees; only supports
+                    paying gas with native token; does not support advanced
+                    features.{' '}
+                    <Text style={styles.modalTextPink}>Learn More</Text>
+                  </Text>
+                </View>
+
+                <View style={styles.nameRow}>
+                  <Text style={styles.nameRowText}>Name Wallet</Text>
+                  <Text style={styles.nameRowText}>0/20</Text>
+                </View>
+
+                <View style={styles.nameRowInput}>
+                  <TextInput
+                    style={styles.nameRowTextInput}
+                    placeholder="E.g.My Wallet"
+                    placeholderTextColor={colors.disabledBg1}
+                    value={smartWalletName}
+                    onChangeText={text => {
+                      setSmartWalletName(text);
+                    }}
+                  />
+                  <Text style={styles.nameRowTextInputLeft}>EQA</Text>
+                </View>
+
+                <View style={styles.modalCheckMarkRow}>
+                  <Image
+                    style={styles.modalCheckMark}
+                    source={images.modalCheckMark}
+                  />
+                  <Text style={styles.modalCheckText}>
+                    Same address on other EVM compatible chains will be created
+                    automatically.
+                    <Text style={styles.modalTextPink}>Networks Supported</Text>
+                  </Text>
+                </View>
+              </View>
+              <View style={styles.bottonsContainer}>
                 <TouchableOpacity
-                  style={styles.bottonBlack}
+                  style={styles.bottonWhite}
                   onPress={() => {
-                    // setModalShow(!modalShow);
-                    setModal2Show(!modal2Show);
+                    setModal3Show(!modal3Show);
                   }}>
-                  <Text style={styles.bottonBlackText}>Confirm</Text>
+                  <Text style={styles.bottonWhiteText}>Cancel</Text>
                 </TouchableOpacity>
+
+                {loader ? (
+                  <View style={styles.bottonBlack}>
+                    <ActivityIndicator color={'white'} size={30} />
+                  </View>
+                ) : (
+                  <TouchableOpacity
+                    style={styles.bottonBlack}
+                    onPress={handleCreateSmartWallet}>
+                    <Text style={styles.bottonBlackText}>Confirm</Text>
+                  </TouchableOpacity>
+                )}
               </View>
             </View>
           </View>

@@ -47,9 +47,9 @@ export const styles = StyleSheet.create({
     color: colors.black,
     fontSize: fontSize.medium,
     fontWeight: '500',
-    alignSelf: 'center',
-    top: sizes.screenHeight * 0.052,
-    right: sizes.screenWidth * 0.181,
+    alignSelf: 'flex-start',
+    top: sizes.screenHeight * 0.06,
+    left: sizes.screenWidth * 0.13,
   },
   homeCardText2: {
     color: colors.black,
@@ -553,6 +553,7 @@ export const styles = StyleSheet.create({
     height: sizes.screenHeight * 0.17,
     borderTopEndRadius: sizes.screenWidth * 0.13,
     borderTopLeftRadius: sizes.screenWidth * 0.13,
+    top: sizes.screenHeight * 0.04,
   },
   backupModalLine: {
     width: sizes.screenWidth * 0.18,

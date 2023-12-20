@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
-import {SafeAreaView, Text, View} from 'react-native';
+import {LogBox, SafeAreaView, Text, View} from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
-// import LandingPage from './src/screens/LandingPage';
+import LandingPage from './src/screens/LandingPage';
 import NoSessionsPage from './src/screens/NoSessionsPage';
 import NetworkSettings from './src/screens/NetworkSettings';
 import BitcoinMainnetScreen from './src/screens/BitcoinMainnetScreen';
@@ -32,90 +32,24 @@ import MainNavigator from './src/services/config/navigation';
 import BackupMainScreen from './src/screens/BackupMainScreen';
 import BackupBiometric from './src/screens/BackupBiometric';
 import BackupRcoveryKey from './src/screens/BackupRcoveryKey';
-import {sizes} from './src/services';
+import {Provider} from 'react-redux';
+import {persistor, store} from './src/store';
+import {PersistGate} from 'redux-persist/integration/react';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
 
 export default function App() {
   useEffect(() => {
+    LogBox.ignoreAllLogs();
     SplashScreen.hide();
   }, []);
-
-  return <MainNavigator />;
+  return (
+    <Provider store={store}>
+      <PersistGate persistor={persistor}>
+        <SafeAreaProvider>
+          <MainNavigator />
+        </SafeAreaProvider>
+      </PersistGate>
+    </Provider>
+  );
+  // return <MainNavigator />;
 }
-
-// <SafeAreaView>
-{
-  /* <LandingPage/> */
-}
-{
-  /* <NoSessionsPage/> */
-}
-{
-  /* <NetworkSettings /> */
-}
-{
-  /* <ETHPage/> */
-}
-{
-  /* <Security /> */
-}
-{
-  /* <ETH1Page/> */
-}
-{
-  /* <SendETHPage/> */
-}
-{
-  /* <WalletAddressPage/> */
-}
-{
-  /* <DiscoverPage/> */
-}
-{
-  /* <BackupEmailVerifyPage/> */
-}
-{
-  /* <BackupPrivacyPolicy/> */
-}
-{
-  /* <BackupEnableLock/> */
-}
-{
-  /* <BackupPersonalKeyShare/> */
-}
-{
-  /* <BitcoinMainnetScreen/> */
-}
-{
-  /* <AboutUs /> */
-}
-{
-  /* <AccountInfo /> */
-}
-{
-  /* <Account /> */
-}
-{
-  /* <SwapAndBridgeScr1 />
-}
-{
-  /* <SwapAndBridgeScr2 /> */
-}
-{
-  /* <RfcNodesSettings /> */
-}
-{
-  /* <Language /> */
-}
-{
-  /* <Home /> */
-}
-{
-  /* <SwapFrom /> */
-}
-{
-  /* <Advanced /> */
-}
-{
-  /* <AboutUs2 /> */
-}
-// </SafeAreaView>

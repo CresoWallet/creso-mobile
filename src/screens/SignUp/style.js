@@ -19,7 +19,7 @@ export const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: sizes.screenHeight * 0.03,
     color: colors.black,
-    marginBottom:sizes.screenHeight*0.07
+    marginBottom: sizes.screenHeight * 0.07,
   },
   bgImage: {
     width: sizes.screenWidth,
@@ -39,9 +39,9 @@ export const styles = StyleSheet.create({
     paddingHorizontal: sizes.screenWidth * 0.05,
     marginVertical: sizes.screenHeight * 0.01,
   },
-  inputFieldText:{
-    width:sizes.screenWidth*0.6,
-    color:colors.black
+  inputFieldText: {
+    width: sizes.screenWidth * 0.6,
+    color: colors.black,
   },
   BtnBlack: {
     width: sizes.screenWidth * 0.85,
@@ -53,32 +53,31 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     height: sizes.screenHeight * 0.08,
-    marginTop: sizes.screenHeight * 0.05,
+    marginTop: sizes.screenHeight * 0.03,
   },
 
-  neon:{
-    
-        width: sizes.screenWidth * 0.85,
-        backgroundColor: colors.neonGreen,
-        alignSelf: 'center',
-        borderRadius: sizes.screenHeight * 0.2,
-        flexDirection: 'row',
-        color: colors.white,
-        alignItems: 'center',
-        justifyContent: 'center',
-        height: sizes.screenHeight * 0.08,
-        marginTop: sizes.screenHeight * 0.02,
-        borderWidth:sizes.screenWidth*0.003
+  neon: {
+    width: sizes.screenWidth * 0.85,
+    backgroundColor: colors.neonGreen,
+    alignSelf: 'center',
+    borderRadius: sizes.screenHeight * 0.2,
+    flexDirection: 'row',
+    color: colors.white,
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: sizes.screenHeight * 0.08,
+    marginTop: sizes.screenHeight * 0.02,
+    borderWidth: sizes.screenWidth * 0.003,
   },
-  neonText:{
+  neonText: {
     color: colors.black,
     marginLeft: sizes.screenWidth * 0.03,
     marginRight: sizes.screenWidth * 0.03,
     fontSize: fontSize.medium,
   },
-  twtLogo:{
-    width:sizes.screenWidth*0.06,
-    height:sizes.screenHeight*0.025
+  twtLogo: {
+    width: sizes.screenWidth * 0.06,
+    height: sizes.screenHeight * 0.025,
   },
 
   BtnBlackText: {
@@ -87,28 +86,35 @@ export const styles = StyleSheet.create({
     marginRight: sizes.screenWidth * 0.03,
     fontSize: fontSize.medium,
   },
-  loginTextView:{
-    flexDirection:'row',
+  loginTextView: {
+    flexDirection: 'row',
     // backgroundColor:'red',
-    marginTop:sizes.screenHeight*0.02
+    marginTop: sizes.screenHeight * 0.02,
   },
-  loginText:{
-    color:colors.disabledBg2
+  loginText: {
+    color: colors.disabledBg2,
   },
-  loginLink:{
-    color:colors.textBlue
+  loginLink: {
+    color: colors.textBlue,
   },
-  orView:{
-    flexDirection:'row',
-    alignItems:'center',
-    justifyContent:'space-evenly',
-    width:sizes.screenWidth*0.85,
-    marginTop:sizes.screenHeight*0.02
+
+  orView: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
+    width: sizes.screenWidth * 0.85,
+    marginTop: sizes.screenHeight * 0.02,
   },
-  divider:{
-    backgroundColor:colors.disabledBg,
-    height:sizes.screenWidth*0.005,
-    width:sizes.screenWidth*0.35,
+
+  divider: {
+    backgroundColor: colors.disabledBg,
+    height: sizes.screenWidth * 0.005,
+    width: sizes.screenWidth * 0.35,
   },
-  
+
+  errorText: {
+    color: 'red',
+    alignSelf: 'flex-start',
+    left: sizes.screenWidth * 0.1,
+  },
 });

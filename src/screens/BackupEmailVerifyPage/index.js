@@ -18,11 +18,13 @@ import {
   useClearByFocusCell,
 } from 'react-native-confirmation-code-field';
 import BtnBlack from '../../components/BtnBlack';
+import {useSelector} from 'react-redux';
 
-export default function BackupEmailVerifyPage({navigation}) {
+export default function BackupEmailVerifyPage({navigation, route}) {
   const [value, setValue] = useState('');
   const [minutes, setMinutes] = useState(0);
   const [seconds, setSeconds] = useState(50);
+  const userToken = useSelector(state => state?.tokenSlice?.token);
 
   const ref = useBlurOnFulfill({value, cellCount: CELL_COUNT});
   const [props, getCellOnLayoutHandler] = useClearByFocusCell({
@@ -30,7 +32,7 @@ export default function BackupEmailVerifyPage({navigation}) {
     setValue,
   });
   const CELL_COUNT = 6;
-
+  const {email} = route.params;
   useEffect(() => {
     let myInterval = setInterval(() => {
       if (seconds > 0) {
@@ -50,6 +52,36 @@ export default function BackupEmailVerifyPage({navigation}) {
     };
   });
 
+  const handleOTP = async () => {
+    console.log(value);
+
+    var myHeaders = new Headers();
+    myHeaders.append('auth_token', `"auth_token ${userToken}"`);
+    myHeaders.append('Content-Type', 'application/json');
+    myHeaders.append('Cookie', `auth_token=${userToken}`);
+    var raw = JSON.stringify({
+      otp: value,
+    });
+
+    var requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: raw,
+      redirect: 'follow',
+    };
+
+    fetch(
+      'https://creso-b02eab9f8c40.herokuapp.com/api/verifyOTP',
+      requestOptions,
+    )
+      .then(response => response.text())
+      .then(result => {
+        console.log(result);
+        navigation.navigate('BackupPrivacyPolicy');
+      })
+      .catch(error => console.log('error', error));
+  };
+
   return (
     <SafeAreaView>
       <ImageBackground source={images.landingPageBGImg} style={styles.bgImage}>
@@ -65,9 +97,9 @@ export default function BackupEmailVerifyPage({navigation}) {
         <Text style={[styles.boldBlack, styles.emailVerifyText]}>
           An email with a verication code was just sent to
         </Text>
-        <TouchableOpacity>
-          <Text style={styles.email}>Samuel.hawking@gmail.com</Text>
-        </TouchableOpacity>
+        <View>
+          <Text style={styles.email}>{email}</Text>
+        </View>
 
         <View style={styles.padding}>
           <CodeField
@@ -98,11 +130,7 @@ export default function BackupEmailVerifyPage({navigation}) {
             <Text style={styles.link}>Resend code {seconds}s</Text>
           </TouchableOpacity>
         </View>
-        <TouchableOpacity
-          style={styles.buttonField}
-          onPress={() => {
-            navigation.navigate('BackupPrivacyPolicy');
-          }}>
+        <TouchableOpacity style={styles.buttonField} onPress={handleOTP}>
           <View style={styles.button}>
             <Text style={styles.text}>Next</Text>
           </View>
