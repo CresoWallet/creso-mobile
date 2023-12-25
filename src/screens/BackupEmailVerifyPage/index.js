@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {
+  ActivityIndicator,
   Image,
   ImageBackground,
   Platform,
@@ -24,6 +25,8 @@ export default function BackupEmailVerifyPage({navigation, route}) {
   const [value, setValue] = useState('');
   const [minutes, setMinutes] = useState(0);
   const [seconds, setSeconds] = useState(50);
+  const [loader, setLoader] = useState(false);
+
   const userToken = useSelector(state => state?.tokenSlice?.token);
 
   const ref = useBlurOnFulfill({value, cellCount: CELL_COUNT});
@@ -53,6 +56,7 @@ export default function BackupEmailVerifyPage({navigation, route}) {
   });
 
   const handleOTP = async () => {
+    setLoader(true);
     console.log(value);
 
     var myHeaders = new Headers();
@@ -78,8 +82,12 @@ export default function BackupEmailVerifyPage({navigation, route}) {
       .then(result => {
         console.log(result);
         navigation.navigate('BackupPrivacyPolicy');
+        setLoader(false);
       })
-      .catch(error => console.log('error', error));
+      .catch(error => {
+        console.log('error', error);
+        setLoader(false);
+      });
   };
 
   return (
@@ -130,11 +138,24 @@ export default function BackupEmailVerifyPage({navigation, route}) {
             <Text style={styles.link}>Resend code {seconds}s</Text>
           </TouchableOpacity>
         </View>
-        <TouchableOpacity style={styles.buttonField} onPress={handleOTP}>
-          <View style={styles.button}>
-            <Text style={styles.text}>Next</Text>
+
+        {loader ? (
+          <View style={styles.buttonField} onPress={handleOTP}>
+            <View style={styles.button}>
+              <ActivityIndicator
+                style={{marginTop: 20}}
+                color={'white'}
+                size={30}
+              />
+            </View>
           </View>
-        </TouchableOpacity>
+        ) : (
+          <TouchableOpacity style={styles.buttonField} onPress={handleOTP}>
+            <View style={styles.button}>
+              <Text style={styles.text}>Next</Text>
+            </View>
+          </TouchableOpacity>
+        )}
       </ImageBackground>
     </SafeAreaView>
   );

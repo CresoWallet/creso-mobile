@@ -9,6 +9,7 @@ import {
   View,
   TextInput,
   onChangeText,
+  ActivityIndicator,
 } from 'react-native';
 import images from '../../services/utilities/images';
 import {styles} from '../BackupMainScreen/style';
@@ -102,11 +103,17 @@ export default function BackupMainScreen({navigation}) {
                   }}
                 />
               </View>
-              <TouchableOpacity
-                style={styles.addPhoneButtonStyling}
-                onPress={handleNext}>
-                <Text style={styles.textColor}>Next</Text>
-              </TouchableOpacity>
+              {loader ? (
+                <View style={styles.addPhoneButtonStyling}>
+                  <ActivityIndicator color={'white'} size={30} />
+                </View>
+              ) : (
+                <TouchableOpacity
+                  style={styles.addPhoneButtonStyling}
+                  onPress={handleNext}>
+                  <Text style={styles.textColor}>Next</Text>
+                </TouchableOpacity>
+              )}
             </View>
           </View>
         </ImageBackground>

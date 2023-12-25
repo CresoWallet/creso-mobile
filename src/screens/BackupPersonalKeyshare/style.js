@@ -70,7 +70,7 @@ export const styles = StyleSheet.create({
   },
   textHeading: {
     color: colors.black,
-    marginTop: sizes.screenHeight * 0.1,
+
     fontSize: fontSize.h4,
     fontWeight: '800',
     marginBottom: sizes.screenHeight * 0.02,
@@ -86,5 +86,23 @@ export const styles = StyleSheet.create({
     width: sizes.screenWidth * 0.767,
     height: sizes.screenHeight * 0.29,
     right: sizes.screenWidth * 0.01,
+  },
+
+  inputField: {
+    width: sizes.screenWidth * 0.9,
+    alignSelf: 'center',
+    borderWidth: 1,
+    borderColor: colors.black,
+    borderRadius: sizes.screenHeight * 0.1,
+    marginVertical: sizes.screenHeight * 0.02,
+    height: sizes.screenHeight * 0.07,
+    justifyContent: 'center',
+  },
+
+  input: {
+    color: colors.black,
+    fontSize: fontSize.medium,
+    marginLeft: sizes.screenWidth * 0.05,
+    width: sizes.screenWidth * 0.8,
   },
 });

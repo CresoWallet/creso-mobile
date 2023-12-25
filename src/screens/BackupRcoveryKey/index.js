@@ -74,7 +74,7 @@ export default function BackupRcoveryKey({navigation}) {
                 onPress={() => {
                   navigation.navigate('BackupPersonalKeyShare');
                 }}>
-                <Text style={styles.textColor}>Enable Device Lock</Text>
+                <Text style={styles.textColor}>Next</Text>
               </TouchableOpacity>
             </View>
           </View>

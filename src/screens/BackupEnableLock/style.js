@@ -65,10 +65,10 @@ export const styles = StyleSheet.create({
   },
   textHeading: {
     color: colors.black,
-    marginTop: sizes.screenHeight * 0.1,
     fontSize: fontSize.h4,
     fontWeight: '800',
     marginBottom: sizes.screenHeight * 0.02,
+    marginTop: sizes.screenHeight * 0.1,
   },
   textBody: {
     width: sizes.screenWidth * 0.85,

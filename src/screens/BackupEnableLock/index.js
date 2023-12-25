@@ -5,12 +5,14 @@ import {
   Platform,
   SafeAreaView,
   Text,
+  TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
 import images from '../../services/utilities/images';
 import {styles} from './style';
 import Header from '../../components/Header';
+import {colors} from '../../services';
 
 export default function BackupEnableLock({navigation}) {
   return (
