@@ -585,4 +585,43 @@ export const styles = StyleSheet.create({
     color: colors.gray,
     marginTop: sizes.screenHeight * 0.003,
   },
+
+  popUpBody: {
+    backgroundColor: colors.white,
+    height: sizes.screenHeight * 0.3,
+    borderRadius: sizes.screenHeight * 0.03,
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: sizes.screenHeight * 0.03,
+  },
+
+  checkmark: {
+    resizeMode: 'contain',
+    height: sizes.screenHeight * 0.06,
+    width: sizes.screenHeight * 0.06,
+  },
+
+  popUpText: {
+    fontSize: fontSize.medium,
+    color: colors.black,
+    fontWeight: '600',
+    width: sizes.screenWidth * 0.7,
+    textAlign: 'center',
+    alignSelf: 'center',
+  },
+
+  popUpBtn: {
+    backgroundColor: colors.black,
+    height: sizes.screenHeight * 0.06,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: sizes.screenWidth * 0.4,
+    borderRadius: sizes.screenHeight * 0.1,
+  },
+
+  popUpBtnText: {
+    color: colors.white,
+    fontSize: fontSize.medium,
+    fontWeight: '600',
+  },
 });

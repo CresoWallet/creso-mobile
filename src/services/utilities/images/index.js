@@ -132,6 +132,7 @@ import backupModalLine from '../../../assets/backupModalLine.png';
 import ethImgBorder from '../../../assets/ethImgBorder.png';
 import twtLogo from '../../../assets/twtLogo.png';
 import forgotPassImg from '../../../assets/forgotPassImg.png';
+import checkmark from '../../../assets/checkmark.png';
 
 const images = {
   forgotPassImg,
@@ -269,6 +270,7 @@ const images = {
   backupModalImg,
   backupModalLine,
   ethImgBorder,
+  checkmark,
 };
 
 export default images;

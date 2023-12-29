@@ -21,6 +21,7 @@ import RNFS, {downloadFile} from 'react-native-fs';
 import {encode} from 'base-64';
 import {PermissionsAndroid} from 'react-native';
 import RNFetchBlob from 'rn-fetch-blob';
+import CryptoJS from 'crypto-js';
 
 export default function BackupPersonalKeyShare({navigation}) {
   const [secretKey, setSecretKey] = useState('');
@@ -36,7 +37,107 @@ export default function BackupPersonalKeyShare({navigation}) {
 
   const userToken = useSelector(state => state?.tokenSlice?.token);
 
-  const requestStoragePermission = async fileURL => {
+  // const downloadFile = async fileURL => {
+  //   console.log(fileURL, userEmail);
+
+  //   const {config, fs} = RNFetchBlob;
+  //   const fileDirectory = fs.dirs.DownloadDir;
+  //   // let file_ext = getFileExtention(fileURL);
+
+  //   try {
+  //     const granted = await PermissionsAndroid.request(
+  //       PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+  //       {
+  //         title: 'Storage Permission',
+  //         message: 'Creso Mobile wants to access your files and storage',
+  //         buttonNeutral: 'Ask Me Later',
+  //         buttonNegative: 'Cancel',
+  //         buttonPositive: 'Allow',
+  //       },
+  //     );
+
+  //     if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+  //       console.log('Storage permission Granted');
+
+  //       // Configure RNFetchBlob
+  //       config({
+  //         fileCache: true,
+  //         addAndroidDownloads: {
+  //           useDownloadManager: true,
+  //           notification: true,
+  //           path: fileDirectory + '/' + userEmail, // Add '/' between directory and filename
+  //           description: 'File download',
+  //         },
+  //       });
+
+  //       // Use RNFetchBlob for downloading
+  //       RNFetchBlob.fetch('GET', decodeURIComponent(fileURL), {}).then(res => {
+  //         console.log('Backup successfully saved to', res.path());
+  //       });
+
+  //       setLoader(false);
+  //     } else {
+  //       console.log('Storage permission denied');
+  //       // Handle denied permission (e.g., show a message to the user)
+  //       setLoader(false);
+  //     }
+  //   } catch (err) {
+  //     console.warn(err);
+  //     // Handle errors (e.g., show an error message to the user)
+  //     setLoader(false);
+  //   }
+  // };
+
+  // const downloadFile = async fileURL => {
+  //   console.log(fileURL, userEmail);
+
+  //   const {config, fs} = RNFetchBlob;
+  //   const fileDirectory = fs.dirs.DownloadDir;
+
+  //   // Request WRITE_EXTERNAL_STORAGE permission
+  //   try {
+  //     const granted = await PermissionsAndroid.request(
+  //       PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+  //       {
+  //         title: 'Storage Permission',
+  //         message: 'Creso Mobile wants to access your files and storage',
+  //         buttonNeutral: 'Ask Me Later',
+  //         buttonNegative: 'Cancel',
+  //         buttonPositive: 'Allow',
+  //       },
+  //     );
+
+  //     if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+  //       console.log('Storage permission Granted');
+
+  //       // Configure RNFetchBlob
+  //       config({
+  //         fileCache: true,
+  //         addAndroidDownloads: {
+  //           useDownloadManager: true,
+  //           notification: true,
+  //           path: fileDirectory + '/' + userEmail + '_backup', // Add '/' between directory and filename
+  //           description: 'File download',
+  //         },
+  //       });
+  //       RNFetchBlob.fetch('GET', decodeURIComponent(fileURL), {}).then(res => {
+  //         console.log('Backup successfully saved to ', res.path());
+  //       });
+
+  //       setLoader(false);
+  //     } else {
+  //       console.log('Storage permission denied');
+  //       setLoader(false);
+  //     }
+  //   } catch (err) {
+  //     console.warn(err);
+  //     setLoader(false);
+  //   }
+  // };
+
+  ///////////////
+
+  const requestStoragePermission = async (fileURL, salt) => {
     try {
       const granted = await PermissionsAndroid.request(
         PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
@@ -50,7 +151,7 @@ export default function BackupPersonalKeyShare({navigation}) {
       );
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
         console.log('Storage permisson Granted');
-        downloadFile(fileURL);
+        downloadAndDecryptFile(fileURL, salt);
       } else {
         console.log('Storage permission denied');
         setLoader(false);
@@ -61,60 +162,56 @@ export default function BackupPersonalKeyShare({navigation}) {
     }
   };
 
-  const downloadFile = async fileURL => {
-    console.log(fileURL, userEmail);
-
+  const downloadAndDecryptFile = async (fileURL, encryptionKey) => {
     const {config, fs} = RNFetchBlob;
     const fileDirectory = fs.dirs.DownloadDir;
 
-    // Request WRITE_EXTERNAL_STORAGE permission
     try {
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+      const response = await fetch(fileURL);
+      const encryptedData = await response.json(); // Assuming API returns JSON
+
+      // Extract components from the API response
+      const {iv, data, tag, salt} = encryptedData;
+
+      // Derive the key using a key derivation function (e.g., PBKDF2)
+      const derivedKey = CryptoJS.PBKDF2(encryptionKey, salt, {
+        keySize: 256 / 32, // Use a 256-bit key size (adjust as needed)
+        iterations: 10000, // Adjust the number of iterations as needed
+      });
+
+      // Decrypt the file content
+      const decryptedData = CryptoJS.AES.decrypt(
+        {ciphertext: CryptoJS.enc.Base64.parse(data)},
+        derivedKey,
         {
-          title: 'Storage Permission',
-          message: 'Creso Mobile wants to access your files and storage',
-          buttonNeutral: 'Ask Me Later',
-          buttonNegative: 'Cancel',
-          buttonPositive: 'Allow',
+          iv: CryptoJS.enc.Base64.parse(iv),
+          tag: CryptoJS.enc.Base64.parse(tag),
         },
       );
 
-      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        console.log('Storage permission Granted');
+      const decryptedText = decryptedData.toString(CryptoJS.enc.Utf8);
 
-        // Configure RNFetchBlob
-        config({
-          fileCache: true,
-          addAndroidDownloads: {
-            useDownloadManager: true,
-            notification: true,
-            path: fileDirectory + '/' + userEmail + '_backup', // Add '/' between directory and filename
-            description: 'File download',
-          },
-        });
+      // Save the decrypted content to a file
+      const filePath = fileDirectory + '/decrypted_wallet_backup.json';
+      await fs.writeFile(filePath, decryptedText, 'utf8');
 
-        // Use RNFetchBlob for downloading
-        RNFetchBlob.fetch('GET', fileURL, {}).then(res => {
-          console.log('Backup successfully saved to ', res.path());
-        });
-
-        setLoader(false);
-      } else {
-        console.log('Storage permission denied');
-        setLoader(false);
-      }
-    } catch (err) {
-      console.warn(err);
+      console.log('Backup successfully saved to ', filePath);
+      setLoader(false);
+    } catch (error) {
+      console.error('Error downloading and decrypting file:', error);
       setLoader(false);
     }
   };
 
   // const downloadFile = fileURL => {
-  //   console.log(fileURL, userEmail);
+  //   console.log('============>>>>>>>>>>>', fileURL);
 
   //   const {config, fs} = RNFetchBlob;
   //   const fileDirectory = fs.dirs.DownloadDir;
+
+  //   const newUrl = 'https://' + fileURL + '.com';
+
+  //   console.log(newUrl);
 
   //   config({
   //     fileCache: true,
@@ -124,11 +221,12 @@ export default function BackupPersonalKeyShare({navigation}) {
   //       path: fileDirectory + userEmail + '_backup',
   //       description: 'File download',
   //     },
-  //   });
-
-  //   fetch('GET', fileURL, {}).then(res => {
-  //     console.log('Backup successfully saved to ', res.path());
-  //   });
+  //   })
+  //     .fetch('GET', newUrl, {})
+  //     .then(res => {
+  //       console.log('Backup successfully saved to ', res.path());
+  //       setLoader(false);
+  //     });
   // };
 
   const handleBackup = async () => {
@@ -157,7 +255,7 @@ export default function BackupPersonalKeyShare({navigation}) {
       .then(response => response.json())
       .then(result => {
         if (result.data) {
-          requestStoragePermission(result.data);
+          requestStoragePermission(result.data, result.salt);
         }
       })
       .catch(error => {
@@ -194,11 +292,7 @@ export default function BackupPersonalKeyShare({navigation}) {
         <Image source={images.personalKeyShareImg} style={styles.image} />
 
         {loader ? (
-          <TouchableOpacity
-            style={styles.buttonField}
-            onPress={() => {
-              handleBackup();
-            }}>
+          <TouchableOpacity style={styles.buttonField}>
             <View style={styles.button}>
               <ActivityIndicator
                 style={{marginTop: 20}}

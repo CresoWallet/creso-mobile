@@ -78,7 +78,6 @@ export default function BackupRcoveryKey({navigation}) {
               </TouchableOpacity>
             </View>
           </View>
-          {/* </View> */}
         </ImageBackground>
       </View>
     </SafeAreaView>

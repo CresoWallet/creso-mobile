@@ -33,6 +33,9 @@ export default function Home({navigation}) {
   const [walletName, setWalletName] = useState('');
   const [smartWalletName, setSmartWalletName] = useState('');
   const [loader, setLoader] = useState(false);
+  const [walletCreatedtModal, setWalletCreatedtModal] = useState(false);
+  const [wallet, setWallet] = useState('');
+  const [walletCreated, setWalletCreated] = useState(false);
 
   const translateY = useRef(new Animated.Value(500)).current;
 
@@ -69,6 +72,7 @@ export default function Home({navigation}) {
         console.log(result);
         if (result) {
           setModal2Show(!modal2Show);
+          setWalletCreatedtModal(true);
         }
         setWalletName('');
         setLoader(false);
@@ -110,6 +114,7 @@ export default function Home({navigation}) {
         console.log(result);
         if (result) {
           setModal3Show(!modal3Show);
+          setWalletCreatedtModal(true);
         }
         setSmartWalletName('');
         setLoader(false);
@@ -177,14 +182,14 @@ export default function Home({navigation}) {
         <View style={styles.logoRow}>
           <Image style={styles.logoImg} source={images.landingPageLogo} />
           <View style={styles.logoRowImgRightContainer}>
-            <TouchableOpacity
-              onPress={() => setModalForBackup(!modalForBackup)}>
+            <TouchableOpacity>
               <Image
                 style={styles.logoRowImgRight}
                 source={images.searchIcon}
               />
             </TouchableOpacity>
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => setModalForBackup(!modalForBackup)}>
               <Image style={styles.logoRowImgRight} source={images.qrScanner} />
             </TouchableOpacity>
           </View>
@@ -197,7 +202,11 @@ export default function Home({navigation}) {
         <View>
           <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
             <View style={styles.scrollViewRowContainer}>
-              <TouchableOpacity style={styles.scrollViewAddItemContainer}>
+              <TouchableOpacity
+                style={styles.scrollViewAddItemContainer}
+                onPress={() => {
+                  setWalletCreatedtModal(true);
+                }}>
                 <Image style={styles.addIcon} source={images.addIcon} />
                 <Text style={styles.scrollViewItemTextBold}>Add</Text>
               </TouchableOpacity>
@@ -656,7 +665,10 @@ export default function Home({navigation}) {
                 ) : (
                   <TouchableOpacity
                     style={styles.bottonBlack}
-                    onPress={handleCreateWallet}>
+                    onPress={() => {
+                      handleCreateWallet();
+                      setWallet('Legacy Wallet');
+                    }}>
                     <Text style={styles.bottonBlackText}>Confirm</Text>
                   </TouchableOpacity>
                 )}
@@ -747,12 +759,38 @@ export default function Home({navigation}) {
                 ) : (
                   <TouchableOpacity
                     style={styles.bottonBlack}
-                    onPress={handleCreateSmartWallet}>
+                    onPress={() => {
+                      handleCreateSmartWallet();
+                      setWallet('Smart Wallet');
+                    }}>
                     <Text style={styles.bottonBlackText}>Confirm</Text>
                   </TouchableOpacity>
                 )}
               </View>
             </View>
+          </View>
+        </Modal>
+
+        <Modal
+          isVisible={walletCreatedtModal}
+          onBackdropPress={() => {
+            setWalletCreatedtModal(false);
+          }}>
+          <View style={styles.popUpBody}>
+            <Image style={styles.checkmark} source={images.checkmark} />
+            <Text style={styles.popUpText}>
+              Your {wallet} is created successfully
+            </Text>
+            <TouchableOpacity style={styles.popUpBtn}>
+              <Text
+                style={styles.popUpBtnText}
+                onPress={() => {
+                  setWalletCreatedtModal(false);
+                  setWallet('');
+                }}>
+                Done
+              </Text>
+            </TouchableOpacity>
           </View>
         </Modal>
       </ImageBackground>
