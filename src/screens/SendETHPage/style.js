@@ -9,8 +9,9 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
   },
   mainContainer: {
-    marginTop: sizes.screenHeight * 0.04,
+    marginTop: sizes.screenHeight * 0.01,
   },
+
   field: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -18,13 +19,68 @@ export const styles = StyleSheet.create({
     // paddingRight:sizes.screenWidth*0.0,
     // paddingVertical:sizes.screen*0.03,
     width: sizes.screenWidth * 0.85,
-    height: sizes.screenHeight * 0.09,
+    height: sizes.screenHeight * 0.08,
     borderRadius: sizes.screenHeight * 0.05,
     borderWidth: sizes.screenHeight * 0.001,
     borderColor: colors.gray,
     fontWeight: '500',
-    marginBottom: sizes.screenHeight * 0.03,
+    marginBottom: sizes.screenHeight * 0.01,
+    overflow: 'hidden',
   },
+
+  typeText: {
+    fontWeight: '500',
+    fontSize: fontSize.regular,
+    color: colors.disabledBg2,
+  },
+
+  typeTextBlack: {
+    fontWeight: '500',
+    fontSize: fontSize.medium,
+    color: colors.black,
+  },
+
+  modalBodey: {
+    backgroundColor: colors.white,
+    paddingHorizontal: sizes.screenWidth * 0.05,
+    width: sizes.screenWidth * 0.9,
+    paddingVertical: sizes.screenHeight * 0.05,
+    borderRadius: 16,
+    maxHeight: sizes.screenHeight * 0.5,
+  },
+
+  modalHeading: {
+    fontWeight: '600',
+    fontSize: fontSize.large,
+    color: colors.black,
+    marginBottom: sizes.screenHeight * 0.02,
+    alignSelf: 'center',
+  },
+
+  modalHeading2: {
+    fontWeight: '600',
+    fontSize: fontSize.large,
+    color: colors.black,
+    alignSelf: 'center',
+    width: sizes.screenWidth * 0.8,
+  },
+
+  typeOptionContainer: {
+    width: sizes.screenWidth * 0.8,
+    borderColor: colors.disabledBg,
+    borderWidth: 1,
+    paddingHorizontal: sizes.screenWidth * 0.02,
+    paddingVertical: sizes.screenHeight * 0.01,
+    borderRadius: 8,
+    marginVertical: sizes.screenHeight * 0.01,
+  },
+
+  typeOption: {
+    fontWeight: '500',
+    fontSize: fontSize.medium,
+    color: colors.black,
+  },
+
   fieldHeading: {
     color: colors.black,
     fontWeight: '500',
@@ -34,6 +90,14 @@ export const styles = StyleSheet.create({
   subField: {
     flexDirection: 'row',
     alignItems: 'center',
+  },
+
+  subField2: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    overflow: 'hidden',
+    width: sizes.screenWidth * 0.42,
+    justifyContent: 'flex-end',
   },
   cresoImg: {
     width: sizes.screenWidth * 0.09,
@@ -49,6 +113,9 @@ export const styles = StyleSheet.create({
   },
   EQASideText: {
     fontSize: fontSize.large,
+    flexWrap: 'nowrap',
+    width: sizes.screenWidth * 0.26,
+    height: sizes.screenHeight * 0.03,
   },
   EQA: {
     paddingHorizontal: sizes.screenWidth * 0.032,
@@ -61,8 +128,8 @@ export const styles = StyleSheet.create({
     marginLeft: sizes.screenWidth * 0.02,
   },
   pasteButton: {
-    paddingHorizontal: sizes.screenWidth * 0.032,
-    paddingVertical: sizes.screenHeight * 0.007,
+    paddingHorizontal: sizes.screenWidth * 0.03,
+    paddingVertical: 3,
     backgroundColor: colors.purple,
     borderRadius: sizes.screenHeight * 0.03,
     marginRight: sizes.screenWidth * 0.02,
@@ -77,11 +144,11 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
-
-    marginTop: sizes.screenHeight * 0.13,
     width: sizes.screenWidth * 0.85,
     height: sizes.screenHeight * 0.08,
     borderRadius: sizes.screenHeight * 0.04,
+    position: 'absolute',
+    bottom: sizes.screenHeight * 0.02,
   },
   BtnText: {
     color: colors.white,
@@ -92,6 +159,8 @@ export const styles = StyleSheet.create({
 
   searchFields: {
     color: colors.black,
+    width: sizes.screenWidth * 0.6,
+    fontSize: fontSize.medium,
   },
 
   coinIcons: {
@@ -108,5 +177,6 @@ export const styles = StyleSheet.create({
 
   inputAmount: {
     color: colors.black,
+    fontSize: fontSize.medium,
   },
 });
