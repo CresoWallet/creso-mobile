@@ -4,7 +4,7 @@
 
 export const AUTH_TOKEN = 'auth_token';
 
-export const BASE_URL = 'https://creso-b02eab9f8c40.herokuapp.com';
+export const BASE_URL = 'https://core.creso.io';
 // : "http://localhost:8080"
 
 // export const BASE_URL = "https://creso-b02eab9f8c40.herokuapp.com";

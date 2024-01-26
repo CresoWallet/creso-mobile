@@ -48,7 +48,7 @@ export default function SignIn({navigation}) {
       } else if (email && password) {
         setError('');
         const data = {
-          email,
+          email: email.toLowerCase(),
           password,
         };
         try {
@@ -125,7 +125,7 @@ export default function SignIn({navigation}) {
         </TouchableOpacity>
 
         {loader ? (
-          <View style={styles.BtnBlack} onPress={handleSignIn}>
+          <View style={styles.BtnBlack}>
             <ActivityIndicator color={'white'} size={30} />
           </View>
         ) : (

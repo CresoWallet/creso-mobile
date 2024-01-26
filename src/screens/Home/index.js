@@ -63,10 +63,7 @@ export default function Home({navigation}) {
       redirect: 'follow',
     };
 
-    fetch(
-      'https://creso-b02eab9f8c40.herokuapp.com/api/create/wallet',
-      requestOptions,
-    )
+    fetch('https://core.creso.io/api/create/wallet', requestOptions)
       .then(response => response.text())
       .then(result => {
         console.log(result);
@@ -105,14 +102,11 @@ export default function Home({navigation}) {
       redirect: 'follow',
     };
 
-    fetch(
-      'https://creso-b02eab9f8c40.herokuapp.com/api/create/smartwallet',
-      requestOptions,
-    )
+    fetch('https://core.creso.io/api/create/smartwallet', requestOptions)
       .then(response => response.text())
       .then(result => {
-        console.log(result);
-        if (result) {
+        console.log(result.id);
+        if (result.id) {
           setModal3Show(!modal3Show);
           setWalletCreatedtModal(true);
         }

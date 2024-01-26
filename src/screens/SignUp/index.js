@@ -57,7 +57,7 @@ export default function SignUp({navigation}) {
       } else if (password === confirmPassword) {
         setError('');
         const signUpData = {
-          email,
+          email: email.toLowerCase(),
           username,
           password,
         };
@@ -76,36 +76,6 @@ export default function SignUp({navigation}) {
         } finally {
           setLoader(false);
         }
-
-        // var myHeaders = new Headers();
-        // myHeaders.append('Content-Type', 'application/json');
-
-        // var raw = JSON.stringify({
-        //   username,
-        //   email,
-        //   password,
-        // });
-
-        // var requestOptions = {
-        //   method: 'POST',
-        //   headers: myHeaders,
-        //   body: raw,
-        //   redirect: 'follow',
-        // };
-
-        // fetch(`${backendURL}/register`, requestOptions)
-        //   .then(response => response)
-        //   .then(result => {
-        //     console.log(result);
-        //     setLoader(false);
-        //     if (result.status === 200) {
-        //       navigation.navigate('MyTabs');
-        //     }
-        //   })
-        //   .catch(error => {
-        //     console.log('error', error);
-        //     setLoader(false);
-        //   });
       } else {
         setError('Password does not match');
         setLoader(false);

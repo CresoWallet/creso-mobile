@@ -49,7 +49,7 @@ export default function AccountInfo({navigation}) {
                 <Text style={styles.accountTopcontainerText}>Account</Text>
               </View>
               <View style={styles.profilecontainer}>
-                <View>
+                <View style={styles.accountProfilePicContainer}>
                   <Image
                     style={styles.accountProfilePic}
                     source={images.accountProfilePic}

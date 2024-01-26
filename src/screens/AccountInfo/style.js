@@ -119,8 +119,14 @@ export const styles = StyleSheet.create({
 
   ///////////////
 
+  accountProfilePicContainer: {
+    height: sizes.screenHeight * 0.15,
+    width: sizes.screenHeight * 0.15,
+    borderRadius: sizes.screenHeight * 0.15,
+    overflow: 'hidden',
+  },
+
   accountProfilePic: {
-    resizeMode: 'contain',
     height: sizes.screenHeight * 0.15,
     width: sizes.screenHeight * 0.15,
   },

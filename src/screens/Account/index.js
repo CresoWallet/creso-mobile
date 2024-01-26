@@ -20,6 +20,7 @@ import {handleFalse, handleTrue} from '../../store/isSignedInSlice';
 import {handleRemoveToken} from '../../store/token';
 import {getUserDetails, logOut, sendOTPMail} from '../../clientApi';
 import {axiosInstance} from '../../services/config/axios';
+import {launchImageLibrary} from 'react-native-image-picker';
 
 export default function Account({navigation}) {
   const [loader, setLoader] = useState(false);
@@ -32,6 +33,30 @@ export default function Account({navigation}) {
 
   const [OTPloader, setOTPLoader] = useState(false);
 
+  const [imgUri, setImgUri] = useState(null);
+  const uploadPhoto = () => {
+    let options = {
+      storageOptions: {
+        skipBackup: true,
+        path: 'images',
+      },
+    };
+    launchImageLibrary(options, res => {
+      console.log('Response = ', res);
+      if (res.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (res.error) {
+        console.log('ImagePicker Error: ', res.error);
+      } else if (res.customButton) {
+        console.log('User tapped custom button: ', res.customButton);
+        // alert(res.customButton);
+      } else {
+        const source = {uri: res.uri};
+        setImgUri(res.assets[0].uri);
+      }
+    });
+  };
+
   const handleVerify = async () => {
     if (!verify) {
       setOTPLoader(true);
@@ -40,7 +65,7 @@ export default function Account({navigation}) {
       myHeaders.append('Cookie', `auth_token=${userToken}`);
 
       var formdata = new FormData();
-      formdata.append('email', 'aleemsimation@gmail.com');
+      formdata.append('email', userEmail);
 
       var requestOptions = {
         method: 'POST',
@@ -49,10 +74,7 @@ export default function Account({navigation}) {
         redirect: 'follow',
       };
 
-      fetch(
-        'https://creso-b02eab9f8c40.herokuapp.com/api/sendOTP',
-        requestOptions,
-      )
+      fetch('https://core.creso.io/api/sendOTP', requestOptions)
         .then(response => response.text())
         .then(result => {
           console.log(result);
@@ -163,7 +185,9 @@ export default function Account({navigation}) {
               </View>
             </View>
 
-            <TouchableOpacity style={styles.addPhoneButtonStyling}>
+            <TouchableOpacity
+              style={styles.addPhoneButtonStyling}
+              onPress={uploadPhoto}>
               <Text style={styles.textColor}>Add Photo</Text>
             </TouchableOpacity>
             <View style={styles.topContainer}>

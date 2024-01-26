@@ -54,13 +54,10 @@ export default function BackupMainScreen({navigation}) {
       redirect: 'follow',
     };
 
-    fetch(
-      'https://creso-b02eab9f8c40.herokuapp.com/api/sendOTP',
-      requestOptions,
-    )
+    fetch('https://core.creso.io/api/sendOTP', requestOptions)
       .then(response => response.text())
       .then(result => {
-        console.log(result);
+        console.log('----------->>>>', result);
 
         navigation.navigate('BackupEmailVerifyPage', {
           email: userEmail,
