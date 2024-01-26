@@ -248,10 +248,7 @@ export default function BackupPersonalKeyShare({navigation}) {
       redirect: 'follow',
     };
 
-    fetch(
-      'https://creso-b02eab9f8c40.herokuapp.com/api/backup/wallet',
-      requestOptions,
-    )
+    fetch('https://core.creso.io/api/backup/wallet', requestOptions)
       .then(response => response.json())
       .then(result => {
         if (result.data) {

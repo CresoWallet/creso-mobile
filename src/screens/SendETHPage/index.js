@@ -59,7 +59,7 @@ export default function SendETHPage({navigation}) {
       redirect: 'follow',
     };
 
-    fetch('https://creso-b02eab9f8c40.herokuapp.com/api/wallet', requestOptions)
+    fetch('https://core.creso.io/api/wallet', requestOptions)
       .then(response => response.json())
       .then(result => {
         setWallets(result.wallets);
@@ -94,10 +94,7 @@ export default function SendETHPage({navigation}) {
       redirect: 'follow',
     };
 
-    fetch(
-      'https://creso-b02eab9f8c40.herokuapp.com/api/transfer',
-      requestOptions,
-    )
+    fetch('https://core.creso.io/api/transfer', requestOptions)
       .then(response => response.json())
       .then(result => {
         console.log(result);

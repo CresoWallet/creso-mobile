@@ -27,16 +27,19 @@ export const styles = StyleSheet.create({
 
   connectedTextStyling: {
     color: colors.black,
+    fontSize: fontSize.small,
   },
 
   connectedButtonStyling: {
     backgroundColor: colors.connectContainerGreen,
-    borderWidth: 2,
+    borderWidth: 1,
     borderRadius: sizes.screenWidth * 0.8,
-    height: sizes.screenHeight * 0.04,
-    paddingHorizontal: sizes.screenWidth * 0.05,
+    height: sizes.screenHeight * 0.036,
+    paddingHorizontal: sizes.screenWidth * 0.04,
     alignItems: 'center',
     justifyContent: 'center',
+    position: 'absolute',
+    right: 8,
   },
   topContainer: {
     // padding: sizes.screenWidth * 0.1,

@@ -134,16 +134,34 @@ export default function Account({navigation}) {
   const userDetail = useSelector(state => state?.userDetailSlice?.userDetail);
 
   useEffect(() => {
-    // getCurrentUser();
+    getCurrentUser();
     setUserEmail(userDetail.email);
   }, []);
 
   const userToken = useSelector(state => state?.tokenSlice?.token);
 
   const getCurrentUser = async () => {
-    const res = await getUserDetails(userToken);
-    setUserEmail(res.data.user.email);
-    setVerify(res.data.user.isEmailVerified);
+    var myHeaders = new Headers();
+    myHeaders.append('auth_token', `"auth_token ${userToken}"`);
+    myHeaders.append('Cookie', `auth_token=${userToken}`);
+
+    var requestOptions = {
+      method: 'GET',
+      headers: myHeaders,
+      redirect: 'follow',
+    };
+
+    fetch('https://core.creso.io/api/authenticate', requestOptions)
+      .then(response => response.json())
+      .then(result => {
+        console.log(result);
+        setVerify(result?.user?.isEmailVerified);
+      })
+      .catch(error => console.log('error', error));
+
+    // const res = await getUserDetails(userToken);
+    // setUserEmail(res.data.user.email);
+    // setVerify(res.data.user.isEmailVerified);
   };
 
   return (

@@ -46,10 +46,7 @@ export default function OTP({navigation}) {
       redirect: 'follow',
     };
 
-    fetch(
-      'https://creso-b02eab9f8c40.herokuapp.com/api/verifyOTP',
-      requestOptions,
-    )
+    fetch('https://core.creso.io/api/verifyOTP', requestOptions)
       .then(response => response.text())
       .then(result => console.log(result))
       .catch(error => console.log('error', error));
