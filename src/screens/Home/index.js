@@ -83,7 +83,6 @@ export default function Home({navigation}) {
 
   const handleCreateSmartWallet = async () => {
     var myHeaders = new Headers();
-
     setLoader(true);
 
     myHeaders.append('auth_token', `"auth_token ${userToken}"`);
@@ -92,7 +91,7 @@ export default function Home({navigation}) {
 
     var raw = JSON.stringify({
       walletName: smartWalletName,
-      network: 'goerli',
+      network: 'ethereum',
     });
 
     var requestOptions = {
@@ -118,6 +117,43 @@ export default function Home({navigation}) {
         setSmartWalletName('');
         setLoader(false);
       });
+
+    // var myHeaders = new Headers();
+
+    // setLoader(true);
+
+    // myHeaders.append('auth_token', `"auth_token ${userToken}"`);
+    // myHeaders.append('Content-Type', 'application/json');
+    // myHeaders.append('Cookie', `auth_token=${userToken}`);
+
+    // var raw = JSON.stringify({
+    //   walletName: smartWalletName,
+    //   network: 'ethereum',
+    // });
+
+    // var requestOptions = {
+    //   method: 'POST',
+    //   headers: myHeaders,
+    //   body: raw,
+    //   redirect: 'follow',
+    // };
+
+    // fetch('https://core.creso.io/api/create/smartwallet', requestOptions)
+    //   .then(response => response.text())
+    //   .then(result => {
+    //     console.log(result.id);
+    //     if (result.id) {
+    //       setModal3Show(!modal3Show);
+    //       setWalletCreatedtModal(true);
+    //     }
+    //     setSmartWalletName('');
+    //     setLoader(false);
+    //   })
+    //   .catch(error => {
+    //     console.log('error', error);
+    //     setSmartWalletName('');
+    //     setLoader(false);
+    //   });
   };
 
   useEffect(() => {
@@ -699,6 +735,7 @@ export default function Home({navigation}) {
                       source={images.securityWarningImg}
                     />
                   </View>
+
                   <Text style={styles.warningText}>
                     Compatible with all Dapps; lower Gas fees; only supports
                     paying gas with native token; does not support advanced
@@ -775,15 +812,13 @@ export default function Home({navigation}) {
             <Text style={styles.popUpText}>
               Your {wallet} is created successfully
             </Text>
-            <TouchableOpacity style={styles.popUpBtn}>
-              <Text
-                style={styles.popUpBtnText}
-                onPress={() => {
-                  setWalletCreatedtModal(false);
-                  setWallet('');
-                }}>
-                Done
-              </Text>
+            <TouchableOpacity
+              style={styles.popUpBtn}
+              onPress={() => {
+                setWalletCreatedtModal(false);
+                setWallet('');
+              }}>
+              <Text style={styles.popUpBtnText}>Done</Text>
             </TouchableOpacity>
           </View>
         </Modal>
