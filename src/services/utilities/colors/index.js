@@ -2,7 +2,6 @@ export const colors = {
   white: '#ffffff',
   black: '#000000',
   sliderDotBG: '#D9D9EB',
-
   gray: '#00000066',
   textBlue: '#2100EC',
   disabledBg2: '#90949d',
@@ -24,4 +23,6 @@ export const colors = {
   purple: '#a699f7',
   backgroundPink: '#FFF5F9',
   disabledBg1: '#D2D2E1',
+  cresoPink: '#FF4085',
+  cresoBlue: '#2100EC',
 };

@@ -133,6 +133,11 @@ import ethImgBorder from '../../../assets/ethImgBorder.png';
 import twtLogo from '../../../assets/twtLogo.png';
 import forgotPassImg from '../../../assets/forgotPassImg.png';
 import checkmark from '../../../assets/checkmark.png';
+import emailCheck from '../../../assets/emailCheck.png';
+import signInA from '../../../assets/signInA.png';
+import signInG from '../../../assets/signInG.png';
+import signInT from '../../../assets/signInT.png';
+import rightArroww from '../../../assets/rightArroww.png';
 
 const images = {
   forgotPassImg,
@@ -271,6 +276,11 @@ const images = {
   backupModalLine,
   ethImgBorder,
   checkmark,
+  emailCheck,
+  signInA,
+  signInG,
+  signInT,
+  rightArroww,
 };
 
 export default images;

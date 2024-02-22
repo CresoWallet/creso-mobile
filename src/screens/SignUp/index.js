@@ -34,10 +34,22 @@ export default function SignUp({navigation}) {
   const [error, setError] = useState('');
   const [loader, setLoader] = useState(false);
 
+  const [correctFormat, setCorrectFormat] = useState(false);
+
+  const validateEmail = email => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const handleEmailChange = text => {
+    setEmail(text);
+    setCorrectFormat(validateEmail(text));
+  };
+
   const handleSignUp = async () => {
     setLoader(true);
     if (!username) {
-      setError('Please enter your name');
+      setError('Please enter your Username');
       setLoader(false);
     } else if (email) {
       let updatedEmail = email.toLocaleLowerCase();
@@ -88,10 +100,13 @@ export default function SignUp({navigation}) {
       <ImageBackground source={images.landingPageBGImg} style={styles.bgImage}>
         <Image source={images.landingPageLogo} style={styles.logoImg} />
 
-        <Text style={styles.text1}>Sign Up</Text>
+        {/* <Text style={styles.text1}>Sign Up</Text> */}
+
+        <Text style={styles.label}>Username</Text>
+
         <View style={styles.inputField}>
           <TextInput
-            placeholder="Your name"
+            placeholder="Username"
             placeholderTextColor={colors.disabledBg2}
             style={styles.inputFieldText}
             value={username}
@@ -101,17 +116,25 @@ export default function SignUp({navigation}) {
           />
           <View />
         </View>
+
+        <Text style={styles.label}>Email</Text>
+
         <View style={styles.inputField}>
           <TextInput
             placeholder="Your email"
             placeholderTextColor={colors.disabledBg2}
+            secureTextEntry={hidePass ? true : false}
             style={styles.inputFieldText}
             value={email}
-            onChangeText={text => {
-              setEmail(text);
-            }}
+            onChangeText={text => handleEmailChange(text)}
           />
+          {correctFormat ? (
+            <Image source={images.emailCheck} style={styles.emailCheck} />
+          ) : null}
         </View>
+
+        <Text style={styles.label}>Password</Text>
+
         <View style={styles.inputField}>
           <TextInput
             placeholder="Password"
@@ -135,6 +158,9 @@ export default function SignUp({navigation}) {
             {/* </TouchableOpacity> */}
           </TouchableOpacity>
         </View>
+
+        <Text style={styles.label}>Confirm Password</Text>
+
         <View style={styles.inputField}>
           <TextInput
             placeholder="Confirm Password"
@@ -167,10 +193,19 @@ export default function SignUp({navigation}) {
         ) : (
           <TouchableOpacity style={styles.BtnBlack} onPress={handleSignUp}>
             <Text style={styles.BtnBlackText}>Sign Up</Text>
+            <Image source={images.rightArroww} style={styles.rightArroww} />
           </TouchableOpacity>
         )}
 
-        <View style={styles.loginTextView}>
+        <View style={styles.TandC}>
+          <Image source={images.emailCheck} style={styles.emailCheck} />
+          <Text style={styles.textBlack}>
+            I have agreed to the Creso{' '}
+            <Text style={styles.textPink}>Terms and Conditions</Text>
+          </Text>
+        </View>
+
+        {/* <View style={styles.loginTextView}>
           <Text style={styles.loginText}>Already have an account? </Text>
           <TouchableOpacity>
             <Text
@@ -192,7 +227,7 @@ export default function SignUp({navigation}) {
         <TouchableOpacity style={styles.neon}>
           <Text style={styles.neonText}>Sign up with twitter</Text>
           <Image source={images.twtLogo} style={styles.twtLogo} />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </ImageBackground>
     </SafeAreaView>
   );

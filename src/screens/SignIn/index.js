@@ -28,6 +28,18 @@ export default function SignIn({navigation}) {
   const [hideSignupPass, setHideSignUpPass] = useState(true);
   const [hideReEnterSignupPass, setHideReEnterSignUpPass] = useState(false);
 
+  const [correctFormat, setCorrectFormat] = useState(false);
+
+  const validateEmail = email => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const handleEmailChange = text => {
+    setEmail(text);
+    setCorrectFormat(validateEmail(text));
+  };
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loader, setLoader] = useState(false);
@@ -76,9 +88,7 @@ export default function SignIn({navigation}) {
     <SafeAreaView style={styles.container}>
       <ImageBackground source={images.landingPageBGImg} style={styles.bgImage}>
         <Image source={images.landingPageLogo} style={styles.logoImg} />
-
-        <Text style={styles.text1}>Sign In</Text>
-
+        <Text style={styles.label}>Email</Text>
         <View style={styles.inputField}>
           <TextInput
             placeholder="Your email"
@@ -86,9 +96,14 @@ export default function SignIn({navigation}) {
             secureTextEntry={hidePass ? true : false}
             style={styles.inputFieldText}
             value={email}
-            onChangeText={text => setEmail(text)}
+            onChangeText={text => handleEmailChange(text)}
           />
+          {correctFormat ? (
+            <Image source={images.emailCheck} style={styles.emailCheck} />
+          ) : null}
         </View>
+        <Text style={styles.label}>Password</Text>
+
         <View style={styles.inputField}>
           <TextInput
             placeholder="Password"
@@ -107,14 +122,15 @@ export default function SignIn({navigation}) {
                 alignSelf: 'flex-end',
               }}
             />
-            {/* </TouchableOpacity> */}
           </TouchableOpacity>
         </View>
-        <Text style={styles.errorText}>{error}</Text>
+        {/* <Text style={styles.errorText}>{error}</Text> */}
         <TouchableOpacity
-          onPress={() => {
-            navigation.navigate('ForgotPass');
-          }}>
+          // onPress={() => {
+          //   navigation.navigate('ForgotPass');
+          // }
+          // }
+          style={styles.forgotPassContainer}>
           <Text
             style={styles.forgotPass}
             onPress={() => {
@@ -130,10 +146,11 @@ export default function SignIn({navigation}) {
           </View>
         ) : (
           <TouchableOpacity style={styles.BtnBlack} onPress={handleSignIn}>
-            <Text style={styles.BtnBlackText}>Sign In</Text>
+            <Text style={styles.BtnBlackText}>Login</Text>
+            <Image source={images.rightArroww} style={styles.rightArroww} />
           </TouchableOpacity>
         )}
-        <View style={styles.loginTextView}>
+        {/* <View style={styles.loginTextView}>
           <Text style={styles.loginText}>Don't have an account? </Text>
           <TouchableOpacity>
             <Text
@@ -144,17 +161,24 @@ export default function SignIn({navigation}) {
               Sign Up
             </Text>
           </TouchableOpacity>
-        </View>
+        </View> */}
 
         <View style={styles.orView}>
           <View style={styles.divider} />
-          <Text style={styles.orViewText}>OR</Text>
-          <View style={styles.divider} />
+          {/* <Text style={styles.orViewText}>OR</Text>
+          <View style={styles.divider} /> */}
         </View>
-
-        <TouchableOpacity style={styles.neon}>
-          <Text style={styles.neonText}>Sign up with twitter</Text>
-          <Image source={images.twtLogo} style={styles.twtLogo} />
+        <TouchableOpacity style={styles.signInWith}>
+          <Image source={images.signInG} style={styles.twtLogo} />
+          <Text style={styles.neonText}>Sign in with Google</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.signInWith}>
+          <Image source={images.signInT} style={styles.twtLogo} />
+          <Text style={styles.neonText}>Sign in with Twitter</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.signInWith}>
+          <Image source={images.signInA} style={styles.twtLogo} />
+          <Text style={styles.neonText}>Sign in with Apple</Text>
         </TouchableOpacity>
       </ImageBackground>
     </SafeAreaView>

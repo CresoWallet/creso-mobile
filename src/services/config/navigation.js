@@ -40,6 +40,7 @@ import ForgotPass from '../../screens/ForgotPass';
 import ResetPass from '../../screens/ResetPass';
 import PrivacyPolicy from '../../screens/PrivacyPolicy';
 import {useSelector} from 'react-redux';
+import VerifyEmail from '../../screens/VerifyEmail';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -48,7 +49,9 @@ export default function MainNavigator() {
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{headerShown: false}}>
-        <Stack.Screen name="MyStack" component={MyStack} />
+        {/* <Stack.Screen name="MyStack" component={MyStack} /> */}
+        {/* <Stack.Screen name="SignUp" component={SignUp} /> */}
+        <Stack.Screen name="VerifyEmail" component={VerifyEmail} />
       </Stack.Navigator>
     </NavigationContainer>
   );
