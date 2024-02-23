@@ -18,7 +18,7 @@ export const logOut = async formData => {
 };
 
 export const signUpAPI = async formData => {
-  const res = await axiosInstance(`/register`, {
+  const res = await axiosInstance(`/signup`, {
     method: 'POST',
     data: formData,
   });
@@ -51,8 +51,8 @@ export const sendOTPMail = async (token, formData) => {
   return res;
 };
 
-export const verifyOTP = async formData => {
-  const res = await axiosInstance(`/verifyOTP`, {
+export const verifyEmail = async formData => {
+  const res = await axiosInstance(`/verify_email`, {
     method: 'POST',
     data: formData,
   });
@@ -60,18 +60,36 @@ export const verifyOTP = async formData => {
   return res;
 };
 
-export const getUserDetails = async token => {
-  const res = await axiosInstance(
-    '/authenticate',
-    {
-      headers: {
-        auth_token: token,
-      },
-    },
-    {
-      method: 'GET',
-    },
-  );
+// export const getUserDetails = async token => {
+//   console.log(token);
+//   const res = await axiosInstance(
+//     '/users/me',
+//     {
+//       headers: {
+//         'Content-Type': 'application/json',
+//         authorization: `authorization  ${token}`,
+//       },
+//     },
+//     {
+//       method: 'GET',
+//     },
+//   );
 
-  return res;
+//   return res;
+// };
+
+export const getUserDetails = async token => {
+  try {
+    console.log(token);
+    const res = await axiosInstance.get('/users/me', {
+      headers: {
+        'Content-Type': 'application/json',
+        authorization: `Bearer ${token}`,
+      },
+    });
+
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
 };

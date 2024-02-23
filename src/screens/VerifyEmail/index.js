@@ -20,12 +20,18 @@ import {
 } from 'react-native-confirmation-code-field';
 import BtnBlack from '../../components/BtnBlack';
 import {useSelector} from 'react-redux';
+import Modal from 'react-native-modal';
+import {verifyEmail} from '../../clientApi';
 
 export default function VerifyEmail({navigation, route}) {
+  // const {email} = route.params;
   const [value, setValue] = useState('');
   const [minutes, setMinutes] = useState(0);
   const [seconds, setSeconds] = useState(50);
   const [loader, setLoader] = useState(false);
+  const [showModal, setShowModal] = useState(true);
+  const [err, setErr] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
 
   const userToken = useSelector(state => state?.tokenSlice?.token);
 
@@ -35,7 +41,6 @@ export default function VerifyEmail({navigation, route}) {
     setValue,
   });
   const CELL_COUNT = 6;
-  // const {email} = route.params;
   const email = 'example@gmail.com';
 
   useEffect(() => {
@@ -58,36 +63,56 @@ export default function VerifyEmail({navigation, route}) {
   });
 
   const handleOTP = async () => {
-    setLoader(true);
-    console.log(value);
-
-    var myHeaders = new Headers();
-    myHeaders.append('auth_token', `"auth_token ${userToken}"`);
-    myHeaders.append('Content-Type', 'application/json');
-    myHeaders.append('Cookie', `auth_token=${userToken}`);
-    var raw = JSON.stringify({
-      otp: value,
-    });
-
-    var requestOptions = {
-      method: 'POST',
-      headers: myHeaders,
-      body: raw,
-      redirect: 'follow',
-    };
-
-    fetch('https://core.creso.io/api/verifyOTP', requestOptions)
-      .then(response => response.text())
-      .then(result => {
-        console.log(result);
-        navigation.navigate('BackupPrivacyPolicy');
-        setLoader(false);
-      })
-      .catch(error => {
-        console.log('error', error);
-        setLoader(false);
-      });
+    try {
+      setLoader(true);
+      const data = {email: email, otp: value};
+      const res = await verifyEmail(data);
+      console.log(formatToJSON(res));
+    } catch (error) {
+      console.log(error.message);
+      setLoader(false);
+    }
   };
+
+  // const handleOTP = async () => {
+  //   setLoader(true);
+  //   console.log(value);
+
+  //   var myHeaders = new Headers();
+  //   myHeaders.append('auth_token', `"auth_token ${userToken}"`);
+  //   myHeaders.append('Content-Type', 'application/json');
+  //   myHeaders.append('Cookie', `auth_token=${userToken}`);
+  //   var raw = JSON.stringify({
+  //     email: email,
+  //     otp: value,
+  //   });
+
+  //   var requestOptions = {
+  //     method: 'POST',
+  //     headers: myHeaders,
+  //     body: raw,
+  //     redirect: 'follow',
+  //   };
+
+  //   fetch(
+  //     'https://creso-api-aea7820ba236.herokuapp.com/api/verify_email',
+  //     requestOptions,
+  //   )
+  //     .then(response => response.text())
+  //     .then(result => {
+  //       console.log(result);
+  //       // navigation.navigate('Home');
+  //       setLoader(false);
+  //     })
+  //     .catch(error => {
+  //       console.log('error', error);
+  //       setErr(true);
+  //       setErrorMsg(error);
+  //       setLoader(false);
+  //     });
+  // };
+
+  const handleHome = () => {};
 
   return (
     <SafeAreaView>
@@ -130,15 +155,12 @@ export default function VerifyEmail({navigation, route}) {
             <Text style={styles.link}>Resend code {seconds}s</Text>
           </TouchableOpacity>
         </View>
+        {err ? <Text style={styles.errorMsg}>*{errorMsg}</Text> : null}
 
         {loader ? (
           <View style={styles.buttonField} onPress={handleOTP}>
             <View style={styles.button}>
-              <ActivityIndicator
-                style={{marginTop: 20}}
-                color={'white'}
-                size={30}
-              />
+              <ActivityIndicator color={'white'} size={30} />
             </View>
           </View>
         ) : (
@@ -148,6 +170,30 @@ export default function VerifyEmail({navigation, route}) {
           </TouchableOpacity>
         )}
       </ImageBackground>
+      <Modal
+        isVisible={showModal}
+        backdropOpacity={0.5}
+        onBackButtonPress={() => {
+          setShowModal(false);
+        }}
+        onBackdropPress={() => {
+          setShowModal(false);
+        }}>
+        <View style={styles.modalCOntainer}>
+          <View style={styles.modalBody}>
+            <View style={styles.modalHr}></View>
+            <Image
+              source={images.verificationModalImg}
+              style={styles.verificationModalImg}
+            />
+            <Text style={styles.textBold}>Email Verification Completed</Text>
+            <TouchableOpacity style={styles.buttonField} onPress={handleHome}>
+              <Text style={styles.text}>Go To Home Screen</Text>
+              <Image source={images.rightArroww} style={styles.rightArroww} />
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 }

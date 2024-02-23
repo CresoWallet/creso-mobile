@@ -69,8 +69,8 @@ export default function SignUp({navigation}) {
       } else if (password === confirmPassword) {
         setError('');
         const signUpData = {
-          email: email.toLowerCase(),
           username,
+          email: email.toLowerCase(),
           password,
         };
         try {
@@ -80,8 +80,8 @@ export default function SignUp({navigation}) {
             console.log(formatToJSON(res));
             dispatch(handleTrue());
           }
-
-          setLoading(false);
+          navigation.navigate('EmailVerify', {email});
+          setLoader(false);
         } catch (error) {
           console.log(error);
           setLoader(false);
@@ -187,7 +187,7 @@ export default function SignUp({navigation}) {
         </View>
         <Text style={styles.errorText}>{error}</Text>
         {loader ? (
-          <View style={styles.BtnBlack} onPress={handleSignUp}>
+          <View style={styles.BtnBlack}>
             <ActivityIndicator color={'white'} size={30} />
           </View>
         ) : (

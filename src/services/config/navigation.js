@@ -51,7 +51,9 @@ export default function MainNavigator() {
       <Stack.Navigator screenOptions={{headerShown: false}}>
         {/* <Stack.Screen name="MyStack" component={MyStack} /> */}
         {/* <Stack.Screen name="SignUp" component={SignUp} /> */}
+        <Stack.Screen name="SignIn" component={SignIn} />
         <Stack.Screen name="VerifyEmail" component={VerifyEmail} />
+        <Stack.Screen name="Home" component={Home} />
       </Stack.Navigator>
     </NavigationContainer>
   );

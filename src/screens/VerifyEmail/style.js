@@ -106,6 +106,13 @@ export const styles = StyleSheet.create({
     fontWeight: '500',
   },
 
+  errorMsg: {
+    marginTop: sizes.screenHeight * 0.06,
+    color: colors.cresoPink,
+    fontWeight: '500',
+    fontSize: fontSize.regular,
+  },
+
   codeFieldRoot: {
     width: sizes.screenWidth,
     paddingHorizontal: sizes.screenWidth * 0.05,
@@ -165,5 +172,44 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  /////////////
+  modalCOntainer: {
+    width: sizes.screenWidth,
+    height: sizes.screenHeight,
+    alignSelf: 'center',
+  },
+
+  modalBody: {
+    backgroundColor: colors.white,
+    width: sizes.screenWidth,
+    height: sizes.screenHeight * 0.5,
+    alignSelf: 'center',
+    position: 'absolute',
+    bottom: 0,
+    alignItems: 'center',
+    borderTopLeftRadius: 46,
+    borderTopRightRadius: 46,
+  },
+
+  modalHr: {
+    height: 6,
+    width: sizes.screenWidth * 0.28,
+    backgroundColor: colors.disabledBg,
+    marginTop: 8,
+    borderRadius: 6,
+  },
+
+  verificationModalImg: {
+    width: sizes.screenWidth * 0.66,
+    resizeMode: 'contain',
+    height: sizes.screenHeight * 0.2,
+    marginVertical: sizes.screenHeight * 0.04,
+  },
+
+  textBold: {
+    fontWeight: '600',
+    color: colors.black,
+    fontSize: fontSize.medium,
   },
 });

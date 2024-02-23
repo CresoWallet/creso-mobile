@@ -134,8 +134,8 @@ export const styles = StyleSheet.create({
   },
 
   forgotPassContainer: {
-    alignSelf: 'flex-start',
-    marginLeft: sizes.screenWidth * 0.14,
+    alignSelf: 'flex-end',
+    marginRight: sizes.screenWidth * 0.1,
   },
 
   forgotPass: {

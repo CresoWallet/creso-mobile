@@ -138,6 +138,7 @@ import signInA from '../../../assets/signInA.png';
 import signInG from '../../../assets/signInG.png';
 import signInT from '../../../assets/signInT.png';
 import rightArroww from '../../../assets/rightArroww.png';
+import verificationModalImg from '../../../assets/verificationModalImg.png';
 
 const images = {
   forgotPassImg,
@@ -281,6 +282,7 @@ const images = {
   signInG,
   signInT,
   rightArroww,
+  verificationModalImg,
 };
 
 export default images;

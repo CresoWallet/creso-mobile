@@ -198,9 +198,10 @@ export default function Home({navigation}) {
   const getCurrentUser = async () => {
     const res = await getUserDetails(userToken);
     if (res) {
-      const user = res.data.user;
+      console.log(res);
+      const user = res;
       dispatch(handleAddUserDetail(user));
-      setUserName(res.data.user.username);
+      setUserName(res.username);
     }
   };
 

@@ -67,12 +67,11 @@ export default function SignIn({navigation}) {
           const res = await loginApi(data);
           console.log(formatToJSON(res));
           dispatch(handleTrue());
-          const tk = res?.data?.token;
+          const tk = res?.data?.data?.token;
+          console.log(tk);
           dispatch(handleAddToken(tk));
-          // localStorage.setItem(AUTH_TOKEN, tk);
-          // authenticate();
-          // setLoading(false);
-          // handleAuthentication();
+          setLoader(false);
+          navigation.navigate('Home');
         } catch (err) {
           console.log(err);
           setLoader(false);
@@ -81,7 +80,10 @@ export default function SignIn({navigation}) {
         setError('*Incorrect email or password');
         setLoader(false);
       }
+    } else {
+      setError('*All fields are required');
     }
+    setLoader(false);
   };
 
   return (
@@ -124,7 +126,7 @@ export default function SignIn({navigation}) {
             />
           </TouchableOpacity>
         </View>
-        {/* <Text style={styles.errorText}>{error}</Text> */}
+        <Text style={styles.errorText}>{error}</Text>
         <TouchableOpacity
           // onPress={() => {
           //   navigation.navigate('ForgotPass');
