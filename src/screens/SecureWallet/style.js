@@ -46,14 +46,17 @@ export const styles = StyleSheet.create({
     color: colors.black,
   },
 
-  body: {
-    width: sizes.screenWidth * 0.9,
-  },
-
   disabledText: {
     fontSize: fontSize.smallM,
     color: colors.disabledBg2,
     marginRight: 8,
+  },
+
+  disabledText2: {
+    fontSize: fontSize.smallM,
+    color: colors.disabledBg2,
+    maxWidth: sizes.screenWidth * 0.9,
+    marginVertical: sizes.screenHeight * 0.02,
   },
 
   hr: {
@@ -70,28 +73,19 @@ export const styles = StyleSheet.create({
     marginTop: sizes.screenHeight * 0.01,
   },
 
-  bulbRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    height: sizes.screenHeight * 0.07,
-    borderWidth: 1,
-    borderColor: colors.disabledBg,
-    borderRadius: sizes.screenHeight * 0.1,
-    paddingLeft: sizes.screenWidth * 0.05,
-    marginTop: sizes.screenHeight * 0.01,
-  },
-
-  bulbGreen: {
-    height: 24,
-    width: 24,
-    marginRight: 6,
-  },
-
   textBlackBold: {
     fontSize: fontSize.smallM,
     color: colors.black,
     fontWeight: '600',
     maxWidth: sizes.screenWidth * 0.8,
+  },
+
+  textBlackBold2: {
+    fontSize: fontSize.smallM,
+    color: colors.black,
+    fontWeight: '600',
+    maxWidth: sizes.screenWidth * 0.8,
+    marginRight: 8,
   },
 
   ///////
@@ -171,5 +165,25 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     width: sizes.screenWidth * 0.9,
     marginBottom: sizes.screenHeight * 0.01,
+  },
+
+  heading: {
+    fontSize: fontSize.h5,
+    color: colors.black,
+    fontWeight: '700',
+  },
+
+  videoContainer: {
+    height: sizes.screenHeight * 0.2,
+    width: sizes.screenWidth * 0.9,
+    overflow: 'hidden',
+    borderRadius: 24,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  secureWalletImg: {
+    resizeMode: 'contain',
+    width: sizes.screenWidth * 0.9,
   },
 });

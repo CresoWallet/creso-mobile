@@ -25,4 +25,5 @@ export const colors = {
   disabledBg1: '#D2D2E1',
   cresoPink: '#FF4085',
   cresoBlue: '#2100EC',
+  cresoPurple: '#A66CFF',
 };
