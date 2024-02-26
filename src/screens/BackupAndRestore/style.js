@@ -26,8 +26,6 @@ export const styles = StyleSheet.create({
 
   bottomSection: {
     flexDirection: 'column',
-    paddingLeft: sizes.screenWidth * 0.02,
-    paddingRight: sizes.screenWidth * 0.02,
   },
 
   autoLockRow: {
@@ -68,29 +66,9 @@ export const styles = StyleSheet.create({
     width: sizes.screenWidth * 0.06,
   },
 
-  warningRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginLeft: sizes.screenWidth * 0.03,
-    marginRight: sizes.screenWidth * 0.03,
-    bottom: sizes.screenHeight * 0.01,
-  },
-
-  warningImg: {
-    resizeMode: 'contain',
-    width: sizes.screenWidth * 0.06,
-  },
-
-  warningText: {
-    color: colors.disabledBg2,
-    marginLeft: sizes.screenWidth * 0.01,
-    width: sizes.screenWidth * 0.75,
-    fontSize: fontSize.small,
-  },
-
   hrRight: {
     backgroundColor: colors.disabledBg,
-    height: sizes.screenHeight * 0.001,
+    height: 1,
     marginTop: sizes.screenHeight * 0.03,
     marginBottom: sizes.screenHeight * 0.02,
     width: sizes.screenWidth * 0.85,

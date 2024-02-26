@@ -41,6 +41,12 @@ import ResetPass from '../../screens/ResetPass';
 import PrivacyPolicy from '../../screens/PrivacyPolicy';
 import {useSelector} from 'react-redux';
 import VerifyEmail from '../../screens/VerifyEmail';
+import BackupAndRestore from '../../screens/BackupAndRestore';
+import TransactionHistory from '../../screens/TransactionHistory';
+import TransferToken from '../../screens/TransferToken';
+import LetsGetStarted from '../../screens/LetsGetStarted';
+import CresoPrivacyPolicy from '../../screens/CresoPrivacyPolicy';
+import EOAPassword from '../../screens/EOAPassword';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -51,9 +57,22 @@ export default function MainNavigator() {
       <Stack.Navigator screenOptions={{headerShown: false}}>
         {/* <Stack.Screen name="MyStack" component={MyStack} /> */}
         {/* <Stack.Screen name="SignUp" component={SignUp} /> */}
-        <Stack.Screen name="SignIn" component={SignIn} />
+        {/* <Stack.Screen name="SignIn" component={SignIn} />
         <Stack.Screen name="VerifyEmail" component={VerifyEmail} />
-        <Stack.Screen name="Home" component={Home} />
+        <Stack.Screen name="Home" component={Home} /> */}
+        {/* <Stack.Screen name="Security" component={Security} /> */}
+        {/* <Stack.Screen name="BackupAndRestore" component={BackupAndRestore} /> */}
+        {/* <Stack.Screen
+          name="TransactionHistory"
+          component={TransactionHistory}
+        /> */}
+        {/* <Stack.Screen name="TransferToken" component={TransferToken} /> */}
+        {/* <Stack.Screen name="LetsGetStarted" component={LetsGetStarted} /> */}
+        {/* <Stack.Screen
+          name="CresoPrivacyPolicy"
+          component={CresoPrivacyPolicy}
+        /> */}
+        <Stack.Screen name="EOAPassword" component={EOAPassword} />
       </Stack.Navigator>
     </NavigationContainer>
   );

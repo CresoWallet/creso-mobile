@@ -6,13 +6,11 @@ import images from '../../services/utilities/images';
 export default function BtnBlack({title}) {
   return (
     <SafeAreaView>
-         <TouchableOpacity style={styles.buttonField}>
+      <TouchableOpacity style={styles.buttonField}>
         <View style={styles.button}>
-            <Text style={styles.text}>
-                Next
-            </Text>
+          <Text style={styles.text}>Next</Text>
         </View>
-        </TouchableOpacity>
+      </TouchableOpacity>
     </SafeAreaView>
   );
 }

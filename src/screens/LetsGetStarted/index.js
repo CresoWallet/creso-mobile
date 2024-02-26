@@ -12,7 +12,7 @@ import images from '../../services/utilities/images';
 import Modal from 'react-native-modal';
 import {useSelector} from 'react-redux';
 
-export default function LandingPage({navigation}) {
+export default function LetsGetStarted({navigation}) {
   const [modalShow, setModalShow] = useState(false);
   const data = useSelector(state => state);
   console.log(data);
@@ -24,9 +24,8 @@ export default function LandingPage({navigation}) {
           source={images.landingPageBGImg}
           style={styles.bgImage}>
           <Image source={images.landingPageLogo} style={styles.logoImg} />
-          <Text style={styles.text1}>Keyless{'\n'} No risk of leakage</Text>
+          <Text style={styles.text1}>Let's Get Started</Text>
           <View style={styles.dotView}>
-            <View style={styles.dotViewChild}></View>
             <View style={styles.dotViewChildBlack}></View>
             <View style={styles.dotViewChild}></View>
             <View style={styles.dotViewChild}></View>
@@ -35,34 +34,23 @@ export default function LandingPage({navigation}) {
             source={images.landingPageSliderImg}
             style={styles.sliderImg}
           />
-          <View style={styles.btnView}>
-            <TouchableOpacity
-              style={styles.btn}
-              onPress={() => {
-                setModalShow(!modalShow);
-              }}>
-              <View style={styles.btnContnt}>
-                <Image source={images.add} style={styles.addImg} />
-                <View style={styles.btnContentView}>
-                  <Text style={styles.text2}>Create</Text>
-                  <Text style={styles.text3}>New Account</Text>
-                </View>
-              </View>
+
+          <View style={styles.btnSection}>
+            <View style={styles.TandC}>
+              <Image source={images.emailCheck} style={styles.emailCheck} />
+              <Text style={styles.textBlack}>
+                I have agreed to the Creso{' '}
+                <Text style={styles.textPink}>Terms and Conditions</Text>
+              </Text>
+            </View>
+            <TouchableOpacity style={styles.button}>
+              <Text style={styles.text}>Create New Wallet</Text>
             </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.btn}
-              onPress={() => {
-                navigation.navigate('SignIn');
-              }}>
-              <View style={styles.btnContnt}>
-                <Image source={images.restore} style={styles.addImg} />
-                <View style={styles.btnContentView}>
-                  <Text style={styles.text2}>Restore</Text>
-                  <Text style={styles.text3}>Existing Account</Text>
-                </View>
-              </View>
+            <TouchableOpacity style={styles.buttonWhite}>
+              <Text style={styles.textBlack}>Import an existing wallet</Text>
             </TouchableOpacity>
           </View>
+
           <Modal
             isVisible={modalShow}
             backdropOpacity={0.5}

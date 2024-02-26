@@ -139,6 +139,20 @@ import signInG from '../../../assets/signInG.png';
 import signInT from '../../../assets/signInT.png';
 import rightArroww from '../../../assets/rightArroww.png';
 import verificationModalImg from '../../../assets/verificationModalImg.png';
+import manageAuthImg from '../../../assets/manageAuthImg.png';
+import encBackupImg from '../../../assets/encBackupImg.png';
+import pushNotiImg from '../../../assets/pushNotiImg.png';
+import backupandRestoreImg from '../../../assets/backupandRestoreImg.png';
+import createEncBackup from '../../../assets/createEncBackup.png';
+import restoreWalletIcon from '../../../assets/restoreWalletIcon.png';
+import THImg from '../../../assets/THImg.png';
+import tranferToImg from '../../../assets/tranferToImg.png';
+import tranferFromImg from '../../../assets/tranferFromImg.png';
+import bulbGreen from '../../../assets/bulbGreen.png';
+import bulbPink from '../../../assets/bulbPink.png';
+import EOA1 from '../../../assets/EOA1.png';
+import EOA2 from '../../../assets/EOA2.png';
+import EOA3 from '../../../assets/EOA3.png';
 
 const images = {
   forgotPassImg,
@@ -283,6 +297,20 @@ const images = {
   signInT,
   rightArroww,
   verificationModalImg,
+  manageAuthImg,
+  encBackupImg,
+  pushNotiImg,
+  backupandRestoreImg,
+  createEncBackup,
+  restoreWalletIcon,
+  THImg,
+  tranferToImg,
+  tranferFromImg,
+  bulbGreen,
+  bulbPink,
+  EOA1,
+  EOA2,
+  EOA3,
 };
 
 export default images;
