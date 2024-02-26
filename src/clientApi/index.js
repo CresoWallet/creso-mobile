@@ -1,5 +1,5 @@
-import {BASE_URL} from '../services/config/backendURL';
-import {axiosInstance} from '../services/config/axios';
+import { BASE_URL } from '../services/config/backendURL';
+import { axiosInstance } from '../services/config/axios';
 
 export const loginApi = async formData => {
   const res = await axiosInstance(`/login`, {
@@ -60,27 +60,8 @@ export const verifyEmail = async formData => {
   return res;
 };
 
-// export const getUserDetails = async token => {
-//   console.log(token);
-//   const res = await axiosInstance(
-//     '/users/me',
-//     {
-//       headers: {
-//         'Content-Type': 'application/json',
-//         authorization: `authorization  ${token}`,
-//       },
-//     },
-//     {
-//       method: 'GET',
-//     },
-//   );
-
-//   return res;
-// };
-
 export const getUserDetails = async token => {
   try {
-    console.log(token);
     const res = await axiosInstance.get('/users/me', {
       headers: {
         'Content-Type': 'application/json',
@@ -88,8 +69,26 @@ export const getUserDetails = async token => {
       },
     });
 
-    return res.data;
+    return res;
   } catch (error) {
     throw error;
   }
 };
+
+export const resendOTP = async (email) => {
+  try {
+    const response = await axiosInstance.post('resend_otp', { email })
+    return response
+  } catch (error) {
+    return error
+  }
+}
+
+export const googleLogin = async () => {
+  try {
+    const response = await axiosInstance.post('/auth/google')
+    return response
+  } catch (error) {
+    return error
+  }
+}

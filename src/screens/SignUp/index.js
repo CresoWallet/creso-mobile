@@ -10,18 +10,15 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import images from '../../services/utilities/images';
-import {useState} from 'react';
+import { useState } from 'react';
 import Feather from 'react-native-vector-icons/Feather';
-import {styles} from './style';
-import {colors} from '../../services';
-import axios from 'axios';
-import backendURL from '../../services/config/backendURL';
-import {signUpAPI} from '../../clientApi';
+import { styles } from './style';
+import { colors } from '../../services';
+import { signUpAPI } from '../../clientApi';
 import formatToJSON from '../../services/utilities/JsonLog';
-import {useDispatch} from 'react-redux';
-import {handleTrue} from '../../store/isSignedInSlice';
+import { useDispatch } from 'react-redux';
 
-export default function SignUp({navigation}) {
+export default function SignUp({ navigation }) {
   const dispatch = useDispatch();
   const [handleStatus, setHandleStatus] = useState('Login');
   const [hidePass, setHidePass] = useState(false);
@@ -75,12 +72,13 @@ export default function SignUp({navigation}) {
         };
         try {
           const res = await signUpAPI(signUpData);
-          if (res) {
-            console.log(res);
-            console.log(formatToJSON(res));
-            dispatch(handleTrue());
+          console.log("-==-=--==-", formatToJSON(res));
+          if (res.status == 200) {
+            navigation.navigate('EmailVerify', { email });
+            setLoader(false);
+          } else {
+            setError(res.data.message)
           }
-          navigation.navigate('EmailVerify', {email});
           setLoader(false);
         } catch (error) {
           console.log(error);
@@ -99,8 +97,6 @@ export default function SignUp({navigation}) {
     <SafeAreaView style={styles.container}>
       <ImageBackground source={images.landingPageBGImg} style={styles.bgImage}>
         <Image source={images.landingPageLogo} style={styles.logoImg} />
-
-        {/* <Text style={styles.text1}>Sign Up</Text> */}
 
         <Text style={styles.label}>Username</Text>
 
@@ -155,7 +151,6 @@ export default function SignUp({navigation}) {
                 alignSelf: 'flex-end',
               }}
             />
-            {/* </TouchableOpacity> */}
           </TouchableOpacity>
         </View>
 
@@ -182,7 +177,6 @@ export default function SignUp({navigation}) {
                 alignSelf: 'flex-end',
               }}
             />
-            {/* </TouchableOpacity> */}
           </TouchableOpacity>
         </View>
         <Text style={styles.errorText}>{error}</Text>
@@ -204,30 +198,6 @@ export default function SignUp({navigation}) {
             <Text style={styles.textPink}>Terms and Conditions</Text>
           </Text>
         </View>
-
-        {/* <View style={styles.loginTextView}>
-          <Text style={styles.loginText}>Already have an account? </Text>
-          <TouchableOpacity>
-            <Text
-              style={styles.loginLink}
-              onPress={() => {
-                navigation.navigate('SignIn');
-              }}>
-              Sign In
-            </Text>
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.orView}>
-          <View style={styles.divider} />
-          <Text style={styles.orViewText}>OR</Text>
-          <View style={styles.divider} />
-        </View>
-
-        <TouchableOpacity style={styles.neon}>
-          <Text style={styles.neonText}>Sign up with twitter</Text>
-          <Image source={images.twtLogo} style={styles.twtLogo} />
-        </TouchableOpacity> */}
       </ImageBackground>
     </SafeAreaView>
   );

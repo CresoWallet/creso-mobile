@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
   Image,
@@ -10,7 +10,7 @@ import {
   View,
 } from 'react-native';
 import images from '../../services/utilities/images';
-import {styles} from './style';
+import { styles } from './style';
 import Header from '../../components/Header';
 import {
   CodeField,
@@ -19,29 +19,33 @@ import {
   useClearByFocusCell,
 } from 'react-native-confirmation-code-field';
 import BtnBlack from '../../components/BtnBlack';
-import {useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Modal from 'react-native-modal';
-import {verifyEmail} from '../../clientApi';
+import { resendOTP, verifyEmail } from '../../clientApi';
+import formatToJSON from '../../services/utilities/JsonLog';
+import { handleAddToken } from '../../store/token';
 
-export default function VerifyEmail({navigation, route}) {
-  // const {email} = route.params;
+export default function VerifyEmail({ navigation, route }) {
+
+  const dispatch = useDispatch()
+
+  const {email} = route.params;
   const [value, setValue] = useState('');
   const [minutes, setMinutes] = useState(0);
-  const [seconds, setSeconds] = useState(50);
+  const [seconds, setSeconds] = useState(5);
   const [loader, setLoader] = useState(false);
-  const [showModal, setShowModal] = useState(true);
+  const [showModal, setShowModal] = useState(false);
   const [err, setErr] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
+  const [authToken, setAuthToken] = useState('');
 
-  const userToken = useSelector(state => state?.tokenSlice?.token);
 
-  const ref = useBlurOnFulfill({value, cellCount: CELL_COUNT});
+  const ref = useBlurOnFulfill({ value, cellCount: CELL_COUNT });
   const [props, getCellOnLayoutHandler] = useClearByFocusCell({
     value,
     setValue,
   });
   const CELL_COUNT = 6;
-  const email = 'example@gmail.com';
 
   useEffect(() => {
     let myInterval = setInterval(() => {
@@ -63,56 +67,49 @@ export default function VerifyEmail({navigation, route}) {
   });
 
   const handleOTP = async () => {
+    setLoader(true);
     try {
-      setLoader(true);
-      const data = {email: email, otp: value};
-      const res = await verifyEmail(data);
-      console.log(formatToJSON(res));
+      if (value.length !== 6) {
+        setErrorMsg('*Please enter the OTP.')
+        setLoader(false)
+      } else {
+        const data = { email: email, otp: value };
+        const res = await verifyEmail(data);
+        if (res.status == 200) {
+          setAuthToken(res.data.data.token)
+          setErrorMsg('')
+          setLoader(false)
+          setShowModal(true)
+        } else {
+          setErrorMsg(res.data.message)
+          setLoader(false)
+        }
+        setLoader(false)
+      }
     } catch (error) {
       console.log(error.message);
       setLoader(false);
     }
   };
 
-  // const handleOTP = async () => {
-  //   setLoader(true);
-  //   console.log(value);
+  const handleResend = async () => {
+    try {
+      const response = await resendOTP(email)
+      console.log("-=-=-=-=-=-=>", formatToJSON(response));
+      if (response.status == 200) {
+        setSeconds(50)
+      } else {
+        setErrorMsg(response.data.message)
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
 
-  //   var myHeaders = new Headers();
-  //   myHeaders.append('auth_token', `"auth_token ${userToken}"`);
-  //   myHeaders.append('Content-Type', 'application/json');
-  //   myHeaders.append('Cookie', `auth_token=${userToken}`);
-  //   var raw = JSON.stringify({
-  //     email: email,
-  //     otp: value,
-  //   });
-
-  //   var requestOptions = {
-  //     method: 'POST',
-  //     headers: myHeaders,
-  //     body: raw,
-  //     redirect: 'follow',
-  //   };
-
-  //   fetch(
-  //     'https://creso-api-aea7820ba236.herokuapp.com/api/verify_email',
-  //     requestOptions,
-  //   )
-  //     .then(response => response.text())
-  //     .then(result => {
-  //       console.log(result);
-  //       // navigation.navigate('Home');
-  //       setLoader(false);
-  //     })
-  //     .catch(error => {
-  //       console.log('error', error);
-  //       setErr(true);
-  //       setErrorMsg(error);
-  //       setLoader(false);
-  //     });
-  // };
-
-  const handleHome = () => {};
+  const handleHome = () => {
+    console.log('dispatch');
+    dispatch(handleAddToken(authToken))
+  };
 
   return (
     <SafeAreaView>
@@ -135,7 +132,7 @@ export default function VerifyEmail({navigation, route}) {
             rootStyle={styles.codeFieldRoot}
             keyboardType="number-pad"
             textContentType="oneTimeCode"
-            renderCell={({index, symbol, isFocused}) => (
+            renderCell={({ index, symbol, isFocused }) => (
               <Text
                 key={index}
                 style={[
@@ -151,11 +148,23 @@ export default function VerifyEmail({navigation, route}) {
 
         <View style={styles.resendCodeText}>
           <Text style={styles.boldBlack}>Not Recieved? </Text>
-          <TouchableOpacity>
-            <Text style={styles.link}>Resend code {seconds}s</Text>
-          </TouchableOpacity>
+          {
+            seconds > 0 ?
+              <View>
+                <Text style={styles.link}>Resend code {seconds}s</Text>
+              </View>
+              :
+              <TouchableOpacity
+                onPress={handleResend}
+              >
+                <Text style={styles.link}>Resend code</Text>
+              </TouchableOpacity>
+          }
         </View>
-        {err ? <Text style={styles.errorMsg}>*{errorMsg}</Text> : null}
+
+        {
+          errorMsg && <Text style={styles.errorMsg}>{errorMsg}</Text>
+        }
 
         {loader ? (
           <View style={styles.buttonField} onPress={handleOTP}>

@@ -35,7 +35,7 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: sizes.screenWidth * 0.8,
     height: sizes.screenHeight * 0.036,
-    paddingHorizontal: sizes.screenWidth * 0.04,
+    paddingHorizontal: sizes.screenWidth * 0.02,
     alignItems: 'center',
     justifyContent: 'center',
     position: 'absolute',

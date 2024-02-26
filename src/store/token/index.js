@@ -19,4 +19,6 @@ const TokenSlice = createSlice({
 
 export const {handleAddToken, handleRemoveToken} = TokenSlice.actions;
 
+export const selectAuthToken = (state) => state.tokenSlice.token;
+
 export default TokenSlice.reducer;

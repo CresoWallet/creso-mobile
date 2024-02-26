@@ -10,18 +10,18 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import images from '../../services/utilities/images';
-import {useState} from 'react';
+import { useState } from 'react';
 import Feather from 'react-native-vector-icons/Feather';
-import {styles} from './style';
-import {colors} from '../../services';
+import { styles } from './style';
+import { colors } from '../../services';
 import backendURL from '../../services/config/backendURL';
-import {useDispatch} from 'react-redux';
-import {handleTrue} from '../../store/isSignedInSlice';
+import { useDispatch } from 'react-redux';
+import { handleTrue } from '../../store/isSignedInSlice';
 import formatToJSON from '../../services/utilities/JsonLog';
-import {handleAddToken} from '../../store/token';
-import {loginApi} from '../../clientApi';
+import { handleAddToken } from '../../store/token';
+import { googleLogin, loginApi } from '../../clientApi';
 
-export default function SignIn({navigation}) {
+export default function SignIn({ navigation }) {
   const dispatch = useDispatch();
   const [handleStatus, setHandleStatus] = useState('Login');
   const [hidePass, setHidePass] = useState(false);
@@ -52,10 +52,10 @@ export default function SignIn({navigation}) {
       let updatedEmail = email.toLocaleLowerCase();
       const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
       if (!emailRegex.test(updatedEmail)) {
-        setError('Please enter a valid email');
+        setError('*Please enter a valid email');
         setLoader(false);
       } else if (!password) {
-        setError('Please enter your password');
+        setError('*Please enter your password');
         setLoader(false);
       } else if (email && password) {
         setError('');
@@ -65,15 +65,16 @@ export default function SignIn({navigation}) {
         };
         try {
           const res = await loginApi(data);
-          console.log(formatToJSON(res));
-          dispatch(handleTrue());
-          const tk = res?.data?.data?.token;
-          console.log(tk);
-          dispatch(handleAddToken(tk));
+          if (res.status == 200) {
+            const token = res?.data?.data?.token
+            dispatch(handleAddToken(token))
+          } else {
+            setError(res.data.message)
+            setLoader(false)
+          }
           setLoader(false);
-          navigation.navigate('Home');
-        } catch (err) {
-          console.log(err);
+        } catch (error) {
+          console.log(error);
           setLoader(false);
         }
       } else {
@@ -85,6 +86,15 @@ export default function SignIn({navigation}) {
     }
     setLoader(false);
   };
+
+  const handleGoogleLogin = async () => {
+    try {
+      const response = await googleLogin()
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -128,10 +138,6 @@ export default function SignIn({navigation}) {
         </View>
         <Text style={styles.errorText}>{error}</Text>
         <TouchableOpacity
-          // onPress={() => {
-          //   navigation.navigate('ForgotPass');
-          // }
-          // }
           style={styles.forgotPassContainer}>
           <Text
             style={styles.forgotPass}
@@ -152,25 +158,12 @@ export default function SignIn({navigation}) {
             <Image source={images.rightArroww} style={styles.rightArroww} />
           </TouchableOpacity>
         )}
-        {/* <View style={styles.loginTextView}>
-          <Text style={styles.loginText}>Don't have an account? </Text>
-          <TouchableOpacity>
-            <Text
-              style={styles.loginLink}
-              onPress={() => {
-                navigation.navigate('SignUp');
-              }}>
-              Sign Up
-            </Text>
-          </TouchableOpacity>
-        </View> */}
 
         <View style={styles.orView}>
           <View style={styles.divider} />
-          {/* <Text style={styles.orViewText}>OR</Text>
-          <View style={styles.divider} /> */}
         </View>
-        <TouchableOpacity style={styles.signInWith}>
+        <TouchableOpacity style={styles.signInWith}
+        >
           <Image source={images.signInG} style={styles.twtLogo} />
           <Text style={styles.neonText}>Sign in with Google</Text>
         </TouchableOpacity>

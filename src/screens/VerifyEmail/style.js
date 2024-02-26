@@ -107,10 +107,12 @@ export const styles = StyleSheet.create({
   },
 
   errorMsg: {
-    marginTop: sizes.screenHeight * 0.06,
+    marginTop: sizes.screenHeight * 0.01,
     color: colors.cresoPink,
     fontWeight: '500',
     fontSize: fontSize.regular,
+    alignSelf:'flex-start',
+    marginLeft:sizes.screenWidth * 0.06
   },
 
   codeFieldRoot: {

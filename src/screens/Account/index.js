@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
   Image,
@@ -8,32 +8,34 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {styles} from './style';
+import { styles } from './style';
 import images from '../../services/utilities/images';
 import Header from '../../components/Header';
 
 import backendURL from '../../services/config/backendURL';
-import {colors} from '../../services';
+import { colors } from '../../services';
 
-import {useDispatch, useSelector} from 'react-redux';
-import {handleFalse, handleTrue} from '../../store/isSignedInSlice';
-import {handleRemoveToken} from '../../store/token';
-import {getUserDetails, logOut, sendOTPMail} from '../../clientApi';
-import {axiosInstance} from '../../services/config/axios';
-import {launchImageLibrary} from 'react-native-image-picker';
+import { useDispatch, useSelector } from 'react-redux';
+import { handleFalse, handleTrue } from '../../store/isSignedInSlice';
+import { handleRemoveToken } from '../../store/token';
+import { getUserDetails, logOut, sendOTPMail } from '../../clientApi';
+import { axiosInstance } from '../../services/config/axios';
+import { launchImageLibrary } from 'react-native-image-picker';
+import { selectUserData } from '../../store/user';
 
-export default function Account({navigation}) {
-  const [loader, setLoader] = useState(false);
-
-  const [verify, setVerify] = useState(false);
-
-  const [userEmail, setUserEmail] = useState('');
+export default function Account({ navigation }) {
 
   const dispatch = useDispatch();
 
-  const [OTPloader, setOTPLoader] = useState(false);
+  const userDetail = useSelector(selectUserData);
 
+
+  const [loader, setLoader] = useState(false);
+  const [verify, setVerify] = useState(false);
+  const [userEmail, setUserEmail] = useState('');
+  const [OTPloader, setOTPLoader] = useState(false);
   const [imgUri, setImgUri] = useState(null);
+
   const uploadPhoto = () => {
     let options = {
       storageOptions: {
@@ -51,7 +53,7 @@ export default function Account({navigation}) {
         console.log('User tapped custom button: ', res.customButton);
         // alert(res.customButton);
       } else {
-        const source = {uri: res.uri};
+        const source = { uri: res.uri };
         setImgUri(res.assets[0].uri);
       }
     });
@@ -89,79 +91,7 @@ export default function Account({navigation}) {
   };
 
   const handleLogout = async () => {
-    setLoader(true);
-
-    try {
-      const res = await logOut();
-      if (res) {
-        console.log(res);
-        setLoader(false);
-        dispatch(handleFalse());
-        dispatch(handleRemoveToken());
-      }
-    } catch (err) {
-      console.log(err);
-      setLoader(false);
-    } finally {
-    }
-
-    // var myHeaders = new Headers();
-    // myHeaders.append('Content-Type', 'application/json');
-
-    // var raw = JSON.stringify({});
-
-    // var requestOptions = {
-    //   method: 'POST',
-    //   headers: myHeaders,
-    //   body: raw,
-    //   redirect: 'follow',
-    // };
-
-    // fetch('https://creso-b02eab9f8c40.herokuapp.com/api/logout', requestOptions)
-    //   .then(response => response.text())
-    //   .then(result => {
-    //     console.log(result);
-    //     setLoader(false);
-    //     dispatch(handleFalse());
-    //     dispatch(handleRemoveToken());
-    //   })
-    //   .catch(error => {
-    //     console.log('error', error);
-    //     setLoader(false);
-    //   });
-  };
-
-  const userDetail = useSelector(state => state?.userDetailSlice?.userDetail);
-
-  useEffect(() => {
-    getCurrentUser();
-    setUserEmail(userDetail.email);
-  }, []);
-
-  const userToken = useSelector(state => state?.tokenSlice?.token);
-
-  const getCurrentUser = async () => {
-    var myHeaders = new Headers();
-    myHeaders.append('auth_token', `"auth_token ${userToken}"`);
-    myHeaders.append('Cookie', `auth_token=${userToken}`);
-
-    var requestOptions = {
-      method: 'GET',
-      headers: myHeaders,
-      redirect: 'follow',
-    };
-
-    fetch('https://core.creso.io/api/authenticate', requestOptions)
-      .then(response => response.json())
-      .then(result => {
-        console.log(result);
-        setVerify(result?.user?.isEmailVerified);
-      })
-      .catch(error => console.log('error', error));
-
-    // const res = await getUserDetails(userToken);
-    // setUserEmail(res.data.user.email);
-    // setVerify(res.data.user.isEmailVerified);
+    dispatch(handleRemoveToken())
   };
 
   return (
@@ -175,20 +105,21 @@ export default function Account({navigation}) {
             <Text style={styles.textalignment}>Email/Phone</Text>
             <View style={styles.emailContainer}>
               <View>
-                <Text style={styles.textColorBlack}>{userEmail}</Text>
+                <Text style={styles.textColorBlack}>{userDetail.email}</Text>
               </View>
               {OTPloader ? (
                 <View style={styles.connectedButtonStyling}>
                   <ActivityIndicator color={colors.black} size={20} />
                 </View>
               ) : (
-                <TouchableOpacity
+                <View
                   style={styles.connectedButtonStyling}
-                  onPress={handleVerify}>
+                // onPress={handleVerify}
+                >
                   <Text style={styles.connectedTextStyling}>
-                    {verify ? 'Connected' : 'Verify'}
+                    Connected
                   </Text>
-                </TouchableOpacity>
+                </View>
               )}
             </View>
             <View style={styles.informativeParaView}>

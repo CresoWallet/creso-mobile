@@ -20,4 +20,7 @@ const UserDetailSlice = createSlice({
 export const {handleAddUserDetail, handleRemoveUserDetail} =
   UserDetailSlice.actions;
 
+export const selectUserData = (state) => state.userDetailSlice.userDetail;
+
+
 export default UserDetailSlice.reducer;

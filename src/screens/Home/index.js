@@ -20,9 +20,15 @@ import Modal from 'react-native-modal';
 import {colors, sizes} from '../../services';
 import {useDispatch, useSelector} from 'react-redux';
 import {getUserDetails} from '../../clientApi';
-import {handleAddUserDetail} from '../../store/user';
+import {handleAddUserDetail, selectUserData} from '../../store/user';
+import { selectAuthToken } from '../../store/token';
+import formatToJSON from '../../services/utilities/JsonLog';
 
 export default function Home({navigation}) {
+  
+  const userToken = useSelector(selectAuthToken)
+  const userDetail = useSelector(selectUserData)
+
   const [checkedCoin, setCheckedCoin] = useState('coin1');
   const [userName, setUserName] = useState('');
   const [modalShow, setModalShow] = useState(false);
@@ -66,7 +72,6 @@ export default function Home({navigation}) {
     fetch('https://core.creso.io/api/create/wallet', requestOptions)
       .then(response => response.text())
       .then(result => {
-        console.log(result);
         if (result) {
           setModal2Show(!modal2Show);
           setWalletCreatedtModal(true);
@@ -104,7 +109,6 @@ export default function Home({navigation}) {
     fetch('https://core.creso.io/api/create/smartwallet', requestOptions)
       .then(response => response.text())
       .then(result => {
-        console.log(result.id);
         if (result.id) {
           setModal3Show(!modal3Show);
           setWalletCreatedtModal(true);
@@ -172,36 +176,15 @@ export default function Home({navigation}) {
     });
   }, [navigation]);
 
-  // useEffect(() => {
-  //   navigation.addListener('focus', () => {
-  //     // console.log('focus use effect work updated user details ' , updatedUserDetails);
-  //     // console.log('focus work' , "userDetalis" , userDetalis);
-  //     if (userDetalis) {
-  //       const _id = test.userDetalis._id
-  //       console.log(_id, 'use Effect focus id');
-  //       handleGetUserDetails(_id);
-  //     }
-  //   });
-  // }, [navigation]);
-
   useEffect(() => {
-    if (!userDetail.username) {
-      getCurrentUser();
-    } else {
-      setUserName(userDetail.username);
-    }
-  }, []);
-
-  const userToken = useSelector(state => state?.tokenSlice?.token);
-  const userDetail = useSelector(state => state?.userDetailSlice?.userDetail);
+    getCurrentUser()
+  }, [])
 
   const getCurrentUser = async () => {
     const res = await getUserDetails(userToken);
-    if (res) {
-      console.log(res);
-      const user = res;
-      dispatch(handleAddUserDetail(user));
-      setUserName(res.username);
+    if(res.status == 200){
+      const user = res.data
+      dispatch(handleAddUserDetail(user))
     }
   };
 
@@ -226,8 +209,8 @@ export default function Home({navigation}) {
           </View>
         </View>
         <ImageBackground style={styles.homeCardImg} source={images.homeCardImg}>
-          <Text style={styles.homeCardText1}>{userName}</Text>
-          <Text style={styles.homeCardText2}>3.187.99 USD</Text>
+          <Text style={styles.homeCardText1}>{userDetail?.username}</Text>
+          <Text style={styles.homeCardText2}>0.000 ETH</Text>
         </ImageBackground>
 
         <View>

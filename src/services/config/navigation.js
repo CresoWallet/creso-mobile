@@ -1,7 +1,7 @@
-import React from 'react';
-import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import React, { useState } from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Home from '../../screens/Home';
 import LandingPage from '../../screens/LandingPage';
 import Account from '../../screens/Account';
@@ -25,8 +25,8 @@ import BackupBiometric from '../../screens/BackupBiometric';
 import BackupEnableLock from '../../screens/BackupEnableLock';
 import BackupPersonalKeyShare from '../../screens/BackupPersonalKeyshare';
 import BackupRcoveryKey from '../../screens/BackupRcoveryKey';
-import {sizes} from '../utilities/sizes';
-import {Image, View} from 'react-native';
+import { sizes } from '../utilities/sizes';
+import { Image, View } from 'react-native';
 import images from '../utilities/images';
 import DiscoverPage from '../../screens/DiscoverPage';
 import SwapAndBridgeScr1 from '../../screens/SwapAndBridgeScr1';
@@ -39,8 +39,9 @@ import OTP from '../../screens/OTP';
 import ForgotPass from '../../screens/ForgotPass';
 import ResetPass from '../../screens/ResetPass';
 import PrivacyPolicy from '../../screens/PrivacyPolicy';
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 import VerifyEmail from '../../screens/VerifyEmail';
+import { selectAuthToken } from '../../store/token';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -48,12 +49,8 @@ const Tab = createBottomTabNavigator();
 export default function MainNavigator() {
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{headerShown: false}}>
-        {/* <Stack.Screen name="MyStack" component={MyStack} /> */}
-        {/* <Stack.Screen name="SignUp" component={SignUp} /> */}
-        <Stack.Screen name="SignIn" component={SignIn} />
-        <Stack.Screen name="VerifyEmail" component={VerifyEmail} />
-        <Stack.Screen name="Home" component={Home} />
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="MyStack" component={MyStack} />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -61,9 +58,10 @@ export default function MainNavigator() {
 
 const MyStack = () => {
   const isSignIn = useSelector(state => state.isSignedInSlice.isSignIn);
+  const authToken = useSelector(selectAuthToken)
   return (
-    <Stack.Navigator screenOptions={{headerShown: false}}>
-      {isSignIn ? (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      {authToken ? (
         <Stack.Screen name="AppStackNavigator" component={AppStackNavigator} />
       ) : (
         <Stack.Screen
@@ -77,7 +75,7 @@ const MyStack = () => {
 
 const AuthStackNavigator = () => {
   return (
-    <Stack.Navigator screenOptions={{headerShown: false}}>
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="LandingPage" component={LandingPage} />
       <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicy} />
       <Stack.Screen name="ForgotPass" component={ForgotPass} />
@@ -121,12 +119,13 @@ const AuthStackNavigator = () => {
       <Stack.Screen name="BackupRcoveryKey" component={BackupRcoveryKey} />
       <Stack.Screen name="SwapAndBridgeScr2" component={SwapAndBridgeScr2} />
       <Stack.Screen name="SwapFrom" component={SwapFrom} />
+      <Stack.Screen name="EmailVerify" component={VerifyEmail} />
     </Stack.Navigator>
   );
 };
 const AppStackNavigator = () => {
   return (
-    <Stack.Navigator screenOptions={{headerShown: false}}>
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="MyTabs" component={MyTabs} />
       <Stack.Screen name="LandingPage" component={LandingPage} />
       <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicy} />

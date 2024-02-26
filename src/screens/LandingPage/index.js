@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   Image,
   ImageBackground,
@@ -7,20 +7,21 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {styles} from './style';
+import { styles } from './style';
 import images from '../../services/utilities/images';
 import Modal from 'react-native-modal';
-import {useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { handleRemoveToken, selectAuthToken } from '../../store/token';
 
-export default function LandingPage({navigation}) {
+export default function LandingPage({ navigation }) {
+  const dispatch = useDispatch()
   const [modalShow, setModalShow] = useState(false);
-  const data = useSelector(state => state);
-  console.log(data);
+  const authToken = useSelector(selectAuthToken)
+  console.log(authToken);
 
   return (
     <SafeAreaView>
       <View style={styles.container}>
-        {/* <Text>LandingPage</Text> */}
         <ImageBackground
           source={images.landingPageBGImg}
           style={styles.bgImage}>
@@ -41,7 +42,8 @@ export default function LandingPage({navigation}) {
               style={styles.btn}
               onPress={() => {
                 setModalShow(!modalShow);
-              }}>
+              }}
+            >
               <View style={styles.btnContnt}>
                 <Image source={images.add} style={styles.addImg} />
                 <View style={styles.btnContentView}>
@@ -70,7 +72,7 @@ export default function LandingPage({navigation}) {
             onBackdropPress={() => {
               setModalShow(!modalShow);
             }}
-            // transparent={true}
+          // transparent={true}
           >
             <View style={styles.modal}>
               <View style={styles.modalContent}>
