@@ -42,6 +42,12 @@ import PrivacyPolicy from '../../screens/PrivacyPolicy';
 import { useSelector } from 'react-redux';
 import VerifyEmail from '../../screens/VerifyEmail';
 import { selectAuthToken } from '../../store/token';
+import BackupAndRestore from '../../screens/BackupAndRestore';
+import TransactionHistory from '../../screens/TransactionHistory';
+import TransferToken from '../../screens/TransferToken';
+import LetsGetStarted from '../../screens/LetsGetStarted';
+import CresoPrivacyPolicy from '../../screens/CresoPrivacyPolicy';
+import EOAPassword from '../../screens/EOAPassword';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -50,7 +56,9 @@ export default function MainNavigator() {
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="MyStack" component={MyStack} />
+      <Stack.Screen name="LetsGetStarted" component={LetsGetStarted} />
+      <Stack.Screen name="CresoPrivacyPolicy" component={CresoPrivacyPolicy} />
+        <Stack.Screen name="EOAPassword" component={EOAPassword} />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -120,6 +128,9 @@ const AuthStackNavigator = () => {
       <Stack.Screen name="SwapAndBridgeScr2" component={SwapAndBridgeScr2} />
       <Stack.Screen name="SwapFrom" component={SwapFrom} />
       <Stack.Screen name="EmailVerify" component={VerifyEmail} />
+      <Stack.Screen name="EOAPassword" component={EOAPassword} />
+      <Stack.Screen name="LetsGetStarted" component={LetsGetStarted} />
+      <Stack.Screen name="CresoPrivacyPolicy" component={CresoPrivacyPolicy} />
     </Stack.Navigator>
   );
 };

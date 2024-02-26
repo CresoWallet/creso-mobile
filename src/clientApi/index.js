@@ -92,3 +92,16 @@ export const googleLogin = async () => {
     return error
   }
 }
+
+export const createEOAWallet = async (token, walletName) => {
+  try {
+    const headers = {
+      'Content-Type': 'application/json',
+      authorization: `authorization ${token}`,
+    }
+    const response = await axiosInstance.post('/wallets/eoa', { walletName }, {headers})
+    return response
+  } catch (error) {
+    return error
+  }
+}

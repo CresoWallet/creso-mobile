@@ -21,7 +21,7 @@ export default function Security() {
         <View style={styles.securityBgImgContainer}>
           <Image
             style={styles.securityBgImg}
-            source={images.securityBackgroundImg}
+            source={images.backupandRestoreImg}
           />
         </View>
         <View style={styles.bottomSection}>
@@ -60,7 +60,67 @@ export default function Security() {
             </Text>
           </View>
         </View>
+
         <View style={styles.hrRight}></View>
+
+        <TouchableOpacity style={styles.autoLockRow}>
+          <View style={styles.autoLockRowRight}>
+            <View style={styles.autoLockImgContainer}>
+              <Image source={images.manageAuthImg} style={styles.autoLockImg} />
+            </View>
+            <Text style={styles.autoLockText}>
+              Manage Authentication Methods
+            </Text>
+          </View>
+
+          <View style={styles.autoLockRowLeft}>
+            <View style={styles.autoLockRowRightArrowContainer}>
+              <Image
+                source={images.securityRightArrowImg}
+                style={styles.autoLockRowRightArrow}
+              />
+            </View>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.autoLockRow}>
+          <View style={styles.autoLockRowRight}>
+            <View style={styles.autoLockImgContainer}>
+              <Image source={images.encBackupImg} style={styles.autoLockImg} />
+            </View>
+            <Text style={styles.autoLockText}>Encrypted Backups</Text>
+          </View>
+
+          <View style={styles.autoLockRowLeft}>
+            <View style={styles.autoLockRowRightArrowContainer}>
+              <Image
+                source={images.securityRightArrowImg}
+                style={styles.autoLockRowRightArrow}
+              />
+            </View>
+          </View>
+        </TouchableOpacity>
+
+        <View style={styles.hrRight}></View>
+
+        <TouchableOpacity style={styles.autoLockRow}>
+          <View style={styles.autoLockRowRight}>
+            <View style={styles.autoLockImgContainer}>
+              <Image source={images.pushNotiImg} style={styles.autoLockImg} />
+            </View>
+            <Text style={styles.autoLockText}>Push Notifications</Text>
+          </View>
+
+          <View style={styles.autoLockRowLeft}>
+            <Text style={styles.autoLockNeverText}>Disabled</Text>
+
+            <View style={styles.autoLockRowRightArrowContainer}>
+              <Image
+                source={images.securityRightArrowImg}
+                style={styles.autoLockRowRightArrow}
+              />
+            </View>
+          </View>
+        </TouchableOpacity>
       </ImageBackground>
     </SafeAreaView>
   );
