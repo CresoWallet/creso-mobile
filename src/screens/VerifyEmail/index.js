@@ -29,7 +29,7 @@ export default function VerifyEmail({ navigation, route }) {
 
   const dispatch = useDispatch()
 
-  const {email} = route.params;
+  const { email } = route.params;
   const [value, setValue] = useState('');
   const [minutes, setMinutes] = useState(0);
   const [seconds, setSeconds] = useState(5);
@@ -107,8 +107,8 @@ export default function VerifyEmail({ navigation, route }) {
   };
 
   const handleHome = () => {
-    console.log('dispatch');
-    dispatch(handleAddToken(authToken))
+    // dispatch(handleAddToken(authToken))
+    navigation.navigate('LetsGetStarted', { authToken })
   };
 
   return (

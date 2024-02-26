@@ -153,6 +153,8 @@ import bulbPink from '../../../assets/bulbPink.png';
 import EOA1 from '../../../assets/EOA1.png';
 import EOA2 from '../../../assets/EOA2.png';
 import EOA3 from '../../../assets/EOA3.png';
+import secureWalletImg from '../../../assets/secureWalletImg.png';
+import phraseImg from '../../../assets/phraseImg.png';
 
 const images = {
   forgotPassImg,
@@ -311,6 +313,8 @@ const images = {
   EOA1,
   EOA2,
   EOA3,
+  secureWalletImg,
+  phraseImg,
 };
 
 export default images;

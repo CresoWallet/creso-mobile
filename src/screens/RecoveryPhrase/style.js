@@ -46,14 +46,17 @@ export const styles = StyleSheet.create({
     color: colors.black,
   },
 
-  body: {
-    width: sizes.screenWidth * 0.9,
-  },
-
   disabledText: {
     fontSize: fontSize.smallM,
     color: colors.disabledBg2,
     marginRight: 8,
+  },
+
+  disabledText2: {
+    fontSize: fontSize.smallM,
+    color: colors.disabledBg2,
+    maxWidth: sizes.screenWidth * 0.9,
+    marginVertical: sizes.screenHeight * 0.02,
   },
 
   hr: {
@@ -70,28 +73,19 @@ export const styles = StyleSheet.create({
     marginTop: sizes.screenHeight * 0.01,
   },
 
-  bulbRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    height: sizes.screenHeight * 0.07,
-    borderWidth: 1,
-    borderColor: colors.disabledBg,
-    borderRadius: sizes.screenHeight * 0.1,
-    paddingLeft: sizes.screenWidth * 0.05,
-    marginTop: sizes.screenHeight * 0.01,
-  },
-
-  bulbGreen: {
-    height: 24,
-    width: 24,
-    marginRight: 6,
-  },
-
   textBlackBold: {
     fontSize: fontSize.smallM,
     color: colors.black,
     fontWeight: '600',
     maxWidth: sizes.screenWidth * 0.8,
+  },
+
+  textBlackBold2: {
+    fontSize: fontSize.smallM,
+    color: colors.black,
+    fontWeight: '600',
+    maxWidth: sizes.screenWidth * 0.8,
+    marginRight: 8,
   },
 
   ///////
@@ -151,25 +145,64 @@ export const styles = StyleSheet.create({
     fontWeight: '500',
   },
 
-  inputContainer: {
-    height: sizes.screenHeight * 0.08,
-    justifyContent: 'center',
-    width: sizes.screenWidth * 0.9,
-    paddingHorizontal: sizes.screenWidth * 0.03,
-    borderWidth: 1,
-    borderRadius: sizes.screenHeight * 0.1,
-    borderColor: colors.disabledBg,
-    marginVertical: sizes.screenHeight * 0.01,
-  },
-
-  input: {
-    color: colors.black,
-    fontSize: fontSize.regular,
-  },
-
   learnMoreRow: {
     flexDirection: 'row',
     width: sizes.screenWidth * 0.9,
     marginBottom: sizes.screenHeight * 0.01,
+  },
+
+  heading: {
+    fontSize: fontSize.h5,
+    color: colors.black,
+    fontWeight: '700',
+    textAlign: 'center',
+  },
+
+  recoveryPhraseContainer: {
+    height: sizes.screenHeight * 0.28,
+    width: sizes.screenWidth * 0.9,
+    overflow: 'hidden',
+    borderRadius: 24,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 24,
+    borderWidth: 1,
+    borderColor: colors.disabledBg,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
+  },
+
+  recoveryPhraseContainer2: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 10,
+    paddingVertical: sizes.screenHeight * 0.02,
+  },
+
+  phraseImg: {
+    resizeMode: 'contain',
+    width: sizes.screenWidth * 0.9,
+    position: 'absolute',
+  },
+
+  phraseViewContainer: {
+    borderWidth: 1,
+    borderColor: colors.cresoPurple,
+    borderRadius: sizes.screenHeight * 0.1,
+    height: sizes.screenHeight * 0.05,
+    justifyContent: 'flex-end',
+    width: sizes.screenWidth * 0.26,
+  },
+
+  phraseView: {
+    backgroundColor: colors.cresoPurple,
+    borderRadius: sizes.screenHeight * 0.1,
+    height: sizes.screenHeight * 0.044,
+    alignItems: 'center',
+    justifyContent: 'center',
+    overflow: 'hidden',
   },
 });

@@ -19,9 +19,9 @@ import { selectAuthToken } from '../../store/token';
 import formatToJSON from '../../services/utilities/JsonLog';
 import { createEOAWallet } from '../../clientApi';
 
-export default function EOAPassword({ navigation }) {
+export default function EOAPassword({ navigation, route }) {
 
-  const authToken = useSelector(selectAuthToken)
+  const authToken = route.params.authToken
 
   const [pass, setPass] = useState('');
   const [showPass, setShowPass] = useState(true);
@@ -35,9 +35,9 @@ export default function EOAPassword({ navigation }) {
     try {
       const response = await createEOAWallet(authToken, walletName)
       console.log(formatToJSON(response));
-      if(response.status == 200){
+      if (response.status == 200) {
         const seedPhrase = extractWords(response.data.data.seedPhrase)
-        // navigation.navigate('')
+        navigation.navigate('SecureWallet', { authToken, seedPhrase })
         setLoader(false)
       }
     } catch (error) {

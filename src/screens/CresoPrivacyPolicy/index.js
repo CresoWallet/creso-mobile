@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   Image,
   ImageBackground,
@@ -7,13 +7,17 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {styles} from './style';
+import { styles } from './style';
 import images from '../../services/utilities/images';
 import Modal from 'react-native-modal';
-import {useSelector} from 'react-redux';
-import {sizes} from '../../services';
+import { useSelector } from 'react-redux';
+import { sizes } from '../../services';
 
-export default function CresoPrivacyPolicy({navigation}) {
+export default function CresoPrivacyPolicy({ navigation, route }) {
+
+  const authToken = route.params.authToken
+
+
   const [modalShow, setModalShow] = useState(false);
   const data = useSelector(state => state);
   console.log(data);
@@ -86,7 +90,7 @@ export default function CresoPrivacyPolicy({navigation}) {
 
           <View style={styles.btnSection}>
             <TouchableOpacity style={styles.button}
-            onPress={() => navigation.navigate('EOAPassword')}
+              onPress={() => navigation.navigate('EOAPassword', { authToken })}
             >
               <Text style={styles.text}>I Agree</Text>
             </TouchableOpacity>

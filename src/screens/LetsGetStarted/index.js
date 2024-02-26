@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   Image,
   ImageBackground,
@@ -7,12 +7,15 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {styles} from './style';
+import { styles } from './style';
 import images from '../../services/utilities/images';
 import Modal from 'react-native-modal';
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 
-export default function LetsGetStarted({navigation}) {
+export default function LetsGetStarted({ navigation, route }) {
+
+  const authToken = route.params.authToken
+
   const [modalShow, setModalShow] = useState(false);
 
   return (
@@ -42,7 +45,7 @@ export default function LetsGetStarted({navigation}) {
               </Text>
             </View>
             <TouchableOpacity style={styles.button}
-            onPress={() => navigation.navigate('CresoPrivacyPolicy')}
+              onPress={() => navigation.navigate('CresoPrivacyPolicy', { authToken })}
             >
               <Text style={styles.text}>Create New EOA Wallet</Text>
             </TouchableOpacity>

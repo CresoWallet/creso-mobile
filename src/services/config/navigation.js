@@ -48,6 +48,8 @@ import TransferToken from '../../screens/TransferToken';
 import LetsGetStarted from '../../screens/LetsGetStarted';
 import CresoPrivacyPolicy from '../../screens/CresoPrivacyPolicy';
 import EOAPassword from '../../screens/EOAPassword';
+import SecureWallet from '../../screens/SecureWallet';
+import RecoveryPhrase from '../../screens/RecoveryPhrase';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -56,9 +58,7 @@ export default function MainNavigator() {
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="LetsGetStarted" component={LetsGetStarted} />
-      <Stack.Screen name="CresoPrivacyPolicy" component={CresoPrivacyPolicy} />
-        <Stack.Screen name="EOAPassword" component={EOAPassword} />
+        <Stack.Screen name="MyStack" component={MyStack} />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -131,6 +131,11 @@ const AuthStackNavigator = () => {
       <Stack.Screen name="EOAPassword" component={EOAPassword} />
       <Stack.Screen name="LetsGetStarted" component={LetsGetStarted} />
       <Stack.Screen name="CresoPrivacyPolicy" component={CresoPrivacyPolicy} />
+      <Stack.Screen name="SecureWallet" component={SecureWallet} />
+      <Stack.Screen name="RecoveryPhrase" component={RecoveryPhrase} />
+      <Stack.Screen name="BackupAndRestore" component={BackupAndRestore} />
+      <Stack.Screen name="TransactionHistory" component={TransactionHistory} />
+      <Stack.Screen name="TransferToken" component={TransferToken} />
     </Stack.Navigator>
   );
 };
