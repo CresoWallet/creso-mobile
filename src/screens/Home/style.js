@@ -41,6 +41,7 @@ export const styles = StyleSheet.create({
   homeCardImg: {
     width: sizes.screenWidth * 0.93,
     height: sizes.screenHeight * 0.256,
+    alignSelf:'center'
   },
 
   homeCardText1: {
@@ -51,13 +52,29 @@ export const styles = StyleSheet.create({
     top: sizes.screenHeight * 0.06,
     left: sizes.screenWidth * 0.13,
   },
+
+  balanceContainer:{
+    position: 'absolute',
+    flexDirection:  'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    minWidth: sizes.screenWidth*0.2,
+    bottom: sizes.screenHeight*0.03,
+    left: sizes.screenWidth*0.2
+  },
+
+  
   homeCardText2: {
     color: colors.black,
     fontSize: fontSize.h7,
     fontWeight: '600',
-    alignSelf: 'center',
-    top: sizes.screenHeight * 0.164,
-    right: sizes.screenWidth * 0.07,
+  },
+
+  hideBtn:{
+    resizeMode: 'contain',
+    height: 28,
+    width: 28,
+    marginLeft: 8
   },
 
   scrollViewRowContainer: {

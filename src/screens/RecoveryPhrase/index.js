@@ -14,9 +14,11 @@ import Modal from 'react-native-modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { colors, sizes } from '../../services';
 import Header from '../../components/Header';
-import { handleAddToken } from '../../store/token';
+import { handleAddToken, selectAuthToken } from '../../store/token';
 
 export default function RecoveryPhrase({ navigation, route }) {
+
+  const authTokenRedux = useSelector(selectAuthToken)
 
   const dispatch = useDispatch()
 
@@ -26,21 +28,6 @@ export default function RecoveryPhrase({ navigation, route }) {
   const [showPhrase, setShowPhrase] = useState(true);
   const [confirmed, setConfirmed] = useState(false);
   const [btnText, setBtnText] = useState('Reveal');
-
-  // const [phrase, setPhrase] = useState([
-  //   'undefined',
-  //   'undefined',
-  //   'undefined',
-  //   'undefined',
-  //   'undefined',
-  //   'undefined',
-  //   'undefined',
-  //   'undefined',
-  //   'undefined',
-  //   'undefined',
-  //   'undefined',
-  //   'undefined',
-  // ]);
 
   const handlePhrase = () => {
     if (!confirmed) {
@@ -53,6 +40,14 @@ export default function RecoveryPhrase({ navigation, route }) {
       else setBtnText('Hide');
     }
   };
+
+  const handleConfirm = async () => {
+    if(authTokenRedux){
+      navigation.navigate('MyTabs')
+    }else{
+      dispatch(handleAddToken(authToken))
+    }
+  }
 
   return (
     <SafeAreaView>
@@ -107,7 +102,7 @@ export default function RecoveryPhrase({ navigation, route }) {
 
           <View style={styles.btnSection}>
             {confirmed ? <TouchableOpacity style={styles.button}
-              onPress={() => dispatch(handleAddToken(authToken))}
+              onPress={handleConfirm}
             >
               <Text style={styles.text}>Go to Home</Text>
             </TouchableOpacity> : null}

@@ -99,7 +99,16 @@ export const createEOAWallet = async (token, walletName) => {
       'Content-Type': 'application/json',
       authorization: `authorization ${token}`,
     }
-    const response = await axiosInstance.post('/wallets/eoa', { walletName }, {headers})
+    const response = await axiosInstance.post('/wallets/eoa', { walletName }, { headers })
+    return response
+  } catch (error) {
+    return error
+  }
+}
+
+export const getWalletBalance = async (walletAddress, network) => {
+  try {
+    const response = await axiosInstance.get(`/wallets/${walletAddress}/balance`, { network })
     return response
   } catch (error) {
     return error

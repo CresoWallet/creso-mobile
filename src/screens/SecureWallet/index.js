@@ -14,11 +14,13 @@ import Modal from 'react-native-modal';
 import { useSelector } from 'react-redux';
 import { colors, sizes } from '../../services';
 import Header from '../../components/Header';
+import { selectWallet } from '../../store/WalletAddress';
 
 export default function SecureWallet({ navigation, route }) {
 
   const authToken = route.params.authToken
   const seedPhrase = route.params.seedPhrase
+
 
   const [pass, setPass] = useState('');
   const [showPass, setShowPass] = useState(true);

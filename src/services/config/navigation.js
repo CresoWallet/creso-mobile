@@ -128,9 +128,9 @@ const AuthStackNavigator = () => {
       <Stack.Screen name="SwapAndBridgeScr2" component={SwapAndBridgeScr2} />
       <Stack.Screen name="SwapFrom" component={SwapFrom} />
       <Stack.Screen name="EmailVerify" component={VerifyEmail} />
-      <Stack.Screen name="EOAPassword" component={EOAPassword} />
       <Stack.Screen name="LetsGetStarted" component={LetsGetStarted} />
       <Stack.Screen name="CresoPrivacyPolicy" component={CresoPrivacyPolicy} />
+      <Stack.Screen name="EOAPassword" component={EOAPassword} />
       <Stack.Screen name="SecureWallet" component={SecureWallet} />
       <Stack.Screen name="RecoveryPhrase" component={RecoveryPhrase} />
       <Stack.Screen name="BackupAndRestore" component={BackupAndRestore} />
@@ -185,6 +185,9 @@ const AppStackNavigator = () => {
       <Stack.Screen name="BackupRcoveryKey" component={BackupRcoveryKey} />
       <Stack.Screen name="SwapAndBridgeScr2" component={SwapAndBridgeScr2} />
       <Stack.Screen name="SwapFrom" component={SwapFrom} />
+      <Stack.Screen name="EOAPassword" component={EOAPassword} />
+      <Stack.Screen name="SecureWallet" component={SecureWallet} />
+      <Stack.Screen name="RecoveryPhrase" component={RecoveryPhrase} />
     </Stack.Navigator>
   );
 };

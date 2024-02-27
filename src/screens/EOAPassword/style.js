@@ -172,4 +172,10 @@ export const styles = StyleSheet.create({
     width: sizes.screenWidth * 0.9,
     marginBottom: sizes.screenHeight * 0.01,
   },
+
+  error:{
+    color:colors.redLoss,
+    alignSelf:'flex-start',
+    marginLeft:sizes.screenWidth * 0.1
+  }
 });

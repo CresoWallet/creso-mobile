@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
   Image,
@@ -12,16 +12,33 @@ import {
 import { styles } from './style';
 import images from '../../services/utilities/images';
 import Modal from 'react-native-modal';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { colors, sizes } from '../../services';
 import Header from '../../components/Header';
 import { selectAuthToken } from '../../store/token';
 import formatToJSON from '../../services/utilities/JsonLog';
 import { createEOAWallet } from '../../clientApi';
+import { handleAddWallet, handleEmptyWallet, selectWallet } from '../../store/WalletAddress';
 
 export default function EOAPassword({ navigation, route }) {
+  const wallet = useSelector(selectWallet)
+  console.log(wallet);
 
-  const authToken = route.params.authToken
+  const dispatch = useDispatch()
+
+  const authToken = route?.params?.authToken
+  const authTokenRedux = useSelector(selectAuthToken)
+
+  const [token, setToken] = useState()
+
+
+  useEffect(() => {
+    if (!authToken) {
+      setToken(authTokenRedux)
+    } else {
+      setToken(authToken)
+    }
+  }, [route, authToken, authTokenRedux])
 
   const [pass, setPass] = useState('');
   const [showPass, setShowPass] = useState(true);
@@ -29,21 +46,38 @@ export default function EOAPassword({ navigation, route }) {
   const [showConfirmPass, setShowConfirmPass] = useState(true);
   const [loader, setLoader] = useState(false)
   const [walletName, setWalletName] = useState('')
+  const [error, setError] = useState('')
 
   const handleCreateNewEOAWallet = async () => {
-    setLoader(true)
-    try {
-      const response = await createEOAWallet(authToken, walletName)
-      console.log(formatToJSON(response));
-      if (response.status == 200) {
-        const seedPhrase = extractWords(response.data.data.seedPhrase)
-        navigation.navigate('SecureWallet', { authToken, seedPhrase })
+
+
+    if (pass === confirmPass) {
+      setError('')
+      setLoader(true)
+      try {
+        const response = await createEOAWallet(token, walletName)
+        if (response.status == 200) {
+          const obj = {
+            walletName,
+            walletAddress: response?.data?.data?.walletAddress
+          }
+          dispatch(handleAddWallet(obj))
+          const seedPhrase = extractWords(response.data.data.seedPhrase)
+          navigation.navigate('SecureWallet', { authToken: token, seedPhrase })
+          setLoader(false)
+        } else {
+          setError(response?.data?.message)
+          setLoader(false)
+        }
+      } catch (error) {
         setLoader(false)
+        console.log(error.message);
+        setError(error.message)
       }
-    } catch (error) {
-      setLoader(false)
-      console.log(error.message);
+    } else { 
+      setError('*Password not matched')
     }
+
   }
 
   const res = {
@@ -51,7 +85,11 @@ export default function EOAPassword({ navigation, route }) {
       "data": {
         "seedPhrase": "mosquito fantasy benefit chapter afraid husband arm original riot illegal draft crash",
         "userId": "65dc3d6b747e6565d664cedb",
-        "walletAddress": "0xDfF15b02d7ddB99C69D32682eAd1e3CF7Ec29cB9"
+        "walletAddress": "0xDfF15b02d7ddB99C69D32682eAd1e3CF7Ec29cB9",
+        // slkafhfhlkjal
+        "seedPhrase": "tank spice bottom alone alert unveil lava vivid shadow assist echo donkey",
+        "userId": "65dc9852193501bd9ae31199",
+        "walletAddress": "0x41FA5D8Ffe178bbFb6a9Fc2887158987D1408383",
       },
       "message": "EOA wallet Successfully created"
     },
@@ -189,10 +227,6 @@ export default function EOAPassword({ navigation, route }) {
     return wordsArray;
   }
 
-  const seedPhrase = res.data.data.seedPhrase;
-  const wordsArray = extractWords(seedPhrase);
-  console.log(wordsArray);
-
   return (
     <SafeAreaView>
       <View style={styles.container}>
@@ -224,7 +258,6 @@ export default function EOAPassword({ navigation, route }) {
               style={styles.input}
             />
           </View>
-
           <View style={styles.rowBetween}>
             <Text style={styles.textBlackBold}>New Password</Text>
             <TouchableOpacity
@@ -266,6 +299,7 @@ export default function EOAPassword({ navigation, route }) {
               secureTextEntry={showConfirmPass}
             />
           </View>
+          <Text style={styles.error}>{error}</Text>
 
           <View style={styles.btnSection}>
             <View style={styles.learnMoreRow}>

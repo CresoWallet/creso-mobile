@@ -1,6 +1,6 @@
-import React, {useState, useRef, useEffect} from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Header from '../../components/Header';
-import {styles} from './style';
+import { styles } from './style';
 import {
   Image,
   ImageBackground,
@@ -17,15 +17,18 @@ import {
 import images from '../../services/utilities/images';
 
 import Modal from 'react-native-modal';
-import {colors, sizes} from '../../services';
-import {useDispatch, useSelector} from 'react-redux';
-import {getUserDetails} from '../../clientApi';
-import {handleAddUserDetail, selectUserData} from '../../store/user';
+import { colors, sizes } from '../../services';
+import { useDispatch, useSelector } from 'react-redux';
+import { getUserDetails, getWalletBalance } from '../../clientApi';
+import { handleAddUserDetail, selectUserData } from '../../store/user';
 import { selectAuthToken } from '../../store/token';
 import formatToJSON from '../../services/utilities/JsonLog';
+import { handleAddWallet, handleEmptyWallet, selectWallet } from '../../store/WalletAddress';
 
-export default function Home({navigation}) {
-  
+
+export default function Home({ navigation }) {
+
+  const userWallet = useSelector(selectWallet)
   const userToken = useSelector(selectAuthToken)
   const userDetail = useSelector(selectUserData)
 
@@ -42,6 +45,7 @@ export default function Home({navigation}) {
   const [walletCreatedtModal, setWalletCreatedtModal] = useState(false);
   const [wallet, setWallet] = useState('');
   const [walletCreated, setWalletCreated] = useState(false);
+  const [walletBalance, setWalletBalance] = useState(0);
 
   const translateY = useRef(new Animated.Value(500)).current;
 
@@ -178,15 +182,29 @@ export default function Home({navigation}) {
 
   useEffect(() => {
     getCurrentUser()
+    handleGetWalletBalance()
   }, [])
 
   const getCurrentUser = async () => {
     const res = await getUserDetails(userToken);
-    if(res.status == 200){
+    if (res.status == 200) {
       const user = res.data
       dispatch(handleAddUserDetail(user))
     }
   };
+
+  const handleGetWalletBalance = async () => {
+    try {
+      const walletAddress = userWallet[0].walletAddress
+      const network = 'goerli'
+      const response = await getWalletBalance(walletAddress, network)
+      if (response.status == 200) {
+        setWalletBalance(response.data)
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
     <SafeAreaView>
@@ -208,9 +226,15 @@ export default function Home({navigation}) {
             </TouchableOpacity>
           </View>
         </View>
-        <ImageBackground style={styles.homeCardImg} source={images.homeCardImg}>
+        <ImageBackground style={styles.homeCardImg} source={images.homeCardImg} resizeMode='contain'>
           <Text style={styles.homeCardText1}>{userDetail?.username}</Text>
-          <Text style={styles.homeCardText2}>0.000 ETH</Text>
+          <View style={styles.balanceContainer}>
+
+          <Text style={styles.homeCardText2}>{`${walletBalance} ETH`}</Text>
+          <TouchableOpacity>
+          <Image source={images.hideBtn} style={styles.hideBtn} />
+          </TouchableOpacity>
+          </View>
         </ImageBackground>
 
         <View>
@@ -463,7 +487,7 @@ export default function Home({navigation}) {
         {modalForBackup && (
           <Animated.View
             style={{
-              transform: [{translateY}],
+              transform: [{ translateY }],
               width: sizes.screenWidth * 0.9,
               alignSelf: 'center',
               bottom: sizes.screenHeight * 0.12,
@@ -488,26 +512,11 @@ export default function Home({navigation}) {
                   </Text>
                 </View>
               </View>
-              {/* <TouchableOpacity onPress={() => console.log('Button Pressed')}>
-                <Text>Press Me</Text>
-              </TouchableOpacity> */}
             </TouchableOpacity>
           </Animated.View>
         )}
 
-        {/* <Modal
-          isVisible={modalForBackup}
-          onBackdropPress={() => {
-            setModalForBackup(!modalForBackup);
-          }}
-        >
-          <View
-            style={styles.modal}
-          >
-            <View style={styles.backupModalInsideContaienr}>
-            </View>
-          </View>
-        </Modal> */}
+
 
         <Modal
           isVisible={modalShow}
@@ -533,14 +542,14 @@ export default function Home({navigation}) {
                 <TouchableOpacity
                   style={styles.walletSection}
                   onPress={() => {
-                    setModal2Show(!modal2Show);
+                    navigation.navigate('EOAPassword')
                   }}>
                   <Image style={styles.images} source={images.walletPink} />
                   <View style={styles.walletTextSection}>
                     <View style={styles.walletSectionFirstRow}>
                       <View>
                         <Text style={styles.walletTextBold}>Legacy Wallet</Text>
-                        <Text style={styles.walletTextLight}>EQA</Text>
+                        <Text style={styles.walletTextLight}>EOA</Text>
                       </View>
                       <View style={styles.walletSectionFirstRowRight}>
                         <View style={styles.walletTextBoldSmallContainer}>
@@ -694,7 +703,6 @@ export default function Home({navigation}) {
           isVisible={modal3Show}
           backdropOpacity={0.5}
           onBackdropPress={() => {
-            // setModalShow(!modalShow);
             setModal3Show(!modal3Show);
           }}>
           <View style={styles.modal}>
