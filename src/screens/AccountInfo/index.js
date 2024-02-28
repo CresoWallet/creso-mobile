@@ -13,29 +13,19 @@ import images from '../../services/utilities/images';
 import {colors} from '../../services';
 import {getUserDetails} from '../../clientApi';
 import {useSelector} from 'react-redux';
+import { selectUserData } from '../../store/user';
 
 export default function AccountInfo({navigation}) {
   const [userName, setUserName] = useState('');
   const [userEmail, setUserEmail] = useState('');
 
-  const userToken = useSelector(state => state?.tokenSlice?.token);
-  const userDetail = useSelector(state => state?.userDetailSlice?.userDetail);
+  const userDetail = useSelector(selectUserData);
 
   useEffect(() => {
-    // getCurrentUser();
     setUserEmail(userDetail.email);
     setUserName(userDetail.username);
   }, []);
 
-  const getCurrentUser = async () => {
-    try {
-      const res = await getUserDetails(userToken);
-      setUserName(res.data.user.username);
-      setUserEmail(res.data.user.email);
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   return (
     <SafeAreaView>
@@ -115,6 +105,22 @@ export default function AccountInfo({navigation}) {
                 </View>
                 <View style={styles.userProfileHeadingContainer}>
                   <Text style={styles.userProfileHeading}>Security</Text>
+                </View>
+                <View>
+                  <Image
+                    source={images.ArrowBitcoin}
+                    style={styles.arrowImage}
+                  />
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.accountView}
+                onPress={() => navigation.navigate('TransactionHistory')}>
+                <View>
+                  <Image source={images.transactionHistory} style={styles.profileImage} />
+                </View>
+                <View style={styles.userProfileHeadingContainer}>
+                  <Text style={styles.userProfileHeading}>Transaction History</Text>
                 </View>
                 <View>
                   <Image

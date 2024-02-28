@@ -49,8 +49,6 @@ export default function EOAPassword({ navigation, route }) {
   const [error, setError] = useState('')
 
   const handleCreateNewEOAWallet = async () => {
-
-
     if (pass === confirmPass) {
       setError('')
       setLoader(true)
@@ -74,7 +72,7 @@ export default function EOAPassword({ navigation, route }) {
         console.log(error.message);
         setError(error.message)
       }
-    } else { 
+    } else {
       setError('*Password not matched')
     }
 
@@ -220,6 +218,36 @@ export default function EOAPassword({ navigation, route }) {
       "_subscriptions": [],
       "responseURL": "https://creso-api-aea7820ba236.herokuapp.com/api/wallets/eoa"
     }
+  }
+
+  const AAWAlletRes = {
+    "data": {
+      "id": "65defcf668026986e952ce9d",
+      "walletName": "firstAAWallet",
+      "address": "0x93331e4DD847202E037545C8eC8BCfd70DF00499",
+      "salt": "0xf01f3e6eca9e77fe8f069ac74a196d71f2e1d77d7f4fe1bad2c8bf5002a7874c",
+      "network": "mumbai",
+      "wallets": [
+        "0x068CFE55Bf5970f9dC96ed6f23748B009E0B4aeF",
+        "0x3810D7035143e8c68014eddbebC87FcC40d93877"
+      ]
+    },
+    "message": "Successfully created AA wallet"
+  }
+
+  const AAWAlletRes2 = {
+    "data": {
+      "id": "65defd7a68026986e952ce9e",
+      "walletName": "secondAAWallet",
+      "address": "0x8947d2a0CDdf690f3858bA42f045b7BF38AFf66d",
+      "salt": "0x95d2e3581696d09b049818ea7318c884932b2779a2101dd0129eb73f7b2dac2b",
+      "network": "mumbai",
+      "wallets": [
+        "0x068CFE55Bf5970f9dC96ed6f23748B009E0B4aeF",
+        "0x3810D7035143e8c68014eddbebC87FcC40d93877"
+      ]
+    },
+    "message": "Successfully created AA wallet"
   }
 
   function extractWords(seedPhrase) {

@@ -19,11 +19,12 @@ import images from '../../services/utilities/images';
 import Modal from 'react-native-modal';
 import { colors, sizes } from '../../services';
 import { useDispatch, useSelector } from 'react-redux';
-import { getUserDetails, getWalletBalance } from '../../clientApi';
+import { createAAWallet, getUserDetails, getWalletBalance } from '../../clientApi';
 import { handleAddUserDetail, selectUserData } from '../../store/user';
 import { selectAuthToken } from '../../store/token';
 import formatToJSON from '../../services/utilities/JsonLog';
 import { handleAddWallet, handleEmptyWallet, selectWallet } from '../../store/WalletAddress';
+import { handleAddAAWallet, selectAAWallet } from '../../store/AAWalletAddress';
 
 
 export default function Home({ navigation }) {
@@ -31,13 +32,14 @@ export default function Home({ navigation }) {
   const userWallet = useSelector(selectWallet)
   const userToken = useSelector(selectAuthToken)
   const userDetail = useSelector(selectUserData)
+  const aaWallet = useSelector(selectAAWallet)
 
   const [checkedCoin, setCheckedCoin] = useState('coin1');
   const [userName, setUserName] = useState('');
   const [modalShow, setModalShow] = useState(false);
   const [modal2Show, setModal2Show] = useState(false);
   const [modal3Show, setModal3Show] = useState(false);
-
+  const [allWalletAddresses, setAllWalletAddresses] = useState();
   const [modalForBackup, setModalForBackup] = useState(true);
   const [walletName, setWalletName] = useState('');
   const [smartWalletName, setSmartWalletName] = useState('');
@@ -46,6 +48,10 @@ export default function Home({ navigation }) {
   const [wallet, setWallet] = useState('');
   const [walletCreated, setWalletCreated] = useState(false);
   const [walletBalance, setWalletBalance] = useState(0);
+  const [showBalance, setShowBalance] = useState(false);
+  const [showTransactionRes, setShowTransactionRes] = useState(false);
+
+
 
   const translateY = useRef(new Animated.Value(500)).current;
 
@@ -90,79 +96,7 @@ export default function Home({ navigation }) {
       });
   };
 
-  const handleCreateSmartWallet = async () => {
-    var myHeaders = new Headers();
-    setLoader(true);
 
-    myHeaders.append('auth_token', `"auth_token ${userToken}"`);
-    myHeaders.append('Content-Type', 'application/json');
-    myHeaders.append('Cookie', `auth_token=${userToken}`);
-
-    var raw = JSON.stringify({
-      walletName: smartWalletName,
-      network: 'ethereum',
-    });
-
-    var requestOptions = {
-      method: 'POST',
-      headers: myHeaders,
-      body: raw,
-      redirect: 'follow',
-    };
-
-    fetch('https://core.creso.io/api/create/smartwallet', requestOptions)
-      .then(response => response.text())
-      .then(result => {
-        if (result.id) {
-          setModal3Show(!modal3Show);
-          setWalletCreatedtModal(true);
-        }
-        setSmartWalletName('');
-        setLoader(false);
-      })
-      .catch(error => {
-        console.log('error', error);
-        setSmartWalletName('');
-        setLoader(false);
-      });
-
-    // var myHeaders = new Headers();
-
-    // setLoader(true);
-
-    // myHeaders.append('auth_token', `"auth_token ${userToken}"`);
-    // myHeaders.append('Content-Type', 'application/json');
-    // myHeaders.append('Cookie', `auth_token=${userToken}`);
-
-    // var raw = JSON.stringify({
-    //   walletName: smartWalletName,
-    //   network: 'ethereum',
-    // });
-
-    // var requestOptions = {
-    //   method: 'POST',
-    //   headers: myHeaders,
-    //   body: raw,
-    //   redirect: 'follow',
-    // };
-
-    // fetch('https://core.creso.io/api/create/smartwallet', requestOptions)
-    //   .then(response => response.text())
-    //   .then(result => {
-    //     console.log(result.id);
-    //     if (result.id) {
-    //       setModal3Show(!modal3Show);
-    //       setWalletCreatedtModal(true);
-    //     }
-    //     setSmartWalletName('');
-    //     setLoader(false);
-    //   })
-    //   .catch(error => {
-    //     console.log('error', error);
-    //     setSmartWalletName('');
-    //     setLoader(false);
-    //   });
-  };
 
   useEffect(() => {
     Animated.spring(translateY, {
@@ -180,10 +114,15 @@ export default function Home({ navigation }) {
     });
   }, [navigation]);
 
-  useEffect(() => {
-    getCurrentUser()
-    handleGetWalletBalance()
-  }, [])
+
+
+  const extractWalletAddresses = (userWallet) => {
+    if (userWallet && Array.isArray(userWallet)) {
+      return userWallet.map(wallet => wallet.walletAddress);
+    } else {
+      return [];
+    }
+  };
 
   const getCurrentUser = async () => {
     const res = await getUserDetails(userToken);
@@ -205,6 +144,37 @@ export default function Home({ navigation }) {
       console.log(error);
     }
   }
+
+  useEffect(() => {
+    getCurrentUser()
+    handleGetWalletBalance()
+    const walletAddresses = extractWalletAddresses(userWallet)
+    setAllWalletAddresses(walletAddresses)
+  }, [])
+
+
+  const handleCreateAAWallet = async () => {
+    try {
+      const obj = {
+        network: 'mumbai',
+        walletName: smartWalletName,
+        address: allWalletAddresses
+      }
+      setLoader(true);
+      const response = await createAAWallet(userToken, obj)
+      if (response.status == 200) {
+        dispatch(handleAddAAWallet(response?.data?.data))
+        setModal3Show(false)
+        setLoader(false)
+      } else {
+        setLoader(false)
+      }
+    } catch (error) {
+      console.log(error);
+      setLoader(false)
+    }
+  }
+
 
   return (
     <SafeAreaView>
@@ -230,10 +200,12 @@ export default function Home({ navigation }) {
           <Text style={styles.homeCardText1}>{userDetail?.username}</Text>
           <View style={styles.balanceContainer}>
 
-          <Text style={styles.homeCardText2}>{`${walletBalance} ETH`}</Text>
-          <TouchableOpacity>
-          <Image source={images.hideBtn} style={styles.hideBtn} />
-          </TouchableOpacity>
+            <Text style={styles.homeCardText2}>{showBalance ? `${walletBalance} ETH` : '*** ETH'}</Text>
+            <TouchableOpacity onPress={()=>{
+              setShowBalance(!showBalance)
+            }}>
+              <Image source={showBalance? images.eyeShow: images.hideBtn} style={styles.hideBtn} />
+            </TouchableOpacity>
           </View>
         </ImageBackground>
 
@@ -751,7 +723,7 @@ export default function Home({ navigation }) {
                       setSmartWalletName(text);
                     }}
                   />
-                  <Text style={styles.nameRowTextInputLeft}>EQA</Text>
+                  <Text style={styles.nameRowTextInputLeft}>AA</Text>
                 </View>
 
                 <View style={styles.modalCheckMarkRow}>
@@ -783,8 +755,8 @@ export default function Home({ navigation }) {
                   <TouchableOpacity
                     style={styles.bottonBlack}
                     onPress={() => {
-                      handleCreateSmartWallet();
-                      setWallet('Smart Wallet');
+                      handleCreateAAWallet()
+                      // setWallet('Smart Wallet');
                     }}>
                     <Text style={styles.bottonBlackText}>Confirm</Text>
                   </TouchableOpacity>
@@ -813,6 +785,20 @@ export default function Home({ navigation }) {
               <Text style={styles.popUpBtnText}>Done</Text>
             </TouchableOpacity>
           </View>
+        </Modal>
+
+        <Modal isVisible={showTransactionRes}
+        backdropOpacity={0.5}
+        onBackdropPress={()=>{
+          setShowTransactionRes(false)
+        }}
+        onBackButtonPress={()=>{
+          setShowTransactionRes(false)
+        }}
+        >
+<View style={styles.transactionModalBody}>
+<Text style={styles.transactionModalText}>Heyyyyyyyyyyyyyyyyyyyyyyy</Text>
+</View>
         </Modal>
       </ImageBackground>
     </SafeAreaView>

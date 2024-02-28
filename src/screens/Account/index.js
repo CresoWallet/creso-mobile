@@ -173,15 +173,6 @@ export default function Account({ navigation }) {
               <Image source={images.ArrowBitcoin} style={styles.arrowImage} />
             </TouchableOpacity>
 
-            {/* <TouchableOpacity
-              style={styles.disconnectButtonStyling}
-              onPress={() => {
-                handleLogout;
-                console.log('run');
-              }}>
-              <Text style={styles.textColorPink}>Disconnect</Text>
-            </TouchableOpacity> */}
-
             {loader ? (
               <View
                 style={styles.disconnectButtonStyling}

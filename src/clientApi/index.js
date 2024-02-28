@@ -114,3 +114,25 @@ export const getWalletBalance = async (walletAddress, network) => {
     return error
   }
 }
+
+export const getTranscitionHistory = async (walletAddress, network) => {
+  try {
+    const response = await axiosInstance.get(`/wallets/${walletAddress}/transactions`, { network })
+    return response
+  } catch (error) {
+    return error
+  }
+}
+
+export const createAAWallet = async (token, body) => {
+  try {
+    const headers = {
+      'Content-Type': 'application/json',
+      authorization: `authorization ${token}`,
+    }
+    const response = await axiosInstance.post('/wallets/aa', body, { headers })
+    return response
+  } catch (error) {
+    return error
+  }
+}

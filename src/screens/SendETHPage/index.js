@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
   Image,
@@ -11,13 +11,18 @@ import {
   View,
 } from 'react-native';
 import images from '../../services/utilities/images';
-import {styles} from './style';
+import { styles } from './style';
 import Header from '../../components/Header';
-import {colors} from '../../services';
+import { colors } from '../../services';
 import Modal from 'react-native-modal';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { Clipboard } from 'react-native';
+import { handleAddAAWallet, selectAAWallet } from '../../store/AAWalletAddress';
 
-export default function SendETHPage({navigation}) {
+
+export default function SendETHPage({ navigation }) {
+
+  const aaWallet = useSelector(selectAAWallet)
   const userToken = useSelector(state => state?.tokenSlice?.token);
 
   const [type, setType] = useState('AA');
@@ -25,7 +30,7 @@ export default function SendETHPage({navigation}) {
   const [selectedWallet, setSelectedWallet] = useState('0x53A...e4af');
   const [standard, setStandard] = useState('Native/Stable');
   const [sendTo, setSendTo] = useState(
-    '0x223A0f5E3F404121b893058C14015b8115Aa78Aa',
+    '',
   );
   const [amount, setAmount] = useState('');
   const [walletType, setWalletType] = useState('');
@@ -115,6 +120,15 @@ export default function SendETHPage({navigation}) {
       });
   };
 
+  const handlePaste = async () => {
+    try {
+      const content = await Clipboard.getString();
+      setSendTo(content);
+    } catch (error) {
+      console.error('Error pasting from clipboard:', error);
+    }
+  };
+
   return (
     <SafeAreaView>
       <ImageBackground source={images.landingPageBGImg} style={styles.bgImage}>
@@ -175,14 +189,14 @@ export default function SendETHPage({navigation}) {
           <TouchableOpacity
             style={[styles.field, styles.spaceBetween]}
             onPress={() => {
-              setWalletTypeModal(true);
+              setWalletModal(true);
             }}>
             <View style={styles.subField}>
               <Image source={images.cresoLogo} style={styles.coinIcons} />
               <Text style={[styles.black, styles.subFieldText]}>ETH-1</Text>
             </View>
             <View style={styles.subField2}>
-              <Text style={[styles.black, styles.EQA]}>EQA</Text>
+              <Text style={[styles.black, styles.EQA]}>AA</Text>
               <Text style={[styles.black, styles.EQASideText]}>
                 {selectedWallet}
               </Text>
@@ -232,35 +246,16 @@ export default function SendETHPage({navigation}) {
               backdropOpacity={0.5}>
               <View style={styles.modalBodey}>
                 <Text style={styles.modalHeading}>
-                  Select Your {walletType} Wallet
+                  Select Your Smart Wallet
                 </Text>
-                {walletType === 'Standard' && (
-                  <ScrollView>
-                    {wallets?.map((item, index) => {
-                      return (
-                        <TouchableOpacity
-                          onPress={() => {
-                            setWalletModal(false);
-                            setSelectedWallet(item.address);
-                          }}
-                          style={styles.typeOptionContainer}>
-                          <Text style={styles.typeOption}>
-                            {item.walletName}
-                          </Text>
-                        </TouchableOpacity>
-                      );
-                    })}
-                  </ScrollView>
-                )}
 
-                {walletType === 'Smart' && (
                   <ScrollView>
-                    {smartWallets?.map((item, index) => {
+                    {aaWallet?.map((item, index) => {
                       return (
                         <TouchableOpacity
                           onPress={() => {
                             setWalletModal(false);
-                            setSelectedWallet(item.address);
+setSelectedWallet(item.address)
                           }}
                           style={styles.typeOptionContainer}>
                           <Text style={styles.typeOption}>
@@ -270,7 +265,9 @@ export default function SendETHPage({navigation}) {
                       );
                     })}
                   </ScrollView>
-                )}
+                
+
+                
               </View>
             </Modal>
           </TouchableOpacity>
@@ -279,13 +276,13 @@ export default function SendETHPage({navigation}) {
           <View style={[styles.field, styles.spaceBetween]}>
             <TextInput
               style={styles.searchFields}
-              placeholder="Enter wallet address or ENS,NNS"
+              placeholder="Enter wallet address"
               placeholderTextColor={colors.disabledBg1}
               onChangeText={text => {
-                // setSendTo(text);
+                setSendTo(text);
               }}
               value={sendTo}></TextInput>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={handlePaste}>
               <Text style={styles.pasteButton}>Paste</Text>
             </TouchableOpacity>
           </View>
@@ -298,9 +295,11 @@ export default function SendETHPage({navigation}) {
           </View>
           <View style={styles.field}>
             <TextInput
+            
               style={styles.inputAmount}
               placeholder="Input Amount"
               placeholderTextColor={colors.disabledBg1}
+              keyboardType="numeric"
               onChangeText={text => {
                 setAmount(text);
               }}

@@ -73,4 +73,14 @@ export const styles = StyleSheet.create({
     width: sizes.screenWidth * 0.85,
     alignSelf: 'flex-end',
   },
+  loaderContainer:{
+    height:sizes.screenHeight * 0.75,
+    justifyContent:'center'
+  },
+  noTransactionsText:{
+    color:colors.cresoPink,
+    fontSize:fontSize.large,
+    fontWeight:'500',
+    textAlign:'center'
+  }
 });

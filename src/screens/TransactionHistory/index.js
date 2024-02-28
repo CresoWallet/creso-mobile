@@ -1,5 +1,6 @@
-import React, {useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
+  ActivityIndicator,
   Image,
   ImageBackground,
   SafeAreaView,
@@ -8,37 +9,46 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {styles} from './style';
+import { styles } from './style';
 import Header from '../../components/Header';
 import images from '../../services/utilities/images';
+import { useSelector } from 'react-redux';
+import { selectAuthToken } from '../../store/token';
+import { colors } from '../../services';
+import { getTranscitionHistory } from '../../clientApi';
+import { selectWallet } from '../../store/WalletAddress';
+import formatToJSON from '../../services/utilities/JsonLog';
 
 export default function TransactionHistory() {
-  const [tH, setTH] = useState([
-    {
-      title: 'Account Deposit',
-      sender: '0xfa...8871',
-      amount: '+$15.00',
-      date: '2024-01-10',
-      time: '16:54',
-      status: 'Pending',
-    },
-    {
-      title: 'Account Deposit',
-      sender: '0xfa...8871',
-      amount: '+$15.00',
-      date: '2024-01-10',
-      time: '16:54',
-      status: 'Successful Transaction',
-    },
-    {
-      title: 'Account Deposit',
-      sender: '0xfa...8871',
-      amount: '+$15.00',
-      date: '2024-01-10',
-      time: '16:54',
-      status: 'Successful Transaction',
-    },
-  ]);
+
+  const wallet = useSelector(selectWallet)
+  const authToken = useSelector(selectAuthToken)
+  console.log(wallet);
+  console.log(authToken);
+
+  const [loader, setLoader] = useState(false)
+  const [transactionHistory, setTransactionHistory] = useState([]);
+
+  useEffect(() => {
+    handleGetTranscitionHistory()
+  }, [])
+
+  const handleGetTranscitionHistory = async () => {
+    try {
+      setLoader(true)
+      const network = 'goerli'
+      const response = await getTranscitionHistory(wallet[0].walletAddress, network)
+      if (response.status == 200) {
+        setLoader(false)
+        setTransactionHistory(response.data)
+      } else {
+        setLoader(false)
+      }
+    } catch (error) {
+      setLoader(false)
+      console.log(error.message);
+    }
+  }
 
   return (
     <SafeAreaView>
@@ -49,42 +59,24 @@ export default function TransactionHistory() {
 
         <View style={styles.scrollContainer}>
           <ScrollView>
-            {tH.map((item, index) => {
-              return (
-                <View key={index}>
-                  <View style={styles.thRow}>
-                    <Image source={images.THImg} style={styles.THImg} />
-                    <View style={styles.abc}>
-                      <Text style={styles.textBold}>{item.title}</Text>
-                      <View style={styles.thRowSpaceBetween}>
-                        <View style={styles.abc}>
-                          <Text style={styles.disabledText}>
-                            Sender : {item.sender}
-                          </Text>
-                          <Text style={styles.disabledText}>
-                            {item.date} | {item.time}
-                          </Text>
-                        </View>
-                        <View style={styles.itemsFlexEnd}>
-                          <Text style={styles.textBold}>{item.amount}</Text>
-                          <Text
-                            style={
-                              item.status === 'Pending'
-                                ? styles.textPink
-                                : styles.textGreen
-                            }>
-                            {item.status}
-                          </Text>
-                        </View>
-                      </View>
-                    </View>
-                  </View>
-                  {index < tH.length - 1 ? (
-                    <View style={styles.hrRight}></View>
-                  ) : null}
+
+            {
+              loader ?
+                <View style={styles.loaderContainer}>
+                  <ActivityIndicator color={colors.disabledBg} size={40} />
                 </View>
-              );
-            })}
+                :
+                transactionHistory.length > 0 ?
+                  <View>
+                    <Text>Transaction history found</Text>
+                  </View>
+                  :
+                  <View style={styles.loaderContainer}>
+                    <Text style={styles.noTransactionsText}>
+                      No transactions have been made yet
+                    </Text>
+                  </View>
+            }
             <View style={styles.margin}></View>
           </ScrollView>
         </View>
@@ -92,3 +84,41 @@ export default function TransactionHistory() {
     </SafeAreaView>
   );
 }
+
+
+// {tH.map((item, index) => {
+//   return (
+//     <View key={index}>
+//       <View style={styles.thRow}>
+//         <Image source={images.THImg} style={styles.THImg} />
+//         <View style={styles.abc}>
+//           <Text style={styles.textBold}>{item.title}</Text>
+//           <View style={styles.thRowSpaceBetween}>
+//             <View style={styles.abc}>
+//               <Text style={styles.disabledText}>
+//                 Sender : {item.sender}
+//               </Text>
+//               <Text style={styles.disabledText}>
+//                 {item.date} | {item.time}
+//               </Text>
+//             </View>
+//             <View style={styles.itemsFlexEnd}>
+//               <Text style={styles.textBold}>{item.amount}</Text>
+//               <Text
+//                 style={
+//                   item.status === 'Pending'
+//                     ? styles.textPink
+//                     : styles.textGreen
+//                 }>
+//                 {item.status}
+//               </Text>
+//             </View>
+//           </View>
+//         </View>
+//       </View>
+//       {index < tH.length - 1 ? (
+//         <View style={styles.hrRight}></View>
+//       ) : null}
+//     </View>
+//   );
+// })}

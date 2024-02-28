@@ -641,4 +641,19 @@ export const styles = StyleSheet.create({
     fontSize: fontSize.medium,
     fontWeight: '600',
   },
+
+  transactionModalBody:{
+    backgroundColor: colors.white,
+    paddingHorizontal: sizes.screenWidth*0.08,
+    paddingVertical: sizes.screenHeight*0.04,
+    width: sizes.screenWidth*0.9,
+    borderRadius: 16,
+    alignItems: 'center'
+  }
+,
+  transactionModalText:{
+    color: colors.black,
+    fontWeight: '500',
+    fontSize: fontSize.medium
+  }
 });

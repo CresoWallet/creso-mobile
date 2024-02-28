@@ -188,6 +188,8 @@ const AppStackNavigator = () => {
       <Stack.Screen name="EOAPassword" component={EOAPassword} />
       <Stack.Screen name="SecureWallet" component={SecureWallet} />
       <Stack.Screen name="RecoveryPhrase" component={RecoveryPhrase} />
+      <Stack.Screen name="TransactionHistory" component={TransactionHistory} />
+
     </Stack.Navigator>
   );
 };

@@ -155,8 +155,13 @@ import EOA2 from '../../../assets/EOA2.png';
 import EOA3 from '../../../assets/EOA3.png';
 import secureWalletImg from '../../../assets/secureWalletImg.png';
 import phraseImg from '../../../assets/phraseImg.png';
+import transactionHistory from "../../../assets/transactionHistory.png"
+import eyeShow from "../../../assets/eyeShow.png"
+
 
 const images = {
+  transactionHistory,
+  eyeShow,
   forgotPassImg,
   twtLogo,
   personalKeyShareImg,
