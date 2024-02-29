@@ -18,6 +18,7 @@ import Modal from 'react-native-modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { Clipboard } from 'react-native';
 import { handleAddAAWallet, selectAAWallet } from '../../store/AAWalletAddress';
+import { sendAAWalletTransaction } from '../../clientApi';
 
 
 export default function SendETHPage({ navigation }) {
@@ -128,6 +129,31 @@ export default function SendETHPage({ navigation }) {
       console.error('Error pasting from clipboard:', error);
     }
   };
+
+
+  const handleAAWalletTransaction = async () => {
+    try {
+      setLoader(true)
+      const body = {
+        type: type,
+        sendTo: sendTo,
+        amount: amount,
+        from: selectedWallet,
+        network: network
+      }
+
+      const response = await sendAAWalletTransaction(userToken, body)
+      if (response.status == 200) {
+        setLoader(false)
+        console.log(response);
+      } else {
+        setLoader(false)
+        console.log(response);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
     <SafeAreaView>
@@ -249,25 +275,26 @@ export default function SendETHPage({ navigation }) {
                   Select Your Smart Wallet
                 </Text>
 
-                  <ScrollView>
-                    {aaWallet?.map((item, index) => {
-                      return (
-                        <TouchableOpacity
-                          onPress={() => {
-                            setWalletModal(false);
-setSelectedWallet(item.address)
-                          }}
-                          style={styles.typeOptionContainer}>
-                          <Text style={styles.typeOption}>
-                            {item.walletName}
-                          </Text>
-                        </TouchableOpacity>
-                      );
-                    })}
-                  </ScrollView>
-                
+                <ScrollView>
+                  {aaWallet?.map((item, index) => {
+                    return (
+                      <TouchableOpacity
+                        key={index}
+                        onPress={() => {
+                          setWalletModal(false);
+                          setSelectedWallet(item.address)
+                        }}
+                        style={styles.typeOptionContainer}>
+                        <Text style={styles.typeOption}>
+                          {item.walletName}
+                        </Text>
+                      </TouchableOpacity>
+                    );
+                  })}
+                </ScrollView>
 
-                
+
+
               </View>
             </Modal>
           </TouchableOpacity>
@@ -295,7 +322,7 @@ setSelectedWallet(item.address)
           </View>
           <View style={styles.field}>
             <TextInput
-            
+
               style={styles.inputAmount}
               placeholder="Input Amount"
               placeholderTextColor={colors.disabledBg1}
@@ -366,7 +393,8 @@ setSelectedWallet(item.address)
                 network,
                 standard,
               );
-              handleSend();
+              // handleSend();
+              handleAAWalletTransaction()
             }}
             style={styles.button}>
             <Image

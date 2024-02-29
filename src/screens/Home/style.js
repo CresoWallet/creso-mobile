@@ -655,5 +655,39 @@ export const styles = StyleSheet.create({
     color: colors.black,
     fontWeight: '500',
     fontSize: fontSize.medium
-  }
+  },
+
+
+  modalBodeySelect: {
+    backgroundColor: colors.white,
+    paddingHorizontal: sizes.screenWidth * 0.05,
+    width: sizes.screenWidth * 0.9,
+    paddingVertical: sizes.screenHeight * 0.05,
+    borderRadius: 16,
+    maxHeight: sizes.screenHeight * 0.5,
+  },
+
+  modalHeadingSelect: {
+    fontWeight: '600',
+    fontSize: fontSize.large,
+    color: colors.black,
+    marginBottom: sizes.screenHeight * 0.02,
+    alignSelf: 'center',
+  },
+
+  typeOptionContainer: {
+    width: sizes.screenWidth * 0.8,
+    borderColor: colors.disabledBg,
+    borderWidth: 1,
+    paddingHorizontal: sizes.screenWidth * 0.02,
+    paddingVertical: sizes.screenHeight * 0.01,
+    borderRadius: 8,
+    marginVertical: sizes.screenHeight * 0.01,
+  },
+
+  typeOption: {
+    fontWeight: '500',
+    fontSize: fontSize.medium,
+    color: colors.black,
+  },
 });

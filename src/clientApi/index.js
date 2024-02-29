@@ -136,3 +136,30 @@ export const createAAWallet = async (token, body) => {
     return error
   }
 }
+
+export const sendAAWalletTransaction = async (token, body) => {
+  try {
+    const headers = {
+      'Content-Type': 'application/json',
+      authorization: `authorization ${token}`,
+    }
+    const response = await axiosInstance.post('/transactions', body, { headers })
+    return response
+  } catch (error) {
+    return error
+  }
+}
+
+
+export const getAllEOAWallets = async (token) => {
+  try {
+    const headers = {
+      'Content-Type': 'application/json',
+      authorization: `authorization ${token}`,
+    }
+    const response = await axiosInstance.get('/wallets/eoa', { headers })
+    return response
+  } catch (error) {
+    return error
+  }
+}

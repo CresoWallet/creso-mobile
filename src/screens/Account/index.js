@@ -22,6 +22,8 @@ import { getUserDetails, logOut, sendOTPMail } from '../../clientApi';
 import { axiosInstance } from '../../services/config/axios';
 import { launchImageLibrary } from 'react-native-image-picker';
 import { selectUserData } from '../../store/user';
+import { handleEmptyAAWallet } from '../../store/AAWalletAddress';
+import { handleEmptyWallet } from '../../store/WalletAddress';
 
 export default function Account({ navigation }) {
 
@@ -92,6 +94,8 @@ export default function Account({ navigation }) {
 
   const handleLogout = async () => {
     dispatch(handleRemoveToken())
+    dispatch(handleEmptyAAWallet())
+    dispatch(handleEmptyWallet())
   };
 
   return (

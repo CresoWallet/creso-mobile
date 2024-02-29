@@ -23,8 +23,6 @@ export default function TransactionHistory() {
 
   const wallet = useSelector(selectWallet)
   const authToken = useSelector(selectAuthToken)
-  console.log(wallet);
-  console.log(authToken);
 
   const [loader, setLoader] = useState(false)
   const [transactionHistory, setTransactionHistory] = useState([]);

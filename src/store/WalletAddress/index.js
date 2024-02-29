@@ -9,15 +9,18 @@ const WalletSlice = createSlice({
     initialState,
     reducers: {
         handleAddWallet(state, action) {
-            state.wallet.push(action.payload); 
+            state.wallet.push(action.payload);
         },
         handleEmptyWallet(state) {
             state.wallet = [];
         },
+        handleReplaceAllWallets(state, action) {
+            state.wallet = action.payload
+        }
     },
 });
 
-export const { handleAddWallet, handleEmptyWallet } = WalletSlice.actions;
+export const { handleAddWallet, handleEmptyWallet , handleReplaceAllWallets} = WalletSlice.actions;
 
 export const selectWallet = (state) => state.wallet.wallet;
 

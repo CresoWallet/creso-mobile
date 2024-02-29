@@ -55,11 +55,6 @@ export default function EOAPassword({ navigation, route }) {
       try {
         const response = await createEOAWallet(token, walletName)
         if (response.status == 200) {
-          const obj = {
-            walletName,
-            walletAddress: response?.data?.data?.walletAddress
-          }
-          dispatch(handleAddWallet(obj))
           const seedPhrase = extractWords(response.data.data.seedPhrase)
           navigation.navigate('SecureWallet', { authToken: token, seedPhrase })
           setLoader(false)
