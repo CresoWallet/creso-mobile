@@ -9,13 +9,6 @@ export const loginApi = async formData => {
   return res;
 };
 
-export const logOut = async formData => {
-  const res = await axiosInstance(`/logout`, {
-    method: 'POST',
-    data: formData,
-  });
-  return res;
-};
 
 export const signUpAPI = async formData => {
   const res = await axiosInstance(`/signup`, {
@@ -23,31 +16,6 @@ export const signUpAPI = async formData => {
     data: formData,
   });
 
-  return res;
-};
-
-export const authenticateUser = async formData => {
-  const res = await axiosInstance(`/authenticate`, {
-    method: 'GET',
-    data: formData,
-  });
-
-  return res;
-};
-
-export const sendOTPMail = async (token, formData) => {
-  const res = await axiosInstance(
-    `/sendOTP`,
-    {
-      headers: {
-        auth_token: token,
-      },
-    },
-    {
-      method: 'POST',
-      data: formData,
-    },
-  );
   return res;
 };
 
@@ -115,9 +83,9 @@ export const getWalletBalance = async (walletAddress, network) => {
   }
 }
 
-export const getTranscitionHistory = async (walletAddress, network) => {
+export const getTranscitionHistory = async (address, network) => {
   try {
-    const response = await axiosInstance.get(`/wallets/${walletAddress}/transactions`, { network })
+    const response = await axiosInstance.get(`/wallets/${address}/transactions`, { network })
     return response
   } catch (error) {
     return error
@@ -158,6 +126,33 @@ export const getAllEOAWallets = async (token) => {
       authorization: `authorization ${token}`,
     }
     const response = await axiosInstance.get('/wallets/eoa', { headers })
+    return response
+  } catch (error) {
+    return error
+  }
+}
+
+
+export const getAAWallets = async (token, address) => {
+  try {
+    const headers = {
+      'Content-Type': 'application/json',
+      authorization: `authorization ${token}`,
+    }
+    const response = await axiosInstance.get(`/wallets/aa/${address}`, { headers })
+    return response
+  } catch (error) {
+    return error
+  }
+}
+
+export const importEOAWallet = async (token, body) => {
+  try {
+    const headers = {
+      'Content-Type': 'application/json',
+      authorization: `authorization ${token}`,
+    }
+    const response = await axiosInstance.post('/wallets/import', body, { headers })
     return response
   } catch (error) {
     return error

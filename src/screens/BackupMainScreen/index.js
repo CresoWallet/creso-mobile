@@ -16,7 +16,7 @@ import {styles} from '../BackupMainScreen/style';
 import Header from '../../components/Header';
 import {colors} from '../../services';
 import {useSelector} from 'react-redux';
-import {getUserDetails, sendOTPMail} from '../../clientApi';
+import {getUserDetails} from '../../clientApi';
 import {axiosInstance} from '../../services/config/axios';
 
 export default function BackupMainScreen({navigation}) {

@@ -49,7 +49,9 @@ export default function LetsGetStarted({ navigation, route }) {
             >
               <Text style={styles.text}>Create New EOA Wallet</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.buttonWhite}>
+            <TouchableOpacity style={styles.buttonWhite}
+             onPress={() => navigation.navigate('ImportEOAWallet', { authToken })}
+            >
               <Text style={styles.textBlack}>Import an existing wallet</Text>
             </TouchableOpacity>
           </View>

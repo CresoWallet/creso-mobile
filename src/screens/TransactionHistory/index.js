@@ -33,9 +33,11 @@ export default function TransactionHistory() {
 
   const handleGetTranscitionHistory = async () => {
     try {
+      console.log("-=-=-=-=-=",wallet[0].address);
       setLoader(true)
       const network = 'goerli'
-      const response = await getTranscitionHistory(wallet[0].walletAddress, network)
+      const response = await getTranscitionHistory(wallet[0].address, network)
+      console.log(formatToJSON(response));
       if (response.status == 200) {
         setLoader(false)
         setTransactionHistory(response.data)

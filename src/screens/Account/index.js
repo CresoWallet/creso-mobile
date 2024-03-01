@@ -18,10 +18,10 @@ import { colors } from '../../services';
 import { useDispatch, useSelector } from 'react-redux';
 import { handleFalse, handleTrue } from '../../store/isSignedInSlice';
 import { handleRemoveToken } from '../../store/token';
-import { getUserDetails, logOut, sendOTPMail } from '../../clientApi';
+import { getUserDetails, logOut } from '../../clientApi';
 import { axiosInstance } from '../../services/config/axios';
 import { launchImageLibrary } from 'react-native-image-picker';
-import { selectUserData } from '../../store/user';
+import { handleRemoveUserDetail, selectUserData } from '../../store/user';
 import { handleEmptyAAWallet } from '../../store/AAWalletAddress';
 import { handleEmptyWallet } from '../../store/WalletAddress';
 
@@ -96,6 +96,7 @@ export default function Account({ navigation }) {
     dispatch(handleRemoveToken())
     dispatch(handleEmptyAAWallet())
     dispatch(handleEmptyWallet())
+    dispatch(handleRemoveUserDetail())
   };
 
   return (
@@ -179,10 +180,7 @@ export default function Account({ navigation }) {
 
             {loader ? (
               <View
-                style={styles.disconnectButtonStyling}
-                onPress={() => {
-                  handleLogout;
-                }}>
+                style={styles.disconnectButtonStyling}>
                 <ActivityIndicator color={colors.accountpink} size={30} />
               </View>
             ) : (

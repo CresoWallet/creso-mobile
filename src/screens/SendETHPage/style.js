@@ -55,6 +55,7 @@ export const styles = StyleSheet.create({
     color: colors.black,
     marginBottom: sizes.screenHeight * 0.02,
     alignSelf: 'center',
+    textAlign: 'center'
   },
 
   modalHeading2: {
@@ -123,6 +124,7 @@ export const styles = StyleSheet.create({
     backgroundColor: colors.ethereumGray,
     borderRadius: sizes.screenHeight * 0.03,
     marginRight: sizes.screenWidth * 0.02,
+    // position: 'absolute'
   },
   subFieldText: {
     marginLeft: sizes.screenWidth * 0.02,
@@ -178,5 +180,20 @@ export const styles = StyleSheet.create({
   inputAmount: {
     color: colors.black,
     fontSize: fontSize.medium,
+  },
+
+  transactionModalBody:{
+    backgroundColor: colors.white,
+    paddingHorizontal: sizes.screenWidth*0.08,
+    paddingVertical: sizes.screenHeight*0.04,
+    width: sizes.screenWidth*0.9,
+    borderRadius: 16,
+    alignItems: 'center'
+  }
+,
+  transactionModalText:{
+    color: colors.black,
+    fontWeight: '500',
+    fontSize: fontSize.medium
   },
 });

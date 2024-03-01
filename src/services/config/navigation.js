@@ -50,6 +50,7 @@ import CresoPrivacyPolicy from '../../screens/CresoPrivacyPolicy';
 import EOAPassword from '../../screens/EOAPassword';
 import SecureWallet from '../../screens/SecureWallet';
 import RecoveryPhrase from '../../screens/RecoveryPhrase';
+import ImportEOAWallet from '../../screens/ImportEOAWallet';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -77,6 +78,7 @@ const MyStack = () => {
           component={AuthStackNavigator}
         />
       )}
+
     </Stack.Navigator>
   );
 };
@@ -136,6 +138,8 @@ const AuthStackNavigator = () => {
       <Stack.Screen name="BackupAndRestore" component={BackupAndRestore} />
       <Stack.Screen name="TransactionHistory" component={TransactionHistory} />
       <Stack.Screen name="TransferToken" component={TransferToken} />
+      <Stack.Screen name="ImportEOAWallet" component={ImportEOAWallet} />
+
     </Stack.Navigator>
   );
 };
@@ -189,7 +193,7 @@ const AppStackNavigator = () => {
       <Stack.Screen name="SecureWallet" component={SecureWallet} />
       <Stack.Screen name="RecoveryPhrase" component={RecoveryPhrase} />
       <Stack.Screen name="TransactionHistory" component={TransactionHistory} />
-
+      <Stack.Screen name="ImportEOAWallet" component={ImportEOAWallet} />
     </Stack.Navigator>
   );
 };

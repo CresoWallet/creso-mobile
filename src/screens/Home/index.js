@@ -790,7 +790,7 @@ export default function Home({ navigation }) {
                   <TouchableOpacity
                     style={styles.bottonBlack}
                     onPress={() => {
-                      // handleCreateAAWallet()
+                      handleCreateAAWallet()
                       // setWallet('Smart Wallet');
                     }}>
                     <Text style={styles.bottonBlackText}>Confirm</Text>

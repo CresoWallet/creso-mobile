@@ -18,108 +18,38 @@ import Modal from 'react-native-modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { Clipboard } from 'react-native';
 import { handleAddAAWallet, selectAAWallet } from '../../store/AAWalletAddress';
-import { sendAAWalletTransaction } from '../../clientApi';
+import { getAAWallets, sendAAWalletTransaction } from '../../clientApi';
+import { selectWallet } from '../../store/WalletAddress';
+import formatToJSON from '../../services/utilities/JsonLog';
+import { selectAuthToken } from '../../store/token';
 
 
 export default function SendETHPage({ navigation }) {
 
   const aaWallet = useSelector(selectAAWallet)
-  const userToken = useSelector(state => state?.tokenSlice?.token);
+  const allEOAWallets = useSelector(selectWallet)
+  const userToken = useSelector(selectAuthToken);
 
   const [type, setType] = useState('AA');
   const [network, setNetwork] = useState('goerli');
-  const [selectedWallet, setSelectedWallet] = useState('0x53A...e4af');
+  const [selectedAAWallet, setSelectedAAWallet] = useState('');
   const [standard, setStandard] = useState('Native/Stable');
-  const [sendTo, setSendTo] = useState(
-    '',
-  );
+  const [sendTo, setSendTo] = useState('');
   const [amount, setAmount] = useState('');
   const [walletType, setWalletType] = useState('');
-  const [wallets, setWallets] = useState([]);
-  const [smartWallets, setSmartWallets] = useState([]);
   const [typeModal, setTypeModal] = useState(false);
   const [walletModal, setWalletModal] = useState(false);
   const [walletTypeModal, setWalletTypeModal] = useState(false);
-
+  const [allAAWallets, setAllAAWallets] = useState([]);
+  const [allAAWalletsModal, setAllAAWalletsModal] = useState(false);
+  const [showTransactionRes, setShowTransactionRes] = useState('');
+  const [showTransactionResModal, setShowTransactionResModal] = useState(false);
   const [loader, setLoader] = useState(false);
   const [responseModal, setResponseModal] = useState(false);
   const [error, setError] = useState(false);
-
   const [standardModal, setStandardModal] = useState(false);
 
-  useEffect(() => {
-    handleWallets();
-  }, []);
 
-  const handleWallets = () => {
-    var myHeaders = new Headers();
-    myHeaders.append('auth_token', `"auth_token ${userToken}"`);
-    myHeaders.append('Cookie', `auth_token=${userToken}`);
-
-    var raw = '';
-
-    var requestOptions = {
-      method: 'GET',
-      headers: myHeaders,
-      body: raw,
-      redirect: 'follow',
-    };
-
-    fetch('https://core.creso.io/api/wallet', requestOptions)
-      .then(response => response.json())
-      .then(result => {
-        setWallets(result.wallets);
-        setSmartWallets(result.smartWallets);
-      })
-      .catch(error => {
-        console.log('error', error);
-      });
-  };
-
-  const handleSend = () => {
-    setLoader(true);
-    var myHeaders = new Headers();
-    myHeaders.append('auth_token', `"auth_token ${userToken}"`);
-    myHeaders.append('Cookie', `auth_token=${userToken}`);
-    myHeaders.append('Content-Type', 'application/json');
-    console.log(sendTo);
-    var raw = JSON.stringify({
-      type: type,
-      sendTo: sendTo,
-      amount: amount,
-      from: selectedWallet,
-      network: network,
-      standard: standard,
-      tokenAddress: '',
-    });
-
-    var requestOptions = {
-      method: 'POST',
-      headers: myHeaders,
-      body: raw,
-      redirect: 'follow',
-    };
-
-    fetch('https://core.creso.io/api/transfer', requestOptions)
-      .then(response => response.json())
-      .then(result => {
-        console.log(result);
-        setLoader(false);
-        if (result.blockNumber) {
-          setResponseModal(true);
-          setError('success');
-        } else {
-          setResponseModal(true);
-          setError('error');
-        }
-      })
-      .catch(error => {
-        console.log('error', error);
-        setLoader(false);
-        setResponseModal(true);
-        setError('error');
-      });
-  };
 
   const handlePaste = async () => {
     try {
@@ -138,20 +68,38 @@ export default function SendETHPage({ navigation }) {
         type: type,
         sendTo: sendTo,
         amount: amount,
-        from: selectedWallet,
+        from: selectedAAWallet,
         network: network
       }
 
       const response = await sendAAWalletTransaction(userToken, body)
       if (response.status == 200) {
         setLoader(false)
-        console.log(response);
+        setShowTransactionRes(response.data.message)
+        setShowTransactionResModal(true)
+        setSendTo()
+        setSelectedAAWallet()
+        setAmount()
+
       } else {
         setLoader(false)
-        console.log(response);
+        setShowTransactionRes(response.data.message)
+        setShowTransactionResModal(true)
+        setSendTo()
+        setSelectedAAWallet()
+        setAmount()
       }
     } catch (error) {
       console.log(error);
+    }
+  }
+
+  const handleGetAAWallet = async (selectedEOAWalletAddress) => {
+    try {
+      const response = await getAAWallets(userToken, selectedEOAWalletAddress)
+      setAllAAWallets(response.data)
+    } catch (error) {
+
     }
   }
 
@@ -223,9 +171,13 @@ export default function SendETHPage({ navigation }) {
             </View>
             <View style={styles.subField2}>
               <Text style={[styles.black, styles.EQA]}>AA</Text>
-              <Text style={[styles.black, styles.EQASideText]}>
-                {selectedWallet}
-              </Text>
+              {
+                selectedAAWallet ?
+                  <Text style={[styles.black, styles.EQASideText]}>
+                    {selectedAAWallet}
+                  </Text>
+                  : null
+              }
             </View>
 
             <Modal
@@ -272,17 +224,19 @@ export default function SendETHPage({ navigation }) {
               backdropOpacity={0.5}>
               <View style={styles.modalBodey}>
                 <Text style={styles.modalHeading}>
-                  Select Your Smart Wallet
+                  Select your EOA Wallet on which your AA Wallet is created
                 </Text>
 
                 <ScrollView>
-                  {aaWallet?.map((item, index) => {
+                  {allEOAWallets?.map((item, index) => {
                     return (
                       <TouchableOpacity
                         key={index}
                         onPress={() => {
                           setWalletModal(false);
-                          setSelectedWallet(item.address)
+                          handleGetAAWallet(item.address)
+                          setAllAAWalletsModal(true);
+
                         }}
                         style={styles.typeOptionContainer}>
                         <Text style={styles.typeOption}>
@@ -292,6 +246,49 @@ export default function SendETHPage({ navigation }) {
                     );
                   })}
                 </ScrollView>
+
+
+
+              </View>
+            </Modal>
+
+            <Modal
+              isVisible={allAAWalletsModal}
+              onBackButtonPress={() => {
+                setAllAAWalletsModal(false);
+              }}
+              onBackdropPress={() => {
+                setAllAAWalletsModal(false);
+              }}
+              backdropOpacity={0.5}>
+              <View style={styles.modalBodey}>
+
+
+                {allAAWallets.length > 0 ? <>
+                  <Text style={styles.modalHeading}>
+                    Select your AA Wallet for transaction
+                  </Text>
+                  <ScrollView>
+                    {allAAWallets?.map((item, index) => {
+                      return (
+                        <TouchableOpacity
+                          key={index}
+                          onPress={() => {
+                            setAllAAWalletsModal(false);
+                            setSelectedAAWallet(item.address)
+
+                          }}
+                          style={styles.typeOptionContainer}>
+                          <Text style={styles.typeOption}>
+                            {item.walletName}
+                          </Text>
+                        </TouchableOpacity>
+                      );
+                    })}
+                  </ScrollView>
+                </>
+                  : <Text style={styles.modalHeading} >You have not created any AA wallet against your selected EOA wallet</Text>
+                }
 
 
 
@@ -385,15 +382,6 @@ export default function SendETHPage({ navigation }) {
         ) : (
           <TouchableOpacity
             onPress={() => {
-              console.log(
-                type,
-                sendTo,
-                amount,
-                selectedWallet,
-                network,
-                standard,
-              );
-              // handleSend();
               handleAAWalletTransaction()
             }}
             style={styles.button}>
@@ -423,6 +411,20 @@ export default function SendETHPage({ navigation }) {
                 There's some issue in your transaction!
               </Text>
             )}
+          </View>
+        </Modal>
+
+        <Modal isVisible={showTransactionResModal}
+          backdropOpacity={0.5}
+          onBackdropPress={() => {
+            setShowTransactionResModal(false)
+          }}
+          onBackButtonPress={() => {
+            setShowTransactionResModal(false)
+          }}
+        >
+          <View style={styles.transactionModalBody}>
+            <Text style={styles.transactionModalText}>{showTransactionRes}</Text>
           </View>
         </Modal>
       </ImageBackground>
