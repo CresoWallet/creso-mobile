@@ -4,7 +4,7 @@
 
 export const AUTH_TOKEN = 'auth_token';
 
-export const BASE_URL = 'https://creso-api-aea7820ba236.herokuapp.com/api';
+export const BASE_URL = 'https://creso-api-aea7820ba236.herokuapp.com/';
 
 // export const BASE_URL = 'https://core.creso.io';
 

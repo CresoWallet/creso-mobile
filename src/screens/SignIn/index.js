@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   Image,
   ImageBackground,
@@ -8,18 +8,20 @@ import {
   View,
   TouchableOpacity,
   ActivityIndicator,
+  Linking,
 } from 'react-native';
+
 import images from '../../services/utilities/images';
 import { useState } from 'react';
 import Feather from 'react-native-vector-icons/Feather';
 import { styles } from './style';
 import { colors } from '../../services';
-import backendURL from '../../services/config/backendURL';
+import backendURL, { BASE_URL } from '../../services/config/backendURL';
 import { useDispatch } from 'react-redux';
 import { handleTrue } from '../../store/isSignedInSlice';
 import formatToJSON from '../../services/utilities/JsonLog';
 import { handleAddToken } from '../../store/token';
-import { googleLogin, loginApi } from '../../clientApi';
+import { googleLogin, loginApi, resendOTP } from '../../clientApi';
 
 export default function SignIn({ navigation }) {
   const dispatch = useDispatch();
@@ -30,12 +32,12 @@ export default function SignIn({ navigation }) {
 
   const [correctFormat, setCorrectFormat] = useState(false);
 
-  const validateEmail = email => {
+  const validateEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   };
 
-  const handleEmailChange = text => {
+  const handleEmailChange = (text) => {
     setEmail(text);
     setCorrectFormat(validateEmail(text));
   };
@@ -43,8 +45,20 @@ export default function SignIn({ navigation }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loader, setLoader] = useState(false);
+  const [authToken, setAuthToken] = useState('');
 
   const [error, setError] = useState('');
+
+  const sendEmail = async () => {
+    try {
+      const res = await resendOTP(email);
+      if (res) {
+        navigation.navigate('EmailVerify', { email, authToken });
+      }
+    } catch (error) {
+      setError('*Oops! Retry, please.');
+    }
+  };
 
   const handleSignIn = async () => {
     setLoader(true);
@@ -66,15 +80,20 @@ export default function SignIn({ navigation }) {
         try {
           const res = await loginApi(data);
           if (res.status == 200) {
-            const token = res?.data?.data?.token
-            dispatch(handleAddToken(token))
+            const token = res?.data?.data?.token;
+            setAuthToken(token);
+            if (res?.data?.data?.isEmailVerified) {
+              dispatch(handleAddToken(token));
+            } else {
+              await sendEmail();
+            }
           } else {
-            setError(res.data.message)
-            setLoader(false)
+            setError(res.data.message);
+            setLoader(false);
           }
           setLoader(false);
         } catch (error) {
-          console.log(error);
+          console.log('error : ', error);
           setLoader(false);
         }
       } else {
@@ -89,12 +108,14 @@ export default function SignIn({ navigation }) {
 
   const handleGoogleLogin = async () => {
     try {
-      const response = await googleLogin()
-      console.log(response);
+      // const response = await googleLogin();
+      // window.open(BASE_URL + '/api/auth/google');
+      // console.log('response : ', response);
+      // Linking.openURL(BASE_URL + '/api/auth/google');
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -108,7 +129,7 @@ export default function SignIn({ navigation }) {
             secureTextEntry={hidePass ? true : false}
             style={styles.inputFieldText}
             value={email}
-            onChangeText={text => handleEmailChange(text)}
+            onChangeText={(text) => handleEmailChange(text)}
           />
           {correctFormat ? (
             <Image source={images.emailCheck} style={styles.emailCheck} />
@@ -123,7 +144,7 @@ export default function SignIn({ navigation }) {
             secureTextEntry={hideSignupPass ? true : false}
             style={styles.inputFieldText}
             value={password}
-            onChangeText={text => setPassword(text)}
+            onChangeText={(text) => setPassword(text)}
           />
           <TouchableOpacity onPress={() => setHideSignUpPass(!hideSignupPass)}>
             <Feather
@@ -137,13 +158,13 @@ export default function SignIn({ navigation }) {
           </TouchableOpacity>
         </View>
         <Text style={styles.errorText}>{error}</Text>
-        <TouchableOpacity
-          style={styles.forgotPassContainer}>
+        <TouchableOpacity style={styles.forgotPassContainer}>
           <Text
             style={styles.forgotPass}
             onPress={() => {
               navigation.navigate('ForgotPass');
-            }}>
+            }}
+          >
             Forgot Password?
           </Text>
         </TouchableOpacity>
@@ -162,8 +183,8 @@ export default function SignIn({ navigation }) {
         <View style={styles.orView}>
           <View style={styles.divider} />
         </View>
-        <TouchableOpacity style={styles.signInWith}
-        >
+
+        <TouchableOpacity style={styles.signInWith} onPress={handleGoogleLogin}>
           <Image source={images.signInG} style={styles.twtLogo} />
           <Text style={styles.neonText}>Sign in with Google</Text>
         </TouchableOpacity>

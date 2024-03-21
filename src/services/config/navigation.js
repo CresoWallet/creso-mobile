@@ -51,6 +51,9 @@ import EOAPassword from '../../screens/EOAPassword';
 import SecureWallet from '../../screens/SecureWallet';
 import RecoveryPhrase from '../../screens/RecoveryPhrase';
 import ImportEOAWallet from '../../screens/ImportEOAWallet';
+import UnlockWallet from '../../screens/UnlockWallet';
+import CreateEOA from '../../screens/CreateEOA';
+import CreateAA from '../../screens/CreateAA';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -66,8 +69,9 @@ export default function MainNavigator() {
 }
 
 const MyStack = () => {
-  const isSignIn = useSelector(state => state.isSignedInSlice.isSignIn);
-  const authToken = useSelector(selectAuthToken)
+  const isSignIn = useSelector((state) => state.isSignedInSlice.isSignIn);
+  const authToken = useSelector(selectAuthToken);
+
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       {authToken ? (
@@ -78,7 +82,6 @@ const MyStack = () => {
           component={AuthStackNavigator}
         />
       )}
-
     </Stack.Navigator>
   );
 };
@@ -139,7 +142,6 @@ const AuthStackNavigator = () => {
       <Stack.Screen name="TransactionHistory" component={TransactionHistory} />
       <Stack.Screen name="TransferToken" component={TransferToken} />
       <Stack.Screen name="ImportEOAWallet" component={ImportEOAWallet} />
-
     </Stack.Navigator>
   );
 };
@@ -194,6 +196,9 @@ const AppStackNavigator = () => {
       <Stack.Screen name="RecoveryPhrase" component={RecoveryPhrase} />
       <Stack.Screen name="TransactionHistory" component={TransactionHistory} />
       <Stack.Screen name="ImportEOAWallet" component={ImportEOAWallet} />
+      <Stack.Screen name="UnlockWallet" component={UnlockWallet} />
+      <Stack.Screen name="CreateEOA" component={CreateEOA} />
+      <Stack.Screen name="CreateAA" component={CreateAA} />
     </Stack.Navigator>
   );
 };

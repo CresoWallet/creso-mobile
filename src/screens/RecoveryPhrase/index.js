@@ -2,12 +2,20 @@ import React, { useState } from 'react';
 import {
   Image,
   ImageBackground,
+  Platform,
   SafeAreaView,
   Text,
   TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
+import Feather from 'react-native-vector-icons/Feather';
+import { Clipboard } from 'react-native';
+import RNFS from 'react-native-fs';
+import RNFetchBlob from 'rn-fetch-blob';
+import { PermissionsAndroid } from 'react-native';
+import Toast from 'react-native-simple-toast';
+
 import { styles } from './style';
 import images from '../../services/utilities/images';
 import Modal from 'react-native-modal';
@@ -15,15 +23,22 @@ import { useDispatch, useSelector } from 'react-redux';
 import { colors, sizes } from '../../services';
 import Header from '../../components/Header';
 import { handleAddToken, selectAuthToken } from '../../store/token';
+import {
+  getDownloadPermissionAndroid,
+  downloadFile,
+  writeFile,
+} from '../../utils';
+import { encryptData } from '../../utils/encryption';
 
 export default function RecoveryPhrase({ navigation, route }) {
+  const authTokenRedux = useSelector(selectAuthToken);
 
-  const authTokenRedux = useSelector(selectAuthToken)
+  const dispatch = useDispatch();
 
-  const dispatch = useDispatch()
-
-  const authToken = route?.params?.authToken
-  const seedPhrase = route?.params?.seedPhrase
+  const authToken = route?.params?.authToken;
+  const seedPhrase = route?.params?.seedPhrase;
+  const walletPassword = route?.params?.walletPassword;
+  const walletName = route?.params?.walletName;
 
   const [showPhrase, setShowPhrase] = useState(true);
   const [confirmed, setConfirmed] = useState(false);
@@ -42,19 +57,37 @@ export default function RecoveryPhrase({ navigation, route }) {
   };
 
   const handleConfirm = async () => {
-    if(authTokenRedux){
-      navigation.navigate('MyTabs')
-    }else{
-      dispatch(handleAddToken(authToken))
+    if (authTokenRedux) {
+      navigation.navigate('MyTabs');
+    } else {
+      dispatch(handleAddToken(authToken));
     }
-  }
+  };
+
+  const handleDownload = async () => {
+    const encryptedData = encryptData(seedPhrase.join(' '), walletPassword);
+    if (encryptedData) {
+      if (Platform.OS === 'android') {
+        getDownloadPermissionAndroid().then((granted) => {
+          if (granted) {
+            writeFile(encryptedData, `${walletName}_privateKey.txt`);
+          }
+        });
+      } else {
+        writeFile(encryptedData, `${walletName}_privateKey.txt`).then((res) => {
+          RNFetchBlob.ios.previewDocument(res.path());
+        });
+      }
+    }
+  };
 
   return (
     <SafeAreaView>
       <View style={styles.container}>
         <ImageBackground
           source={images.landingPageBGImg}
-          style={styles.bgImage}>
+          style={styles.bgImage}
+        >
           <Header title={'Create EOA Wallet'} />
           <View style={styles.EOARow}>
             <Image
@@ -65,7 +98,8 @@ export default function RecoveryPhrase({ navigation, route }) {
               <Text style={styles.textBlackBold}>Create Password</Text>
               <Text style={styles.textBlackBold2}>Secure Wallet</Text>
               <Text
-                style={confirmed ? styles.textBlackBold2 : styles.disabledText}>
+                style={confirmed ? styles.textBlackBold2 : styles.disabledText}
+              >
                 Confirm Code
               </Text>
             </View>
@@ -100,19 +134,45 @@ export default function RecoveryPhrase({ navigation, route }) {
             ) : null}
           </View>
 
-          <View style={styles.btnSection}>
-            {confirmed ? <TouchableOpacity style={styles.button}
-              onPress={handleConfirm}
+          <View style={styles.iconButton}>
+            <TouchableOpacity
+              onPress={() => {
+                Clipboard.setString(seedPhrase.join(' '));
+                Toast.show('Secret key copied ', Toast.LONG);
+              }}
             >
-              <Text style={styles.text}>Go to Home</Text>
-            </TouchableOpacity> : null}
+              <Feather
+                name={'copy'}
+                color={colors.black}
+                size={20}
+                style={{
+                  alignSelf: 'flex-end',
+                }}
+              />
+            </TouchableOpacity>
+            {/* <TouchableOpacity onPress={handleDownload}>
+              <Feather
+                name={'download'}
+                color={colors.black}
+                size={20}
+                style={{
+                  alignSelf: 'flex-end',
+                }}
+              />
+            </TouchableOpacity> */}
+          </View>
+
+          <View style={styles.btnSection}>
+            {confirmed ? (
+              <TouchableOpacity style={styles.button} onPress={handleConfirm}>
+                <Text style={styles.text}>Go to Home</Text>
+              </TouchableOpacity>
+            ) : null}
 
             <TouchableOpacity style={styles.button} onPress={handlePhrase}>
               <Text style={styles.text}>{btnText} Secret Recovery Phrase</Text>
             </TouchableOpacity>
-
           </View>
-
         </ImageBackground>
       </View>
     </SafeAreaView>

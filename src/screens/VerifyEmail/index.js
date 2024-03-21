@@ -26,8 +26,9 @@ import formatToJSON from '../../services/utilities/JsonLog';
 import { handleAddToken } from '../../store/token';
 
 export default function VerifyEmail({ navigation, route }) {
+  const dispatch = useDispatch();
 
-  const dispatch = useDispatch()
+  const authToken = route?.params?.authToken;
 
   const { email } = route.params;
   const [value, setValue] = useState('');
@@ -37,8 +38,6 @@ export default function VerifyEmail({ navigation, route }) {
   const [showModal, setShowModal] = useState(false);
   const [err, setErr] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
-  const [authToken, setAuthToken] = useState('');
-
 
   const ref = useBlurOnFulfill({ value, cellCount: CELL_COUNT });
   const [props, getCellOnLayoutHandler] = useClearByFocusCell({
@@ -70,21 +69,22 @@ export default function VerifyEmail({ navigation, route }) {
     setLoader(true);
     try {
       if (value.length !== 6) {
-        setErrorMsg('*Please enter the OTP.')
-        setLoader(false)
+        setErrorMsg('*Please enter the OTP.');
+        setLoader(false);
       } else {
         const data = { email: email, otp: value };
         const res = await verifyEmail(data);
         if (res.status == 200) {
-          setAuthToken(res.data.data.token)
-          setErrorMsg('')
-          setLoader(false)
-          setShowModal(true)
+          // setAuthToken(res.data.data.token);
+          setErrorMsg('');
+          setLoader(false);
+          // setShowModal(true);
+          navigation.navigate('LetsGetStarted', { authToken });
         } else {
-          setErrorMsg(res.data.message)
-          setLoader(false)
+          setErrorMsg(res.data.message);
+          setLoader(false);
         }
-        setLoader(false)
+        setLoader(false);
       }
     } catch (error) {
       console.log(error.message);
@@ -94,12 +94,12 @@ export default function VerifyEmail({ navigation, route }) {
 
   const handleResend = async () => {
     try {
-      const response = await resendOTP(email)
-      console.log("-=-=-=-=-=-=>", formatToJSON(response));
+      const response = await resendOTP(email);
+      console.log('-=-=-=-=-=-=>', formatToJSON(response));
       if (response.status == 200) {
-        setSeconds(50)
+        setSeconds(50);
       } else {
-        setErrorMsg(response.data.message)
+        setErrorMsg(response.data.message);
       }
     } catch (error) {
       console.log(error.message);
@@ -108,7 +108,7 @@ export default function VerifyEmail({ navigation, route }) {
 
   const handleHome = () => {
     // dispatch(handleAddToken(authToken))
-    navigation.navigate('LetsGetStarted', { authToken })
+    navigation.navigate('LetsGetStarted', { authToken });
   };
 
   return (
@@ -139,7 +139,8 @@ export default function VerifyEmail({ navigation, route }) {
                   Platform.OS == 'ios' ? styles.cellIOS : styles.cell,
                   isFocused && styles.focusCell,
                 ]}
-                onLayout={getCellOnLayoutHandler(index)}>
+                onLayout={getCellOnLayoutHandler(index)}
+              >
                 {symbol || (isFocused ? <Cursor /> : null)}
               </Text>
             )}
@@ -148,23 +149,18 @@ export default function VerifyEmail({ navigation, route }) {
 
         <View style={styles.resendCodeText}>
           <Text style={styles.boldBlack}>Not Recieved? </Text>
-          {
-            seconds > 0 ?
-              <View>
-                <Text style={styles.link}>Resend code {seconds}s</Text>
-              </View>
-              :
-              <TouchableOpacity
-                onPress={handleResend}
-              >
-                <Text style={styles.link}>Resend code</Text>
-              </TouchableOpacity>
-          }
+          {seconds > 0 ? (
+            <View>
+              <Text style={styles.link}>Resend code {seconds}s</Text>
+            </View>
+          ) : (
+            <TouchableOpacity onPress={handleResend}>
+              <Text style={styles.link}>Resend code</Text>
+            </TouchableOpacity>
+          )}
         </View>
 
-        {
-          errorMsg && <Text style={styles.errorMsg}>{errorMsg}</Text>
-        }
+        {errorMsg && <Text style={styles.errorMsg}>{errorMsg}</Text>}
 
         {loader ? (
           <View style={styles.buttonField} onPress={handleOTP}>
@@ -187,7 +183,8 @@ export default function VerifyEmail({ navigation, route }) {
         }}
         onBackdropPress={() => {
           setShowModal(false);
-        }}>
+        }}
+      >
         <View style={styles.modalCOntainer}>
           <View style={styles.modalBody}>
             <View style={styles.modalHr}></View>

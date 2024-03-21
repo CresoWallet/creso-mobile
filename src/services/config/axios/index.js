@@ -2,7 +2,7 @@ import { BASE_URL } from '../backendURL';
 import axios from 'axios';
 
 export const axiosInstance = axios.create({
-  baseURL: BASE_URL,
+  baseURL:  BASE_URL + "api",
   withCredentials: true,
 });
 
@@ -25,3 +25,6 @@ axiosInstance.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
+
+

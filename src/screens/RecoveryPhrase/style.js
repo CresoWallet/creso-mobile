@@ -1,6 +1,6 @@
-import {Dimensions, StyleSheet} from 'react-native';
-import {colors, fontFamily, fontSize, sizes} from '../../services';
-import {Colors} from 'react-native/Libraries/NewAppScreen';
+import { Dimensions, StyleSheet } from 'react-native';
+import { colors, fontFamily, fontSize, sizes } from '../../services';
+import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 export const styles = StyleSheet.create({
   container: {
@@ -115,6 +115,15 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.disabledBg,
     marginTop: 10,
+  },
+
+  iconButton: {
+    marginTop: 15,
+    display: 'flex',
+    textAlign: 'right',
+    flexDirection: 'row-reverse',
+    gap: 15,
+    width: sizes.screenWidth * 0.85,
   },
 
   text: {

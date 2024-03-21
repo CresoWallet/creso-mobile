@@ -13,7 +13,7 @@ import images from '../../services/utilities/images';
 import {colors} from '../../services';
 import {getUserDetails} from '../../clientApi';
 import {useSelector} from 'react-redux';
-import { selectUserData } from '../../store/user';
+import {selectUserData} from '../../store/user';
 
 export default function AccountInfo({navigation}) {
   const [userName, setUserName] = useState('');
@@ -25,7 +25,6 @@ export default function AccountInfo({navigation}) {
     setUserEmail(userDetail.email);
     setUserName(userDetail.username);
   }, []);
-
 
   return (
     <SafeAreaView>
@@ -117,10 +116,15 @@ export default function AccountInfo({navigation}) {
                 style={styles.accountView}
                 onPress={() => navigation.navigate('TransactionHistory')}>
                 <View>
-                  <Image source={images.transactionHistory} style={styles.profileImage} />
+                  <Image
+                    source={images.transactionHistory}
+                    style={styles.profileImage}
+                  />
                 </View>
                 <View style={styles.userProfileHeadingContainer}>
-                  <Text style={styles.userProfileHeading}>Transaction History</Text>
+                  <Text style={styles.userProfileHeading}>
+                    Transaction History
+                  </Text>
                 </View>
                 <View>
                   <Image

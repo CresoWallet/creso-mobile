@@ -19,20 +19,36 @@ import images from '../../services/utilities/images';
 import Modal from 'react-native-modal';
 import { colors, sizes } from '../../services';
 import { useDispatch, useSelector } from 'react-redux';
-import { createAAWallet, getAllEOAWallets, getUserDetails, getWalletBalance } from '../../clientApi';
+import {
+  createAAWallet,
+  getAllEOAWallets,
+  getUserDetails,
+  getWalletBalance,
+} from '../../clientApi';
 import { handleAddUserDetail, selectUserData } from '../../store/user';
 import { selectAuthToken } from '../../store/token';
 import formatToJSON from '../../services/utilities/JsonLog';
-import { handleAddWallet, handleEmptyWallet, handleReplaceAllWallets, selectWallet } from '../../store/WalletAddress';
+import {
+  handleAddWallet,
+  handleEmptyWallet,
+  handleReplaceAllWallets,
+  selectWallet,
+} from '../../store/WalletAddress';
 import { handleAddAAWallet, selectAAWallet } from '../../store/AAWalletAddress';
-
+import {
+  selectEncryptedSeedPhrase,
+  selectWalletPassword,
+} from '../../store/seedPhrase';
 
 export default function Home({ navigation }) {
+  const userWallet = useSelector(selectWallet);
+  const userToken = useSelector(selectAuthToken);
+  const userDetail = useSelector(selectUserData);
+  const aaWallet = useSelector(selectAAWallet);
+  const encryptedSeedPhrase = useSelector(selectEncryptedSeedPhrase);
+  const walletPassword = useSelector(selectWalletPassword);
 
-  const userWallet = useSelector(selectWallet)
-  const userToken = useSelector(selectAuthToken)
-  const userDetail = useSelector(selectUserData)
-  const aaWallet = useSelector(selectAAWallet)
+  console.log('walletPassword : ', walletPassword);
 
   const [selectWalletModal, setSelectWalletModal] = useState(false);
   const [checkedCoin, setCheckedCoin] = useState('coin1');
@@ -51,10 +67,8 @@ export default function Home({ navigation }) {
   const [walletBalance, setWalletBalance] = useState(0);
   const [showBalance, setShowBalance] = useState(false);
   const [showTransactionRes, setShowTransactionRes] = useState(false);
-  const [balanceLoader, setBalanceLoader] = useState(false)
+  const [balanceLoader, setBalanceLoader] = useState(false);
   const [parentOfAAWallet, setParentOfAAWallet] = useState('');
-
-
 
   const translateY = useRef(new Animated.Value(500)).current;
 
@@ -83,8 +97,8 @@ export default function Home({ navigation }) {
     };
 
     fetch('https://core.creso.io/api/create/wallet', requestOptions)
-      .then(response => response.text())
-      .then(result => {
+      .then((response) => response.text())
+      .then((result) => {
         if (result) {
           setModal2Show(!modal2Show);
           setWalletCreatedtModal(true);
@@ -92,14 +106,12 @@ export default function Home({ navigation }) {
         setWalletName('');
         setLoader(false);
       })
-      .catch(error => {
+      .catch((error) => {
         console.log('error', error);
         setWalletName('');
         setLoader(false);
       });
   };
-
-
 
   useEffect(() => {
     Animated.spring(translateY, {
@@ -117,11 +129,9 @@ export default function Home({ navigation }) {
     });
   }, [navigation]);
 
-
-
   const extractWalletAddresses = (userWallet) => {
     if (userWallet && Array.isArray(userWallet)) {
-      return userWallet.map(wallet => wallet.walletAddress);
+      return userWallet.map((wallet) => wallet.walletAddress);
     } else {
       return [];
     }
@@ -130,77 +140,76 @@ export default function Home({ navigation }) {
   const getCurrentUser = async () => {
     const res = await getUserDetails(userToken);
     if (res.status == 200) {
-      const user = res.data
-      dispatch(handleAddUserDetail(user))
+      const user = res.data;
+      dispatch(handleAddUserDetail(user));
     }
   };
 
   const handleGetWalletBalance = async (wallets) => {
     try {
-      const walletAddress = wallets[0].address
-      const network = 'goerli'
-      const response = await getWalletBalance(walletAddress, network)
+      const walletAddress = wallets[0].address;
+      const network = 'goerli';
+      const response = await getWalletBalance(walletAddress, network);
       if (response.status == 200) {
-        setBalanceLoader(false)
-        setWalletBalance(response.data)
+        setBalanceLoader(false);
+        setWalletBalance(response.data);
       } else {
-        setBalanceLoader(false)
+        setBalanceLoader(false);
       }
     } catch (error) {
       console.log(error);
-      setBalanceLoader(false)
+      setBalanceLoader(false);
     }
-  }
+  };
 
   useEffect(() => {
-    getCurrentUser()
-    handleAllEOAWallets()
-  }, [])
-
+    getCurrentUser();
+    handleAllEOAWallets();
+  }, []);
 
   const handleCreateAAWallet = async () => {
     try {
       const obj = {
         network: 'mumbai',
         walletName: smartWalletName,
-        address: [parentOfAAWallet]
-      }
+        address: [parentOfAAWallet],
+      };
       setLoader(true);
-      const response = await createAAWallet(userToken, obj)
+      const response = await createAAWallet(userToken, obj);
       if (response.status == 200) {
         console.log(formatToJSON(response));
-        dispatch(handleAddAAWallet(response?.data?.data))
-        setModal3Show(false)
-        setLoader(false)
+        dispatch(handleAddAAWallet(response?.data?.data));
+        setModal3Show(false);
+        setLoader(false);
       } else {
-        setLoader(false)
+        setLoader(false);
       }
     } catch (error) {
       console.log(error);
-      setLoader(false)
+      setLoader(false);
     }
-  }
-
+  };
 
   const handleAllEOAWallets = async () => {
     try {
-      setBalanceLoader(true)
-      const response = await getAllEOAWallets(userToken)
+      setBalanceLoader(true);
+      const response = await getAllEOAWallets(userToken);
       if (response.status == 200) {
-        dispatch(handleReplaceAllWallets(response.data))
-        handleGetWalletBalance(response.data)
+        dispatch(handleReplaceAllWallets(response.data));
+        handleGetWalletBalance(response.data);
       }
     } catch (error) {
       console.log(error);
-      setBalanceLoader(false)
+      setBalanceLoader(false);
     }
-  }
+  };
 
   return (
     <SafeAreaView>
       <ImageBackground
         style={styles.container}
-        source={images.landingPageBGImg}>
+        source={images.landingPageBGImg}
+      >
         <View style={styles.logoRow}>
           <Image style={styles.logoImg} source={images.landingPageLogo} />
           <View style={styles.logoRowImgRightContainer}>
@@ -211,29 +220,38 @@ export default function Home({ navigation }) {
               />
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={() => setModalForBackup(!modalForBackup)}>
+              onPress={() => setModalForBackup(!modalForBackup)}
+            >
               <Image style={styles.logoRowImgRight} source={images.qrScanner} />
             </TouchableOpacity>
           </View>
         </View>
-        <ImageBackground style={styles.homeCardImg} source={images.homeCardImg} resizeMode='contain'>
+        <ImageBackground
+          style={styles.homeCardImg}
+          source={images.homeCardImg}
+          resizeMode="contain"
+        >
           <Text style={styles.homeCardText1}>{userDetail?.username}</Text>
           <View style={styles.balanceContainer}>
-
-            <Text style={styles.homeCardText2}>{showBalance ? `${walletBalance} ETH` : '*** ETH'}</Text>
-            {
-              balanceLoader ?
-                <View style={{ marginLeft: sizes.screenWidth * 0.02 }}>
-                  <ActivityIndicator size={18} />
-                </View>
-                :
-                <TouchableOpacity onPress={() => {
-                  setShowBalance(!showBalance)
+            <Text style={styles.homeCardText2}>
+              {showBalance ? `${walletBalance} ETH` : '*** ETH'}
+            </Text>
+            {balanceLoader ? (
+              <View style={{ marginLeft: sizes.screenWidth * 0.02 }}>
+                <ActivityIndicator size={18} />
+              </View>
+            ) : (
+              <TouchableOpacity
+                onPress={() => {
+                  setShowBalance(!showBalance);
                 }}
-                >
-                  <Image source={showBalance ? images.eyeShow : images.hideBtn} style={styles.hideBtn} />
-                </TouchableOpacity>
-            }
+              >
+                <Image
+                  source={showBalance ? images.eyeShow : images.hideBtn}
+                  style={styles.hideBtn}
+                />
+              </TouchableOpacity>
+            )}
             {/* <TouchableOpacity onPress={() => {
               setShowBalance(!showBalance)
             }}
@@ -250,19 +268,22 @@ export default function Home({ navigation }) {
                 style={styles.scrollViewAddItemContainer}
                 onPress={() => {
                   setWalletCreatedtModal(true);
-                }}>
+                }}
+              >
                 <Image style={styles.addIcon} source={images.addIcon} />
                 <Text style={styles.scrollViewItemTextBold}>Add</Text>
               </TouchableOpacity>
               <Image
                 style={styles.dottedLine}
-                source={images.dottedLine}></Image>
+                source={images.dottedLine}
+              ></Image>
               <TouchableOpacity
                 style={styles.scrollViewItemContainer}
                 onPress={() => {
                   setCheckedCoin('coin1');
                   navigation.navigate('ETH1Page');
-                }}>
+                }}
+              >
                 {checkedCoin === 'coin1' ? (
                   <View style={styles.coinIconContainer2}>
                     <Image
@@ -290,7 +311,8 @@ export default function Home({ navigation }) {
                 style={styles.scrollViewItemContainer}
                 onPress={() => {
                   setCheckedCoin('coin2');
-                }}>
+                }}
+              >
                 {checkedCoin === 'coin2' ? (
                   <View style={styles.coinIconContainer2}>
                     <Image
@@ -317,7 +339,8 @@ export default function Home({ navigation }) {
                 style={styles.scrollViewItemContainer}
                 onPress={() => {
                   setCheckedCoin('coin3');
-                }}>
+                }}
+              >
                 {checkedCoin === 'coin3' ? (
                   <View style={styles.coinIconContainer2}>
                     <Image
@@ -345,7 +368,8 @@ export default function Home({ navigation }) {
                 style={styles.scrollViewItemContainer}
                 onPress={() => {
                   setCheckedCoin('coin4');
-                }}>
+                }}
+              >
                 {checkedCoin === 'coin4' ? (
                   <View style={styles.coinIconContainer2}>
                     <Image
@@ -373,7 +397,8 @@ export default function Home({ navigation }) {
                 style={styles.scrollViewItemContainer}
                 onPress={() => {
                   setCheckedCoin('coin5');
-                }}>
+                }}
+              >
                 {checkedCoin === 'coin5' ? (
                   <View style={styles.coinIconContainer2}>
                     <Image
@@ -400,7 +425,8 @@ export default function Home({ navigation }) {
                 style={styles.scrollViewItemContainer}
                 onPress={() => {
                   setCheckedCoin('coin6');
-                }}>
+                }}
+              >
                 {checkedCoin === 'coin6' ? (
                   <View style={styles.coinIconContainer2}>
                     <Image
@@ -434,7 +460,8 @@ export default function Home({ navigation }) {
               style={styles.textRowRight}
               onPress={() => {
                 setModalShow(!modalShow);
-              }}>
+              }}
+            >
               <Text style={styles.textRowPinkPlus}>+</Text>
               <Text style={styles.textRowPink}>Create</Text>
             </TouchableOpacity>
@@ -451,7 +478,13 @@ export default function Home({ navigation }) {
               <Text style={styles.walletRowTextBold}>
                 Keyless Secure Wallet
               </Text>
-              <Text style={styles.walletRowTextLight}>0xc213 ... 34dr</Text>
+              <Text style={styles.walletRowTextLight}>
+                {aaWallet && aaWallet.length > 0
+                  ? aaWallet[0].address.slice(0, 10) +
+                    '...' +
+                    aaWallet[0].address.slice(-6)
+                  : 'No Wallet'}
+              </Text>
             </View>
           </View>
           <View style={styles.walletRowRight}>
@@ -497,10 +530,12 @@ export default function Home({ navigation }) {
               width: sizes.screenWidth * 0.9,
               alignSelf: 'center',
               bottom: sizes.screenHeight * 0.12,
-            }}>
+            }}
+          >
             <TouchableOpacity
               style={styles.backupModalInsideContaienr}
-              onPress={() => navigation.navigate('BackupMainScreen')}>
+              onPress={() => navigation.navigate('BackupMainScreen')}
+            >
               <Image
                 source={images.backupModalLine}
                 style={styles.backupModalLine}
@@ -522,14 +557,13 @@ export default function Home({ navigation }) {
           </Animated.View>
         )}
 
-
-
         <Modal
           isVisible={modalShow}
           backdropOpacity={0.5}
           onBackdropPress={() => {
             setModalShow(!modalShow);
-          }}>
+          }}
+        >
           <View style={styles.modal}>
             <View style={styles.modalContent}>
               <View style={styles.modalBody}>
@@ -548,8 +582,12 @@ export default function Home({ navigation }) {
                 <TouchableOpacity
                   style={styles.walletSection}
                   onPress={() => {
-                    navigation.navigate('EOAPassword')
-                  }}>
+                    setModalShow(!modalShow);
+                    walletPassword !== ''
+                      ? navigation.navigate('CreateEOA')
+                      : navigation.navigate('UnlockWallet');
+                  }}
+                >
                   <Image style={styles.images} source={images.walletPink} />
                   <View style={styles.walletTextSection}>
                     <View style={styles.walletSectionFirstRow}>
@@ -578,10 +616,14 @@ export default function Home({ navigation }) {
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={styles.walletSection}
+                  // onPress={() => {
+                  //   setSelectWalletModal(true);
+                  // }}
                   onPress={() => {
-
-                    setSelectWalletModal(true);
-                  }}>
+                    setModalShow(!modalShow);
+                    navigation.navigate('CreateAA');
+                  }}
+                >
                   <Image style={styles.images} source={images.walletSmart} />
                   <View style={styles.walletTextSection}>
                     <View style={styles.walletSectionFirstRow}>
@@ -619,7 +661,8 @@ export default function Home({ navigation }) {
           onBackdropPress={() => {
             // setModalShow(!modalShow);
             setModal2Show(!modal2Show);
-          }}>
+          }}
+        >
           <View style={styles.modal}>
             <View style={styles.modalContent}>
               <View style={styles.modalBody}>
@@ -661,7 +704,7 @@ export default function Home({ navigation }) {
                     placeholder="E.g.My Wallet"
                     placeholderTextColor={colors.disabledBg1}
                     value={walletName}
-                    onChangeText={text => {
+                    onChangeText={(text) => {
                       setWalletName(text);
                     }}
                   />
@@ -685,7 +728,8 @@ export default function Home({ navigation }) {
                   style={styles.bottonWhite}
                   onPress={() => {
                     setModal2Show(!modal2Show);
-                  }}>
+                  }}
+                >
                   <Text style={styles.bottonWhiteText}>Cancel</Text>
                 </TouchableOpacity>
                 {loader ? (
@@ -698,7 +742,8 @@ export default function Home({ navigation }) {
                     onPress={() => {
                       handleCreateWallet();
                       setWallet('Legacy Wallet');
-                    }}>
+                    }}
+                  >
                     <Text style={styles.bottonBlackText}>Confirm</Text>
                   </TouchableOpacity>
                 )}
@@ -711,7 +756,8 @@ export default function Home({ navigation }) {
           backdropOpacity={0.5}
           onBackdropPress={() => {
             setModal3Show(!modal3Show);
-          }}>
+          }}
+        >
           <View style={styles.modal}>
             <View style={styles.modalContent}>
               <View style={styles.modalBody}>
@@ -754,7 +800,7 @@ export default function Home({ navigation }) {
                     placeholder="E.g.My Wallet"
                     placeholderTextColor={colors.disabledBg1}
                     value={smartWalletName}
-                    onChangeText={text => {
+                    onChangeText={(text) => {
                       setSmartWalletName(text);
                     }}
                   />
@@ -778,7 +824,8 @@ export default function Home({ navigation }) {
                   style={styles.bottonWhite}
                   onPress={() => {
                     setModal3Show(!modal3Show);
-                  }}>
+                  }}
+                >
                   <Text style={styles.bottonWhiteText}>Cancel</Text>
                 </TouchableOpacity>
 
@@ -790,9 +837,10 @@ export default function Home({ navigation }) {
                   <TouchableOpacity
                     style={styles.bottonBlack}
                     onPress={() => {
-                      handleCreateAAWallet()
+                      handleCreateAAWallet();
                       // setWallet('Smart Wallet');
-                    }}>
+                    }}
+                  >
                     <Text style={styles.bottonBlackText}>Confirm</Text>
                   </TouchableOpacity>
                 )}
@@ -805,7 +853,8 @@ export default function Home({ navigation }) {
           isVisible={walletCreatedtModal}
           onBackdropPress={() => {
             setWalletCreatedtModal(false);
-          }}>
+          }}
+        >
           <View style={styles.popUpBody}>
             <Image style={styles.checkmark} source={images.checkmark} />
             <Text style={styles.popUpText}>
@@ -816,23 +865,27 @@ export default function Home({ navigation }) {
               onPress={() => {
                 setWalletCreatedtModal(false);
                 setWallet('');
-              }}>
+              }}
+            >
               <Text style={styles.popUpBtnText}>Done</Text>
             </TouchableOpacity>
           </View>
         </Modal>
 
-        <Modal isVisible={showTransactionRes}
+        <Modal
+          isVisible={showTransactionRes}
           backdropOpacity={0.5}
           onBackdropPress={() => {
-            setShowTransactionRes(false)
+            setShowTransactionRes(false);
           }}
           onBackButtonPress={() => {
-            setShowTransactionRes(false)
+            setShowTransactionRes(false);
           }}
         >
           <View style={styles.transactionModalBody}>
-            <Text style={styles.transactionModalText}>Heyyyyyyyyyyyyyyyyyyyyyyy</Text>
+            <Text style={styles.transactionModalText}>
+              Heyyyyyyyyyyyyyyyyyyyyyyy
+            </Text>
           </View>
         </Modal>
 
@@ -844,7 +897,8 @@ export default function Home({ navigation }) {
           onBackdropPress={() => {
             setSelectWalletModal(false);
           }}
-          backdropOpacity={0.5}>
+          backdropOpacity={0.5}
+        >
           <View style={styles.modalBodeySelect}>
             <Text style={styles.modalHeadingSelect}>
               Select Your Smart Wallet
@@ -855,15 +909,13 @@ export default function Home({ navigation }) {
                   <TouchableOpacity
                     key={index}
                     onPress={() => {
-                      setParentOfAAWallet(item.address)
+                      setParentOfAAWallet(item.address);
                       setSelectWalletModal(false);
                       setModal3Show(true);
-
                     }}
-                    style={styles.typeOptionContainer}>
-                    <Text style={styles.typeOption}>
-                      {item.walletName}
-                    </Text>
+                    style={styles.typeOptionContainer}
+                  >
+                    <Text style={styles.typeOption}>{item.walletName}</Text>
                   </TouchableOpacity>
                 );
               })}

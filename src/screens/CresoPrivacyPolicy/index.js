@@ -14,12 +14,10 @@ import { useSelector } from 'react-redux';
 import { sizes } from '../../services';
 
 export default function CresoPrivacyPolicy({ navigation, route }) {
-
-  const authToken = route.params.authToken
-
+  const authToken = route?.params?.authToken;
 
   const [modalShow, setModalShow] = useState(false);
-  const data = useSelector(state => state);
+  const data = useSelector((state) => state);
   console.log(data);
 
   return (
@@ -27,7 +25,8 @@ export default function CresoPrivacyPolicy({ navigation, route }) {
       <View style={styles.container}>
         <ImageBackground
           source={images.landingPageBGImg}
-          style={styles.bgImage}>
+          style={styles.bgImage}
+        >
           <Image source={images.landingPageLogo} style={styles.logoImg} />
           <Text style={styles.text1}>Let's Get Started</Text>
           <View style={styles.body}>
@@ -66,7 +65,8 @@ export default function CresoPrivacyPolicy({ navigation, route }) {
               style={{
                 flexDirection: 'row',
                 alignItems: 'center',
-              }}>
+              }}
+            >
               <Text style={styles.disabledText}>
                 This data is aggregated and is therefore anonymous for the
                 purposes of General Data Protection Regulation (EU) 2016/679.
@@ -82,19 +82,26 @@ export default function CresoPrivacyPolicy({ navigation, route }) {
                 style={{
                   top: sizes.screenHeight * 0.08,
                   right: sizes.screenWidth * 0.35,
-                }}>
+                }}
+              >
                 <Text style={styles.textPink}>Privacy Policy here.</Text>
               </TouchableOpacity>
             </View>
           </View>
 
           <View style={styles.btnSection}>
-            <TouchableOpacity style={styles.button}
+            <TouchableOpacity
+              style={styles.button}
               onPress={() => navigation.navigate('EOAPassword', { authToken })}
             >
               <Text style={styles.text}>I Agree</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.buttonWhite}>
+            <TouchableOpacity
+              style={styles.buttonWhite}
+              onPress={() =>
+                navigation.navigate('LetsGetStarted', { authToken })
+              }
+            >
               <Text style={styles.textBlack}>No thanks</Text>
             </TouchableOpacity>
           </View>

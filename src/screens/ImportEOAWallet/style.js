@@ -1,6 +1,6 @@
-import {Dimensions, StyleSheet} from 'react-native';
-import {colors, fontFamily, fontSize, sizes} from '../../services';
-import {Colors} from 'react-native/Libraries/NewAppScreen';
+import { Dimensions, StyleSheet } from 'react-native';
+import { colors, fontFamily, fontSize, sizes } from '../../services';
+import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 export const styles = StyleSheet.create({
   container: {
@@ -97,7 +97,8 @@ export const styles = StyleSheet.create({
   ///////
 
   btnSection: {
-    position: 'absolute',
+    marginTop: 50,
+    // position: 'absolute',
     bottom: sizes.screenHeight * 0.04,
   },
 
@@ -173,37 +174,34 @@ export const styles = StyleSheet.create({
     marginBottom: sizes.screenHeight * 0.01,
   },
 
-  error:{
-    color:colors.redLoss,
-    alignSelf:'flex-start',
-    marginLeft:sizes.screenWidth * 0.1
-  }
-,
-  transactionModalBody:{
+  error: {
+    color: colors.redLoss,
+    alignSelf: 'flex-start',
+    marginLeft: sizes.screenWidth * 0.1,
+  },
+  transactionModalBody: {
     backgroundColor: colors.white,
-    paddingHorizontal: sizes.screenWidth*0.08,
-    paddingVertical: sizes.screenHeight*0.04,
-    width: sizes.screenWidth*0.9,
+    paddingHorizontal: sizes.screenWidth * 0.08,
+    paddingVertical: sizes.screenHeight * 0.04,
+    width: sizes.screenWidth * 0.9,
     borderRadius: 16,
-    alignItems: 'center'
-  }
-,
-  transactionModalText:{
+    alignItems: 'center',
+  },
+  transactionModalText: {
     color: colors.black,
     fontWeight: '500',
-    fontSize: fontSize.medium
+    fontSize: fontSize.medium,
   },
 
-  modalBtn:{
+  modalBtn: {
     backgroundColor: colors.black,
     paddingHorizontal: 20,
     paddingVertical: 12,
-    borderRadius: 100
-  }
-,
-  modalBtnText:{
+    borderRadius: 100,
+  },
+  modalBtnText: {
     color: colors.white,
     fontWeight: '500',
-    fontSize: fontSize.medium
-  }
+    fontSize: fontSize.medium,
+  },
 });

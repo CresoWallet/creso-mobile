@@ -13,8 +13,7 @@ import Modal from 'react-native-modal';
 import { useSelector } from 'react-redux';
 
 export default function LetsGetStarted({ navigation, route }) {
-
-  const authToken = route.params.authToken
+  const authToken = route?.params?.authToken;
 
   const [modalShow, setModalShow] = useState(false);
 
@@ -23,7 +22,8 @@ export default function LetsGetStarted({ navigation, route }) {
       <View style={styles.container}>
         <ImageBackground
           source={images.landingPageBGImg}
-          style={styles.bgImage}>
+          style={styles.bgImage}
+        >
           <Image source={images.landingPageLogo} style={styles.logoImg} />
           <Text style={styles.text1}>Let's Get Started</Text>
           <View style={styles.dotView}>
@@ -44,13 +44,19 @@ export default function LetsGetStarted({ navigation, route }) {
                 <Text style={styles.textPink}>Terms and Conditions</Text>
               </Text>
             </View>
-            <TouchableOpacity style={styles.button}
-              onPress={() => navigation.navigate('CresoPrivacyPolicy', { authToken })}
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() =>
+                navigation.navigate('CresoPrivacyPolicy', { authToken })
+              }
             >
               <Text style={styles.text}>Create New EOA Wallet</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.buttonWhite}
-             onPress={() => navigation.navigate('ImportEOAWallet', { authToken })}
+            <TouchableOpacity
+              style={styles.buttonWhite}
+              onPress={() =>
+                navigation.navigate('ImportEOAWallet', { authToken })
+              }
             >
               <Text style={styles.textBlack}>Import an existing wallet</Text>
             </TouchableOpacity>
@@ -61,7 +67,8 @@ export default function LetsGetStarted({ navigation, route }) {
             backdropOpacity={0.5}
             onBackdropPress={() => {
               setModalShow(!modalShow);
-            }}>
+            }}
+          >
             <View style={styles.modal}>
               <View style={styles.modalContent}>
                 <View style={styles.modalBody}>
@@ -85,7 +92,8 @@ export default function LetsGetStarted({ navigation, route }) {
                     style={styles.bottonWhite}
                     onPress={() => {
                       setModalShow(!modalShow);
-                    }}>
+                    }}
+                  >
                     <Text style={styles.bottonWhiteText}>Disagree</Text>
                   </TouchableOpacity>
                   <TouchableOpacity
@@ -93,7 +101,8 @@ export default function LetsGetStarted({ navigation, route }) {
                     onPress={() => {
                       setModalShow(!modalShow);
                       navigation.navigate('SignUp');
-                    }}>
+                    }}
+                  >
                     <Text style={styles.bottonBlackText}>Agree</Text>
                   </TouchableOpacity>
                 </View>

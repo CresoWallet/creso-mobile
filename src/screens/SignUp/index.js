@@ -33,12 +33,12 @@ export default function SignUp({ navigation }) {
 
   const [correctFormat, setCorrectFormat] = useState(false);
 
-  const validateEmail = email => {
+  const validateEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   };
 
-  const handleEmailChange = text => {
+  const handleEmailChange = (text) => {
     setEmail(text);
     setCorrectFormat(validateEmail(text));
   };
@@ -72,16 +72,16 @@ export default function SignUp({ navigation }) {
         };
         try {
           const res = await signUpAPI(signUpData);
-          console.log("-==-=--==-", formatToJSON(res));
+          console.log('-==-=--==-', formatToJSON(res));
           if (res.status == 200) {
-            navigation.navigate('EmailVerify', { email });
+            const token = res?.data?.data?.token;
+            navigation.navigate('EmailVerify', { email, authToken: token });
             setLoader(false);
           } else {
-            setError(res.data.message)
+            setError(res.data.message);
           }
           setLoader(false);
         } catch (error) {
-          console.log(error);
           setLoader(false);
         } finally {
           setLoader(false);
@@ -106,7 +106,7 @@ export default function SignUp({ navigation }) {
             placeholderTextColor={colors.disabledBg2}
             style={styles.inputFieldText}
             value={username}
-            onChangeText={text => {
+            onChangeText={(text) => {
               setUsername(text);
             }}
           />
@@ -122,7 +122,7 @@ export default function SignUp({ navigation }) {
             secureTextEntry={hidePass ? true : false}
             style={styles.inputFieldText}
             value={email}
-            onChangeText={text => handleEmailChange(text)}
+            onChangeText={(text) => handleEmailChange(text)}
           />
           {correctFormat ? (
             <Image source={images.emailCheck} style={styles.emailCheck} />
@@ -138,7 +138,7 @@ export default function SignUp({ navigation }) {
             secureTextEntry={hideSignupPass ? true : false}
             style={styles.inputFieldText}
             value={password}
-            onChangeText={text => {
+            onChangeText={(text) => {
               setPassword(text);
             }}
           />
@@ -163,12 +163,13 @@ export default function SignUp({ navigation }) {
             secureTextEntry={hideReEnterSignupPass ? true : false}
             style={styles.inputFieldText}
             value={confirmPassword}
-            onChangeText={text => {
+            onChangeText={(text) => {
               setConfirmPassword(text);
             }}
           />
           <TouchableOpacity
-            onPress={() => setHideReEnterSignUpPass(!hideReEnterSignupPass)}>
+            onPress={() => setHideReEnterSignUpPass(!hideReEnterSignupPass)}
+          >
             <Feather
               name={!hideReEnterSignupPass ? 'eye' : 'eye-off'}
               color={colors.disabledBg2}
