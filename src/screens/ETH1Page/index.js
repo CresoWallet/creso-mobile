@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   Image,
   ImageBackground,
@@ -12,6 +12,8 @@ import {styles} from './style';
 import Header from '../../components/Header';
 
 export default function ETH1Page({navigation}) {
+  const [hideAmount, setHideAmount] = useState(false);
+
   return (
     <SafeAreaView>
       <ImageBackground source={images.landingPageBGImg} style={styles.bgImage}>
@@ -36,10 +38,16 @@ export default function ETH1Page({navigation}) {
           <View style={styles.SecondCardField}>
             <Text style={styles.subHeading}>Total Assets:</Text>
             <View style={[styles.flexrow]}>
-              <Text style={[styles.cardHeading, styles.cardHeading2]}>
-                3,187.99 USD
-              </Text>
-              <TouchableOpacity>
+              {!hideAmount ? (
+                <Text style={[styles.cardHeading, styles.cardHeading2]}>
+                  3,187.99 USD
+                </Text>
+              ) : (
+                <Text style={[styles.cardHeading, styles.cardHeading2]}>
+                  *********
+                </Text>
+              )}
+              <TouchableOpacity onPress={() => setHideAmount(!hideAmount)}>
                 <Image source={images.hideBtn} style={styles.cardIconEye} />
               </TouchableOpacity>
             </View>

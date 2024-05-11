@@ -47,7 +47,10 @@ export const styles = StyleSheet.create({
   },
   cardIconEye: {
     marginLeft: sizes.screenWidth * 0.02,
-    bottom: sizes.screenHeight * 0.0,
+    height:sizes.screenHeight* 0.03,
+    width:sizes.screenHeight* 0.04,
+    resizeMode:'contain',
+    // bottom: sizes.screenHeight * 0.0,
   },
   cardIconCopy: {
     marginLeft: sizes.screenWidth * 0.05,
