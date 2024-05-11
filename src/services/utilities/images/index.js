@@ -157,6 +157,8 @@ import secureWalletImg from '../../../assets/secureWalletImg.png';
 import phraseImg from '../../../assets/phraseImg.png';
 import transactionHistory from "../../../assets/transactionHistory.png"
 import eyeShow from "../../../assets/eyeShow.png"
+import comingSoon from "../../../assets/comingSoon.png"
+
 
 
 const images = {
@@ -320,6 +322,7 @@ const images = {
   EOA3,
   secureWalletImg,
   phraseImg,
+  comingSoon
 };
 
 export default images;

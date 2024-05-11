@@ -8,6 +8,9 @@ import {
   View,
   TouchableOpacity,
   ActivityIndicator,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
 } from 'react-native';
 import images from '../../services/utilities/images';
 import { useState } from 'react';
@@ -95,7 +98,9 @@ export default function SignUp({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ImageBackground source={images.landingPageBGImg} style={styles.bgImage}>
+      <KeyboardAvoidingView style={{flex:1}} behavior={Platform.OS === 'ios' ? 'padding' :'height'}>
+        <ScrollView>
+        <ImageBackground source={images.landingPageBGImg} style={styles.bgImage}>
         <Image source={images.landingPageLogo} style={styles.logoImg} />
 
         <Text style={styles.label}>Username</Text>
@@ -200,6 +205,10 @@ export default function SignUp({ navigation }) {
           </Text>
         </View>
       </ImageBackground>
+        </ScrollView>
+     
+      </KeyboardAvoidingView>
+      
     </SafeAreaView>
   );
 }

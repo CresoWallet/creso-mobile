@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Image, ImageBackground, SafeAreaView, Text, TextInput, TouchableOpacity, View} from 'react-native';
+import {Image, ImageBackground, KeyboardAvoidingView, Platform, SafeAreaView, Text, TextInput, TouchableOpacity, View} from 'react-native';
 import {styles} from './style';
 import images from '../../services/utilities/images';
 import Header from '../../components/Header';
@@ -27,6 +27,7 @@ export default function ResetPass({navigation}) {
   const CELL_COUNT = 6;
   return (
     <SafeAreaView style={styles.container}>
+      <KeyboardAvoidingView style={{flex:1}} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
       <ImageBackground source={images.landingPageBGImg} style={styles.bgImage}>
         <Header title={'Reset Password'} />
 
@@ -88,6 +89,8 @@ password on your account.
 
 
       </ImageBackground>
+      </KeyboardAvoidingView>
+     
     </SafeAreaView>
   );
 }

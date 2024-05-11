@@ -26,4 +26,5 @@ export const colors = {
   cresoPink: '#FF4085',
   cresoBlue: '#2100EC',
   cresoPurple: '#A66CFF',
+  modalBg:'rgba(0, 0, 0, 0.5)'
 };

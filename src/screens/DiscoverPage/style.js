@@ -228,4 +228,33 @@ export const styles = StyleSheet.create({
     color: colors.disabledBg2,
     fontSize: fontSize.smallM,
   },
+  popUpBody: {
+    backgroundColor: colors.white,
+    height: sizes.screenHeight * 0.2,
+    borderRadius: sizes.screenHeight * 0.03,
+    alignItems: 'center',
+    paddingVertical: sizes.screenHeight * 0.04,
+  },
+ 
+  popUpText: {
+    fontSize: fontSize.medium,
+    color: colors.black,
+    fontWeight: '600',
+    width: sizes.screenWidth * 0.7,
+    textAlign: 'center',
+  },
+  modalBackground:{
+    flex:1,
+    backgroundColor:colors.modalBg,
+    justifyContent:'center',
+    alignItems:'center'
+  },
+  modalImage: {
+    height: sizes.screenHeight * 0.07,
+    width: sizes.screenHeight * 0.07,
+    marginBottom:sizes.screenHeight* 0.01,
+    alignSelf:'center'
+  },
+ 
+
 });

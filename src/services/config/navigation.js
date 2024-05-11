@@ -54,6 +54,7 @@ import ImportEOAWallet from '../../screens/ImportEOAWallet';
 import UnlockWallet from '../../screens/UnlockWallet';
 import CreateEOA from '../../screens/CreateEOA';
 import CreateAA from '../../screens/CreateAA';
+import NoSessionsPageTwo from '../../screens/NoSessionPageTwo';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -89,6 +90,7 @@ const MyStack = () => {
 const AuthStackNavigator = () => {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="MyTabs" component={MyTabs} />
       <Stack.Screen name="LandingPage" component={LandingPage} />
       <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicy} />
       <Stack.Screen name="ForgotPass" component={ForgotPass} />
@@ -96,11 +98,12 @@ const AuthStackNavigator = () => {
       <Stack.Screen name="OTP" component={OTP} />
       <Stack.Screen name="SignIn" component={SignIn} />
       <Stack.Screen name="SignUp" component={SignUp} />
-      <Stack.Screen name="MyTabs" component={MyTabs} />
+      {/* <Stack.Screen name="MyTabs" component={MyTabs} /> */}
       <Stack.Screen name="AccountInfo" component={AccountInfo} />
       <Stack.Screen name="Account" component={Account} />
       <Stack.Screen name="Security" component={Security} />
       <Stack.Screen name="NoSessionsPage" component={NoSessionsPage} />
+      <Stack.Screen name="NoSessionsPageTwo" component={NoSessionsPageTwo} />
       <Stack.Screen name="NetworkSettings" component={NetworkSettings} />
       <Stack.Screen
         name="BitcoinMainnetScreen"
@@ -160,6 +163,7 @@ const AppStackNavigator = () => {
       <Stack.Screen name="Account" component={Account} />
       <Stack.Screen name="Security" component={Security} />
       <Stack.Screen name="NoSessionsPage" component={NoSessionsPage} />
+      <Stack.Screen name="NoSessionsPageTwo" component={NoSessionsPageTwo} />
       <Stack.Screen name="NetworkSettings" component={NetworkSettings} />
       <Stack.Screen
         name="BitcoinMainnetScreen"

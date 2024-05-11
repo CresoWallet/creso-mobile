@@ -9,6 +9,8 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   Linking,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 
 import images from '../../services/utilities/images';
@@ -119,6 +121,7 @@ export default function SignIn({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
+      <KeyboardAvoidingView style={{flex:1}} behavior={Platform.OS  === 'ios' ? 'padding' :'height' }>
       <ImageBackground source={images.landingPageBGImg} style={styles.bgImage}>
         <Image source={images.landingPageLogo} style={styles.logoImg} />
         <Text style={styles.label}>Email</Text>
@@ -197,6 +200,8 @@ export default function SignIn({ navigation }) {
           <Text style={styles.neonText}>Sign in with Apple</Text>
         </TouchableOpacity>
       </ImageBackground>
+      </KeyboardAvoidingView>
+      
     </SafeAreaView>
   );
 }

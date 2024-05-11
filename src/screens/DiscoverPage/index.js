@@ -1,7 +1,8 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   Image,
   ImageBackground,
+  Modal,
   SafeAreaView,
   ScrollView,
   Text,
@@ -15,6 +16,7 @@ import {useSelector} from 'react-redux';
 export default function DiscoverPage() {
   // const data = useSelector(state => state);
   // console.log('discover0--=-=-=-=', data);
+  const [modalVisible, setModalVisible] = useState(false)
   return (
     <SafeAreaView>
       <ImageBackground
@@ -24,13 +26,13 @@ export default function DiscoverPage() {
           <View style={styles.headerContainer}>
             <Text style={styles.headerHeadingText}>Discover</Text>
             <View style={styles.headerImgField}>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={() => setModalVisible(true)}>
                 <Image source={images.star} style={styles.icon} />
               </TouchableOpacity>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={() => setModalVisible(true)}>
                 <Image source={images.clock} style={styles.icon} />
               </TouchableOpacity>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={() => setModalVisible(true)}>
                 <Image source={images.playlistPlus} style={styles.icon} />
               </TouchableOpacity>
             </View>
@@ -82,7 +84,7 @@ export default function DiscoverPage() {
             </View>
 
             <View style={styles.flexRow}>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={() => setModalVisible(true)}>
                 <View style={styles.secondSection}>
                   <Image
                     source={images.joystick}
@@ -91,7 +93,7 @@ export default function DiscoverPage() {
                   <Text style={styles.secondSectionText}>Games</Text>
                 </View>
               </TouchableOpacity>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={() => setModalVisible(true)}>
                 <View style={styles.secondSection}>
                   <Image
                     source={images.shop}
@@ -100,7 +102,7 @@ export default function DiscoverPage() {
                   <Text style={styles.secondSectionText}>MarketPlace</Text>
                 </View>
               </TouchableOpacity>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={() => setModalVisible(true)}>
                 <View style={styles.secondSection}>
                   <Image
                     source={images.dollarIcon}
@@ -112,13 +114,13 @@ export default function DiscoverPage() {
             </View>
 
             <View style={styles.flexRow}>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={() => setModalVisible(true)}>
                 <Image
                   style={styles.thirdSectionImg}
                   source={images.cryptoNews}
                 />
               </TouchableOpacity>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={() => setModalVisible(true)}>
                 <Image
                   style={styles.thirdSectionImg}
                   source={images.discoverDapps}
@@ -132,7 +134,7 @@ export default function DiscoverPage() {
                   <Text style={styles.topNFTtext}>Top NFTs</Text>
                   <Text>(24h)</Text>
                 </View>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => setModalVisible(true)}>
                   <Text style={styles.textLoser}>See more</Text>
                 </TouchableOpacity>
               </View>
@@ -218,12 +220,12 @@ export default function DiscoverPage() {
               </View>
 
               <View style={[styles.flexRow]}>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => setModalVisible(true)}>
                   <Text style={[styles.balanceType, styles.neonBtn]}>
                     Top Gainers
                   </Text>
                 </TouchableOpacity>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => setModalVisible(true)}>
                   <Text style={[styles.balanceType]}>Top Losers</Text>
                 </TouchableOpacity>
               </View>
@@ -321,7 +323,19 @@ export default function DiscoverPage() {
             </View>
             <View style={styles.marginBtn}></View>
           </ScrollView>
+
         </View>
+        <Modal animationType='fade'
+        transparent={true}
+        visible={modalVisible}
+        >
+          <TouchableOpacity style={styles.modalBackground} onPress={() => setModalVisible(false)}>
+          <View style={styles.popUpBody}>
+            <Image style={styles.modalImage} source={images.comingSoon}/>
+            <Text style={styles.popUpText}>Coming Soon!</Text>
+          </View>
+          </TouchableOpacity>
+        </Modal>
       </ImageBackground>
     </SafeAreaView>
   );

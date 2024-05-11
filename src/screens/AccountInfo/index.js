@@ -78,7 +78,7 @@ export default function AccountInfo({navigation}) {
                   />
                 </View>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.accountView}>
+              {/* <TouchableOpacity style={styles.accountView}>
                 <View>
                   <Image
                     source={images.RecoveryKey}
@@ -94,7 +94,7 @@ export default function AccountInfo({navigation}) {
                     style={styles.arrowImage}
                   />
                 </View>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
               <View style={styles.horizontalLine}></View>
               <TouchableOpacity
                 style={styles.accountView}
@@ -150,7 +150,8 @@ export default function AccountInfo({navigation}) {
                   />
                 </View>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.accountView}>
+              <TouchableOpacity style={styles.accountView}
+              onPress={() => navigation.navigate('NoSessionsPageTwo')}>
                 <View>
                   <Image source={images.Sessions} style={styles.profileImage} />
                 </View>

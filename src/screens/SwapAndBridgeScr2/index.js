@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Image,
   ImageBackground,
@@ -11,6 +11,23 @@ import images from '../../services/utilities/images';
 import {styles} from './style';
 
 export default function SwapAndBridgeScr2({navigation}) {
+  const [fromValue, setFromValue] = useState({
+    coin:'BNB',
+    address:'0x53A...e4af'
+  })
+  
+  const [toValue, setToValue] = useState({
+    coin:'ETH',
+    address:'0x53A...e4af'
+  })
+
+  const swapValue = () => {
+    const temp = {...fromValue}
+    setFromValue({...toValue})
+    setToValue({...temp})
+  }
+  
+
   return (
     <SafeAreaView>
       <ImageBackground
@@ -43,7 +60,8 @@ export default function SwapAndBridgeScr2({navigation}) {
               <View style={styles.coiImgContainer}>
                 <Image style={styles.coiImg} source={images.bnbImg} />
               </View>
-              <Text style={styles.coinSwapBtnText}>BNB</Text>
+              <Text style={styles.coinSwapBtnText}>{fromValue.coin}</Text>
+              {/* <Text style={styles.coinSwapBtnText}>BNB</Text> */}
               <View>
                 <Image
                   style={styles.dropdownIcon}
@@ -52,7 +70,8 @@ export default function SwapAndBridgeScr2({navigation}) {
               </View>
             </TouchableOpacity>
             <TouchableOpacity style={styles.coinSwapBtnInnerRight}>
-              <Text style={styles.coinSwapBtnText}>0x53A...e4af</Text>
+            <Text style={styles.coinSwapBtnText}>{fromValue.address}</Text>
+              {/* <Text style={styles.coinSwapBtnText}>0x53A...e4af</Text> */}
               <View>
                 <Image
                   style={styles.dropdownIcon}
@@ -69,7 +88,8 @@ export default function SwapAndBridgeScr2({navigation}) {
               <View style={styles.coiImgContainer}>
                 <Image style={styles.coiImg} source={images.ethImg} />
               </View>
-              <Text style={styles.coinSwapBtnText}>ETH</Text>
+              <Text style={styles.coinSwapBtnText}>{toValue.coin}</Text>
+              {/* <Text style={styles.coinSwapBtnText}>ETH</Text> */}
               <View>
                 <Image
                   style={styles.dropdownIcon}
@@ -78,7 +98,8 @@ export default function SwapAndBridgeScr2({navigation}) {
               </View>
             </TouchableOpacity>
             <TouchableOpacity style={styles.coinSwapBtnInnerRight}>
-              <Text style={styles.coinSwapBtnText}>0x53A...e4af</Text>
+            <Text style={styles.coinSwapBtnText}>{toValue.address}</Text>
+              {/* <Text style={styles.coinSwapBtnText}>0x53A...e4af</Text> */}
               <View>
                 <Image
                   style={styles.dropdownIcon}
@@ -213,7 +234,7 @@ export default function SwapAndBridgeScr2({navigation}) {
             </View>
           </View>
         </View>
-        <TouchableOpacity style={styles.swapBridgeImgContainer}>
+        <TouchableOpacity style={styles.swapBridgeImgContainer} onPress={swapValue}>
           <Image style={styles.swapBridgeImg} source={images.swapBridgeImg} />
         </TouchableOpacity>
 
